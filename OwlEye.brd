@@ -387,16 +387,13 @@ design rules under a new name.</description>
 <attribute name="PROD_ID" value="CAP-00810" x="51.054" y="85.852" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="52.07" y="86.995" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C10" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="42.164" y="54.864">
-<attribute name="PROD_ID" value="CAP-00810" x="42.164" y="54.864" size="1.778" layer="27" display="off"/>
+<element name="TENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="81.534" smashed="yes" rot="R180">
+<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="81.534" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="51.816" y="82.677" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="78.74" smashed="yes" rot="R180">
-<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="78.74" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="51.816" y="79.883" size="0.4064" layer="27" font="vector" rot="R180"/>
-</element>
-<element name="TENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="72.39" smashed="yes" rot="R180">
-<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="72.39" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="51.816" y="73.533" size="0.4064" layer="27" font="vector" rot="R180"/>
+<element name="TENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="69.85" smashed="yes" rot="R180">
+<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="69.85" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="51.816" y="70.993" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
 <element name="TENS:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="56.134" y="67.31" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="56.134" y="67.31" size="1.778" layer="27" display="off"/>
@@ -417,10 +414,6 @@ design rules under a new name.</description>
 <element name="TENS:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="72.39" y="87.63" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="72.39" y="87.63" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="73.406" y="88.773" size="0.4064" layer="27" font="vector" rot="R180"/>
-</element>
-<element name="TENS:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852" smashed="yes">
-<attribute name="PROD_ID" value="CAP-00810" x="78.74" y="85.852" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="77.978" y="86.614" size="0.4064" layer="27" font="vector"/>
 </element>
 <element name="TENS:D1" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="86.36" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.014" y="82.994" size="1.016" layer="25" rot="R90"/>
@@ -466,9 +459,6 @@ design rules under a new name.</description>
 <attribute name="PROD_ID" value="CAP-00810" x="18.288" y="100.838" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="22.352" y="67.945" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C10" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="17.526" y="54.864">
-<attribute name="PROD_ID" value="CAP-00810" x="17.526" y="82.804" size="1.778" layer="27" display="off"/>
-</element>
 <element name="ONES:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.734" y="70.612" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="21.844" y="94.742" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="29.718" y="69.469" size="0.4064" layer="27" font="vector"/>
@@ -489,16 +479,13 @@ design rules under a new name.</description>
 <attribute name="PROD_ID" value="CAP-00810" x="6.858" y="96.52" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="30.226" y="88.392" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="45.466" y="54.864" smashed="yes">
-<attribute name="PROD_ID" value="CAP-00810" x="17.526" y="59.944" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="44.577" y="55.626" size="0.4064" layer="25" font="vector"/>
-<attribute name="VALUE" x="44.45" y="53.721" size="0.4064" layer="27" font="vector"/>
+<element name="ONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="74.422" smashed="yes" rot="R180">
+<attribute name="PROD_ID" value="CAP-00810" x="78.74" y="69.342" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="51.689" y="73.66" size="0.4064" layer="25" font="vector" rot="R180"/>
+<attribute name="VALUE" x="51.816" y="75.565" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="ONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="21.082" y="54.864">
-<attribute name="PROD_ID" value="CAP-00810" x="21.082" y="59.944" size="1.778" layer="27" display="off"/>
-</element>
-<element name="ONES:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="24.384" y="54.864">
-<attribute name="PROD_ID" value="CAP-00810" x="20.574" y="56.134" size="1.778" layer="27" display="off"/>
+<element name="ONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852">
+<attribute name="PROD_ID" value="CAP-00810" x="78.74" y="90.932" size="1.778" layer="27" display="off"/>
 </element>
 <element name="ONES:D1" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="74.0918" smashed="yes" rot="R90">
 <attribute name="NAME" x="19.882" y="70.7258" size="1.016" layer="25" rot="R90"/>
@@ -764,9 +751,7 @@ design rules under a new name.</description>
 <contactref element="TENS:D7" pad="1"/>
 <contactref element="TENS:C8" pad="1"/>
 <contactref element="TENS:D8" pad="1"/>
-<contactref element="TENS:C9" pad="1"/>
 <contactref element="TENS:D9" pad="1"/>
-<contactref element="TENS:C10" pad="1"/>
 <contactref element="TENS:D10" pad="1"/>
 <contactref element="ONES:C1" pad="1"/>
 <contactref element="ONES:D1" pad="1"/>
@@ -784,9 +769,7 @@ design rules under a new name.</description>
 <contactref element="ONES:D7" pad="1"/>
 <contactref element="ONES:C8" pad="1"/>
 <contactref element="ONES:D8" pad="1"/>
-<contactref element="ONES:C9" pad="1"/>
 <contactref element="ONES:D9" pad="1"/>
-<contactref element="ONES:C10" pad="1"/>
 <contactref element="ONES:D10" pad="1"/>
 <wire x1="76.962" y1="78.74" x2="76.708" y2="78.486" width="0.8128" layer="1"/>
 <wire x1="76.708" y1="78.486" x2="75.438" y2="77.216" width="0.8128" layer="1"/>
@@ -799,26 +782,22 @@ design rules under a new name.</description>
 <wire x1="53.086" y1="83.566" x2="52.578" y2="83.058" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="83.82" x2="53.34" y2="83.82" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="83.82" x2="54.28" y2="83.91" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="83.058" x2="52.578" y2="78.74" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="78.74" x2="52.578" y2="77.978" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="83.058" x2="52.578" y2="81.534" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="81.534" x2="52.578" y2="77.978" width="0.8128" layer="1"/>
 <wire x1="53.594" y1="76.962" x2="54.102" y2="76.962" width="0.8128" layer="1"/>
 <wire x1="52.578" y1="77.978" x2="53.34" y2="77.216" width="0.8128" layer="1"/>
 <wire x1="53.34" y1="77.216" x2="53.594" y2="76.962" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="76.962" x2="54.28" y2="76.8996" width="0.8128" layer="1"/>
 <wire x1="53.34" y1="77.216" x2="52.578" y2="76.454" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="76.454" x2="52.578" y2="72.39" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="72.39" x2="52.578" y2="71.12" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="76.454" x2="52.578" y2="74.422" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="74.422" x2="52.578" y2="71.12" width="0.8128" layer="1"/>
 <wire x1="53.594" y1="70.104" x2="54.102" y2="70.104" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="71.12" x2="53.594" y2="70.104" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="71.12" x2="53.34" y2="70.358" width="0.8128" layer="1"/>
+<wire x1="53.34" y1="70.358" x2="53.594" y2="70.104" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="70.104" x2="54.28" y2="69.8892" width="0.8128" layer="1"/>
-<wire x1="51.65" y1="78.74" x2="52.578" y2="78.74" width="0.3048" layer="1"/>
-<wire x1="51.65" y1="72.39" x2="52.578" y2="72.39" width="0.3048" layer="1"/>
 <wire x1="52.07" y1="85.852" x2="52.324" y2="85.852" width="0.3048" layer="1"/>
 <wire x1="76.708" y1="78.486" x2="75.438" y2="79.756" width="0.8128" layer="1"/>
-<wire x1="77.216" y1="85.852" x2="77.89" y2="85.852" width="0.8128" layer="1"/>
-<wire x1="75.438" y1="84.074" x2="75.946" y2="84.582" width="0.8128" layer="1"/>
-<wire x1="75.946" y1="84.582" x2="77.216" y2="85.852" width="0.8128" layer="1"/>
-<wire x1="75.438" y1="79.756" x2="75.438" y2="84.074" width="0.8128" layer="1"/>
+<wire x1="75.438" y1="79.756" x2="75.438" y2="84.836" width="0.8128" layer="1"/>
 <wire x1="60.198" y1="80.518" x2="60.198" y2="76.454" width="0.8128" layer="1"/>
 <wire x1="61.722" y1="82.042" x2="60.198" y2="80.518" width="0.8128" layer="1"/>
 <wire x1="61.722" y1="82.042" x2="61.9" y2="82.1574" width="0.8128" layer="1"/>
@@ -851,9 +830,7 @@ design rules under a new name.</description>
 <wire x1="73.914" y1="87.63" x2="75.438" y2="86.106" width="0.8128" layer="1"/>
 <wire x1="73.24" y1="87.63" x2="73.914" y2="87.63" width="0.8128" layer="1"/>
 <wire x1="75.438" y1="86.106" x2="75.438" y2="84.836" width="0.8128" layer="1"/>
-<wire x1="75.692" y1="84.836" x2="75.946" y2="84.582" width="0.8128" layer="1"/>
-<wire x1="75.692" y1="84.836" x2="75.438" y2="84.836" width="0.8128" layer="1"/>
-<wire x1="75.438" y1="84.836" x2="75.438" y2="84.074" width="0.8128" layer="1"/>
+<wire x1="76.454" y1="85.852" x2="75.438" y2="84.836" width="0.8128" layer="1"/>
 <wire x1="43.942" y1="83.82" x2="42.418" y2="82.296" width="0.8128" layer="1"/>
 <wire x1="43.942" y1="83.82" x2="44.12" y2="83.91" width="0.8128" layer="1"/>
 <wire x1="42.418" y1="82.296" x2="42.418" y2="78.486" width="0.8128" layer="1"/>
@@ -922,18 +899,18 @@ design rules under a new name.</description>
 <wire x1="30.226" y1="84.582" x2="30.226" y2="86.106" width="0.8128" layer="1"/>
 <wire x1="29.972" y1="87.63" x2="30.138" y2="87.63" width="0.8128" layer="1"/>
 <wire x1="30.226" y1="84.582" x2="28.956" y2="82.804" width="0.8128" layer="1"/>
+<wire x1="77.89" y1="85.852" x2="76.454" y2="85.852" width="0.8128" layer="1"/>
+<wire x1="51.65" y1="69.85" x2="52.832" y2="69.85" width="0.8128" layer="1"/>
+<wire x1="52.832" y1="69.85" x2="53.34" y2="70.358" width="0.8128" layer="1"/>
+<wire x1="51.65" y1="74.422" x2="52.578" y2="74.422" width="0.8128" layer="1"/>
+<wire x1="51.65" y1="81.534" x2="52.578" y2="81.534" width="0.8128" layer="1"/>
 <wire x1="70.524" y1="70.866" x2="75.438" y2="72.644" width="0" layer="19" extent="1-1"/>
 <wire x1="61.9" y1="75.147" x2="67.818" y2="74.422" width="0" layer="19" extent="1-1"/>
 <wire x1="55.284" y1="67.31" x2="60.198" y2="69.342" width="0" layer="19" extent="1-1"/>
-<wire x1="44.12" y1="76.8996" x2="51.65" y2="78.74" width="0" layer="19" extent="1-1"/>
+<wire x1="45.378" y1="67.31" x2="51.65" y2="69.85" width="0" layer="19" extent="1-1"/>
 <wire x1="36.5" y1="82.1574" x2="42.418" y2="82.296" width="0" layer="19" extent="1-1"/>
 <wire x1="29.884" y1="70.612" x2="34.798" y2="71.628" width="0" layer="19" extent="1-1"/>
 <wire x1="22.606" y1="79.756" x2="27.178" y2="78.74" width="0" layer="19" extent="1-1"/>
-<wire x1="44.616" y1="54.864" x2="44.958" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="41.314" y1="54.864" x2="44.616" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="16.676" y1="54.864" x2="22.098" y2="69.088" width="0" layer="19" extent="1-1"/>
-<wire x1="20.232" y1="54.864" x2="16.676" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="23.534" y1="54.864" x2="20.232" y2="54.864" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
 <contactref element="TENS:C1" pad="2"/>
@@ -952,9 +929,7 @@ design rules under a new name.</description>
 <contactref element="TENS:D7" pad="3"/>
 <contactref element="TENS:C8" pad="2"/>
 <contactref element="TENS:D8" pad="3"/>
-<contactref element="TENS:C9" pad="2"/>
 <contactref element="TENS:D9" pad="3"/>
-<contactref element="TENS:C10" pad="2"/>
 <contactref element="TENS:D10" pad="3"/>
 <contactref element="ONES:C1" pad="2"/>
 <contactref element="ONES:D1" pad="3"/>
@@ -972,9 +947,7 @@ design rules under a new name.</description>
 <contactref element="ONES:D7" pad="3"/>
 <contactref element="ONES:C8" pad="2"/>
 <contactref element="ONES:D8" pad="3"/>
-<contactref element="ONES:C9" pad="2"/>
 <contactref element="ONES:D9" pad="3"/>
-<contactref element="ONES:C10" pad="2"/>
 <contactref element="ONES:D10" pad="3"/>
 <wire x1="80.518" y1="83.312" x2="82.042" y2="81.788" width="0.8128" layer="1"/>
 <wire x1="80.518" y1="83.312" x2="80.34" y2="83.5522" width="0.8128" layer="1"/>
@@ -988,10 +961,6 @@ design rules under a new name.</description>
 <wire x1="73.152" y1="78.486" x2="72.898" y2="78.486" width="0.8128" layer="1"/>
 <wire x1="74.422" y1="79.756" x2="73.152" y2="78.486" width="0.8128" layer="1"/>
 <wire x1="72.898" y1="78.486" x2="72.72" y2="78.2944" width="0.8128" layer="1"/>
-<wire x1="80.264" y1="85.598" x2="80.264" y2="83.82" width="0.3048" layer="1"/>
-<wire x1="80.01" y1="85.852" x2="80.264" y2="85.598" width="0.3048" layer="1"/>
-<wire x1="79.59" y1="85.852" x2="80.01" y2="85.852" width="0.3048" layer="1"/>
-<wire x1="80.264" y1="83.82" x2="80.34" y2="83.5522" width="0.3048" layer="1"/>
 <wire x1="65.278" y1="87.122" x2="66.802" y2="85.598" width="0.8128" layer="1"/>
 <wire x1="65.278" y1="87.122" x2="65.1" y2="87.0574" width="0.8128" layer="1"/>
 <wire x1="65.532" y1="80.264" x2="65.278" y2="80.264" width="0.8128" layer="1"/>
@@ -1039,16 +1008,15 @@ design rules under a new name.</description>
 <wire x1="47.498" y1="88.646" x2="47.32" y2="88.81" width="0.8128" layer="1"/>
 <wire x1="47.498" y1="82.042" x2="47.32" y2="81.7996" width="0.8128" layer="1"/>
 <wire x1="49.022" y1="76.454" x2="47.498" y2="74.93" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="80.264" x2="49.022" y2="78.74" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="78.74" x2="49.022" y2="76.454" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="80.264" x2="49.022" y2="76.454" width="0.8128" layer="1"/>
 <wire x1="47.498" y1="74.93" x2="47.32" y2="74.7892" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="80.264" x2="47.763353125" y2="81.46575625" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="80.264" x2="48.248803125" y2="81.00225" width="0.8128" layer="1"/>
+<wire x1="48.248803125" y1="81.00225" x2="47.763353125" y2="81.46575625" width="0.8128" layer="1"/>
 <wire x1="47.763353125" y1="81.46575625" x2="47.32" y2="81.7996" width="0.8128" layer="1"/>
 <wire x1="49.022" y1="82.804" x2="49.022" y2="85.852" width="0.8128" layer="1"/>
 <wire x1="49.022" y1="85.852" x2="49.022" y2="87.122" width="0.8128" layer="1"/>
 <wire x1="48.006" y1="81.788" x2="49.022" y2="82.804" width="0.8128" layer="1"/>
 <wire x1="48.006" y1="81.788" x2="47.763353125" y2="81.46575625" width="0.8128" layer="1"/>
-<wire x1="49.95" y1="78.74" x2="49.022" y2="78.74" width="0.8128" layer="1"/>
 <wire x1="39.878" y1="87.122" x2="41.402" y2="85.598" width="0.8128" layer="1"/>
 <wire x1="39.878" y1="87.122" x2="39.7" y2="87.0574" width="0.8128" layer="1"/>
 <wire x1="40.132" y1="80.264" x2="39.878" y2="80.264" width="0.8128" layer="1"/>
@@ -1081,11 +1049,11 @@ design rules under a new name.</description>
 <wire x1="40.132" y1="72.898" x2="39.7" y2="73.0366" width="0.8128" layer="1"/>
 <wire x1="47.498" y1="67.31" x2="49.022" y2="68.834" width="0.8128" layer="1"/>
 <wire x1="47.078" y1="67.31" x2="47.498" y2="67.31" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="68.834" x2="49.022" y2="72.39" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="72.39" x2="49.022" y2="73.406" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="73.406" x2="47.752" y2="74.676" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="68.834" x2="49.022" y2="69.85" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="69.85" x2="49.022" y2="73.406" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="73.406" x2="48.768" y2="73.66" width="0.8128" layer="1"/>
+<wire x1="48.768" y1="73.66" x2="47.752" y2="74.676" width="0.8128" layer="1"/>
 <wire x1="47.752" y1="74.676" x2="47.32" y2="74.7892" width="0.8128" layer="1"/>
-<wire x1="49.95" y1="72.39" x2="49.022" y2="72.39" width="0.8128" layer="1"/>
 <wire x1="50.204" y1="85.852" x2="49.022" y2="85.852" width="0.8128" layer="1"/>
 <wire x1="24.384" y1="85.598" x2="24.384" y2="83.82" width="0.8128" layer="1"/>
 <wire x1="24.13" y1="85.852" x2="24.384" y2="85.598" width="0.8128" layer="1"/>
@@ -1099,19 +1067,24 @@ design rules under a new name.</description>
 <wire x1="26.162" y1="74.676" x2="26.162" y2="70.866" width="0.8128" layer="1"/>
 <wire x1="26.162" y1="70.866" x2="24.384" y2="69.088" width="0.8128" layer="1"/>
 <wire x1="24.384" y1="69.088" x2="24.218" y2="69.088" width="0.8128" layer="1"/>
+<wire x1="80.264" y1="85.598" x2="80.264" y2="83.82" width="0.8128" layer="1"/>
+<wire x1="80.01" y1="85.852" x2="80.264" y2="85.598" width="0.8128" layer="1"/>
+<wire x1="79.59" y1="85.852" x2="80.01" y2="85.852" width="0.8128" layer="1"/>
+<wire x1="80.264" y1="83.82" x2="80.34" y2="83.5522" width="0.8128" layer="1"/>
+<wire x1="49.95" y1="69.85" x2="49.022" y2="69.85" width="0.8128" layer="1"/>
+<wire x1="49.53" y1="74.422" x2="48.768" y2="73.66" width="0.8128" layer="1"/>
+<wire x1="49.95" y1="74.422" x2="49.53" y2="74.422" width="0.8128" layer="1"/>
+<wire x1="48.768" y1="81.534" x2="48.514" y2="81.28" width="0.8128" layer="1"/>
+<wire x1="49.95" y1="81.534" x2="48.768" y2="81.534" width="0.8128" layer="1"/>
+<wire x1="48.514" y1="81.28" x2="48.248803125" y2="81.00225" width="0.8128" layer="1"/>
 <wire x1="74.422" y1="83.566" x2="79.59" y2="85.852" width="0" layer="19" extent="1-1"/>
 <wire x1="66.802" y1="85.598" x2="71.374" y2="86.614" width="0" layer="19" extent="1-1"/>
 <wire x1="59.182" y1="87.376" x2="65.1" y2="87.0574" width="0" layer="19" extent="1-1"/>
-<wire x1="50.204" y1="85.852" x2="57.48" y2="88.81" width="0" layer="19" extent="1-1"/>
+<wire x1="49.95" y1="69.85" x2="56.984" y2="67.31" width="0" layer="19" extent="1-1"/>
 <wire x1="41.402" y1="67.056" x2="47.078" y2="67.31" width="0" layer="19" extent="1-1"/>
 <wire x1="33.782" y1="79.756" x2="39.7" y2="80.047" width="0" layer="19" extent="1-1"/>
 <wire x1="31.584" y1="70.612" x2="32.258" y2="70.612" width="0" layer="19" extent="1-1"/>
 <wire x1="26.162" y1="70.866" x2="31.584" y2="70.612" width="0" layer="19" extent="1-1"/>
-<wire x1="46.316" y1="54.864" x2="39.878" y2="65.532" width="0" layer="19" extent="1-1"/>
-<wire x1="43.014" y1="54.864" x2="46.316" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="18.376" y1="54.864" x2="24.218" y2="69.088" width="0" layer="19" extent="1-1"/>
-<wire x1="21.932" y1="54.864" x2="18.376" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="25.234" y1="54.864" x2="21.932" y2="54.864" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>

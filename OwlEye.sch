@@ -439,14 +439,10 @@ Standard decoupling cap</description>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
 <part name="GND16" library="supply1" deviceset="GND" device=""/>
 <part name="D9" library="SparkFun-LED" deviceset="WS2812B" device=""/>
-<part name="C9" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.1uF"/>
 <part name="P+9" library="supply1" deviceset="VCC" device=""/>
-<part name="GND17" library="supply1" deviceset="GND" device=""/>
 <part name="GND18" library="supply1" deviceset="GND" device=""/>
 <part name="D10" library="SparkFun-LED" deviceset="WS2812B" device=""/>
-<part name="C10" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.1uF"/>
 <part name="P+10" library="supply1" deviceset="VCC" device=""/>
-<part name="GND19" library="supply1" deviceset="GND" device=""/>
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="FRAME1" library="frames" deviceset="FRAME_A_L" device=""/>
 </parts>
@@ -496,14 +492,10 @@ Standard decoupling cap</description>
 <instance part="GND15" gate="1" x="50.8" y="76.2"/>
 <instance part="GND16" gate="1" x="81.28" y="76.2"/>
 <instance part="D9" gate="G$1" x="109.22" y="86.36"/>
-<instance part="C9" gate="G$1" x="91.44" y="93.98"/>
 <instance part="P+9" gate="VCC" x="91.44" y="106.68"/>
-<instance part="GND17" gate="1" x="91.44" y="76.2"/>
 <instance part="GND18" gate="1" x="127" y="76.2"/>
 <instance part="D10" gate="G$1" x="149.86" y="86.36"/>
-<instance part="C10" gate="G$1" x="137.16" y="93.98"/>
 <instance part="P+10" gate="VCC" x="137.16" y="106.68"/>
-<instance part="GND19" gate="1" x="137.16" y="76.2"/>
 <instance part="GND20" gate="1" x="167.64" y="76.2"/>
 <instance part="FRAME1" gate="G$1" x="-76.2" y="-17.78"/>
 <instance part="FRAME1" gate="G$2" x="96.52" y="-17.78"/>
@@ -585,22 +577,16 @@ Standard decoupling cap</description>
 <junction x="50.8" y="99.06"/>
 </segment>
 <segment>
-<pinref part="C9" gate="G$1" pin="1"/>
 <pinref part="P+9" gate="VCC" pin="VCC"/>
-<wire x1="91.44" y1="99.06" x2="91.44" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="D9" gate="G$1" pin="VDD"/>
-<wire x1="104.14" y1="91.44" x2="104.14" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="99.06" x2="91.44" y2="99.06" width="0.1524" layer="91"/>
-<junction x="91.44" y="99.06"/>
+<wire x1="104.14" y1="91.44" x2="91.44" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="91.44" x2="91.44" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C10" gate="G$1" pin="1"/>
 <pinref part="P+10" gate="VCC" pin="VCC"/>
-<wire x1="137.16" y1="99.06" x2="137.16" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="D10" gate="G$1" pin="VDD"/>
-<wire x1="144.78" y1="91.44" x2="144.78" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="144.78" y1="99.06" x2="137.16" y2="99.06" width="0.1524" layer="91"/>
-<junction x="137.16" y="99.06"/>
+<wire x1="144.78" y1="91.44" x2="137.16" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="137.16" y1="91.44" x2="137.16" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -685,19 +671,9 @@ Standard decoupling cap</description>
 <wire x1="81.28" y1="78.74" x2="81.28" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C9" gate="G$1" pin="2"/>
-<pinref part="GND17" gate="1" pin="GND"/>
-<wire x1="91.44" y1="78.74" x2="91.44" y2="91.44" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="GND18" gate="1" pin="GND"/>
 <pinref part="D9" gate="G$1" pin="VSS"/>
 <wire x1="127" y1="78.74" x2="127" y2="83.82" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="C10" gate="G$1" pin="2"/>
-<pinref part="GND19" gate="1" pin="GND"/>
-<wire x1="137.16" y1="78.74" x2="137.16" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND20" gate="1" pin="GND"/>
