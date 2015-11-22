@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.01" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.3" altunitdist="inch" altunit="inch"/>
+<grid distance="0.01" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.005" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -26,25 +26,25 @@
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
-<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
-<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
-<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
-<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
-<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
-<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="yes" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="yes" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
-<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
@@ -383,86 +383,163 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="TENS:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="51.054" y="85.852" rot="R180">
+<element name="TENS:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="51.054" y="85.852" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="51.054" y="85.852" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="52.07" y="86.995" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C10" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="49.022" y="45.212">
-<attribute name="PROD_ID" value="CAP-00810" x="49.022" y="45.212" size="1.778" layer="27" display="off"/>
+<element name="TENS:C10" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="42.164" y="54.864">
+<attribute name="PROD_ID" value="CAP-00810" x="42.164" y="54.864" size="1.778" layer="27" display="off"/>
 </element>
-<element name="TENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="79.248" rot="R180">
-<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="79.248" size="1.778" layer="27" rot="R180" display="off"/>
+<element name="TENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="78.74" smashed="yes" rot="R180">
+<attribute name="PROD_ID" value="CAP-00810" x="50.8" y="78.74" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="51.816" y="79.883" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="72.39" rot="R180">
+<element name="TENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="72.39" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="50.8" y="72.39" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="51.816" y="73.533" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="56.134" y="67.31">
+<element name="TENS:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="56.134" y="67.31" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="56.134" y="67.31" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="55.118" y="66.167" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="63.754" y="65.532">
+<element name="TENS:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="63.754" y="65.532" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="63.754" y="65.532" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="62.738" y="64.389" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="71.374" y="70.866">
+<element name="TENS:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="71.374" y="70.866" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="71.374" y="70.866" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="70.358" y="69.723" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.994" y="69.088">
+<element name="TENS:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.994" y="69.088" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="78.994" y="69.088" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="77.978" y="67.945" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="72.39" y="87.63" rot="R180">
+<element name="TENS:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="72.39" y="87.63" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="72.39" y="87.63" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="73.406" y="88.773" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852">
+<element name="TENS:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="78.74" y="85.852" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="77.978" y="86.614" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:D1" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="86.36" rot="R90"/>
-<element name="TENS:D10" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="74.0918" rot="R90"/>
-<element name="TENS:D2" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="79.3496" rot="R90"/>
-<element name="TENS:D3" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="72.3392" rot="R90"/>
-<element name="TENS:D4" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="70.5866" rot="R90"/>
-<element name="TENS:D5" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="77.597" rot="R90"/>
-<element name="TENS:D6" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="84.6074" rot="R90"/>
-<element name="TENS:D7" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="82.8548" rot="R90"/>
-<element name="TENS:D8" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="75.8444" rot="R90"/>
-<element name="TENS:D9" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="81.1022" rot="R90"/>
-<element name="ONES:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="23.368" y="69.088">
+<element name="TENS:D1" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="86.36" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.014" y="82.994" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="57.48" y="90.36" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D10" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="74.0918" smashed="yes" rot="R90">
+<attribute name="NAME" x="82.874" y="70.7258" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="80.34" y="78.0918" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D2" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="79.3496" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.014" y="75.9836" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="57.48" y="83.3496" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D3" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="72.3392" smashed="yes" rot="R90">
+<attribute name="NAME" x="60.014" y="68.9732" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="57.48" y="76.3392" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D4" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="70.5866" smashed="yes" rot="R90">
+<attribute name="NAME" x="67.634" y="67.2206" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="65.1" y="74.5866" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D5" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="77.597" smashed="yes" rot="R90">
+<attribute name="NAME" x="67.634" y="74.231" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="65.1" y="81.597" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D6" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="84.6074" smashed="yes" rot="R90">
+<attribute name="NAME" x="67.634" y="81.2414" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="65.1" y="88.6074" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D7" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="82.8548" smashed="yes" rot="R90">
+<attribute name="NAME" x="75.254" y="79.4888" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="72.72" y="86.8548" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D8" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="75.8444" smashed="yes" rot="R90">
+<attribute name="NAME" x="75.254" y="72.4784" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="72.72" y="79.8444" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="TENS:D9" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="81.1022" smashed="yes" rot="R90">
+<attribute name="NAME" x="82.874" y="78.4982" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="80.34" y="85.1022" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="23.368" y="69.088" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="18.288" y="100.838" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="22.352" y="67.945" size="0.4064" layer="27" font="vector"/>
 </element>
 <element name="ONES:C10" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="17.526" y="54.864">
 <attribute name="PROD_ID" value="CAP-00810" x="17.526" y="82.804" size="1.778" layer="27" display="off"/>
 </element>
-<element name="ONES:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.734" y="70.612">
+<element name="ONES:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.734" y="70.612" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="21.844" y="94.742" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="29.718" y="69.469" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="38.608" y="65.532">
+<element name="ONES:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="38.608" y="65.532" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="25.908" y="85.852" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="37.592" y="64.389" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="46.228" y="67.31">
+<element name="ONES:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="46.228" y="67.31" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="29.718" y="83.82" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="45.212" y="66.167" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="22.86" y="85.852">
+<element name="ONES:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="22.86" y="85.852" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="2.54" y="98.552" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="22.098" y="86.614" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.988" y="87.63">
+<element name="ONES:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.988" y="87.63" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="6.858" y="96.52" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="30.226" y="88.392" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="45.466" y="54.864">
+<element name="ONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="45.466" y="54.864" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="17.526" y="59.944" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="44.577" y="55.626" size="0.4064" layer="25" font="vector"/>
+<attribute name="VALUE" x="44.45" y="53.721" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="17.526" y="51.054">
-<attribute name="PROD_ID" value="CAP-00810" x="17.526" y="56.134" size="1.778" layer="27" display="off"/>
+<element name="ONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="21.082" y="54.864">
+<attribute name="PROD_ID" value="CAP-00810" x="21.082" y="59.944" size="1.778" layer="27" display="off"/>
 </element>
-<element name="ONES:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="21.336" y="51.054">
-<attribute name="PROD_ID" value="CAP-00810" x="17.526" y="52.324" size="1.778" layer="27" display="off"/>
+<element name="ONES:C9" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="24.384" y="54.864">
+<attribute name="PROD_ID" value="CAP-00810" x="20.574" y="56.134" size="1.778" layer="27" display="off"/>
 </element>
-<element name="ONES:D1" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="74.0918" rot="R90"/>
-<element name="ONES:D10" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="86.36" rot="R90"/>
-<element name="ONES:D2" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="81.1022" rot="R90"/>
-<element name="ONES:D3" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="75.8444" rot="R90"/>
-<element name="ONES:D4" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="82.8548" rot="R90"/>
-<element name="ONES:D5" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="70.5866" rot="R90"/>
-<element name="ONES:D6" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="77.597" rot="R90"/>
-<element name="ONES:D7" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="84.6074" rot="R90"/>
-<element name="ONES:D8" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="72.3392" rot="R90"/>
-<element name="ONES:D9" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="79.3496" rot="R90"/>
+<element name="ONES:D1" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="74.0918" smashed="yes" rot="R90">
+<attribute name="NAME" x="19.882" y="70.7258" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="24.46" y="78.0918" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D10" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="86.36" smashed="yes" rot="R90">
+<attribute name="NAME" x="42.742" y="82.994" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="47.32" y="90.36" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D2" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="81.1022" smashed="yes" rot="R90">
+<attribute name="NAME" x="19.882" y="77.9902" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="24.46" y="85.1022" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D3" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="75.8444" smashed="yes" rot="R90">
+<attribute name="NAME" x="26.994" y="72.4784" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="32.08" y="79.8444" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D4" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="82.8548" smashed="yes" rot="R90">
+<attribute name="NAME" x="26.994" y="79.4888" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="32.08" y="86.8548" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D5" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="70.5866" smashed="yes" rot="R90">
+<attribute name="NAME" x="35.122" y="67.2206" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="39.7" y="74.5866" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D6" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="77.597" smashed="yes" rot="R90">
+<attribute name="NAME" x="35.122" y="74.231" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="39.7" y="81.597" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D7" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="84.6074" smashed="yes" rot="R90">
+<attribute name="NAME" x="35.122" y="81.2414" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="39.7" y="88.6074" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D8" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="72.3392" smashed="yes" rot="R90">
+<attribute name="NAME" x="42.742" y="68.9732" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="47.32" y="76.3392" size="0.6096" layer="27" rot="R90"/>
+</element>
+<element name="ONES:D9" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="79.3496" smashed="yes" rot="R90">
+<attribute name="NAME" x="42.742" y="75.9836" size="1.016" layer="25" rot="R90"/>
+<attribute name="VALUE" x="47.32" y="83.3496" size="0.6096" layer="27" rot="R90"/>
+</element>
 </elements>
 <signals>
 <signal name="TENS:N$5">
@@ -497,8 +574,8 @@ design rules under a new name.</description>
 <wire x1="54.356" y1="74.676" x2="54.356" y2="73.66" width="0.3048" layer="1"/>
 <wire x1="65.024" y1="68.326" x2="65.1" y2="68.1366" width="0.3048" layer="1"/>
 <wire x1="54.356" y1="74.676" x2="54.28" y2="74.7892" width="0.3048" layer="1"/>
-<via x="63.5" y="68.326" extent="1-16" drill="0.6"/>
-<via x="54.864" y="73.152" extent="1-16" drill="0.6"/>
+<via x="63.5" y="68.326" extent="1-16" drill="0.7" diameter="0.6096"/>
+<via x="54.864" y="73.152" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="TENS:N$7">
 <contactref element="TENS:D5" pad="2"/>
@@ -546,16 +623,7 @@ design rules under a new name.</description>
 <signal name="TENS:N$13">
 <contactref element="TENS:D9" pad="2"/>
 <contactref element="TENS:D8" pad="4"/>
-<wire x1="69.596" y1="77.216" x2="69.596" y2="78.232" width="0.3048" layer="1"/>
-<wire x1="70.104" y1="76.708" x2="69.596" y2="77.216" width="0.3048" layer="1"/>
-<wire x1="76.2" y1="76.708" x2="70.104" y2="76.708" width="0.3048" layer="16"/>
-<wire x1="79.756" y1="80.264" x2="76.2" y2="76.708" width="0.3048" layer="16"/>
-<wire x1="80.264" y1="79.756" x2="79.756" y2="80.264" width="0.3048" layer="1"/>
-<wire x1="80.264" y1="78.74" x2="80.264" y2="79.756" width="0.3048" layer="1"/>
-<wire x1="69.596" y1="78.232" x2="69.52" y2="78.2944" width="0.3048" layer="1"/>
-<wire x1="80.264" y1="78.74" x2="80.34" y2="78.6522" width="0.3048" layer="1"/>
-<via x="70.104" y="76.708" extent="1-16" drill="0.6"/>
-<via x="79.756" y="80.264" extent="1-16" drill="0.6"/>
+<wire x1="69.52" y1="78.2944" x2="80.34" y2="78.6522" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="TENS:N$15">
 <contactref element="TENS:D10" pad="2"/>
@@ -586,8 +654,8 @@ design rules under a new name.</description>
 <wire x1="21.336" y1="83.312" x2="21.336" y2="82.042" width="0.3048" layer="1"/>
 <wire x1="32.004" y1="73.406" x2="32.08" y2="73.3944" width="0.3048" layer="1"/>
 <wire x1="21.336" y1="83.312" x2="21.26" y2="83.5522" width="0.3048" layer="1"/>
-<via x="30.48" y="73.406" extent="1-16" drill="0.6"/>
-<via x="21.336" y="82.042" extent="1-16" drill="0.6"/>
+<via x="30.48" y="73.406" extent="1-16" drill="0.7" diameter="0.6096"/>
+<via x="21.336" y="82.042" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="ONES:N$6">
 <contactref element="ONES:D4" pad="2"/>
@@ -602,14 +670,14 @@ design rules under a new name.</description>
 <contactref element="ONES:D5" pad="2"/>
 <contactref element="ONES:D4" pad="4"/>
 <wire x1="39.624" y1="70.358" x2="39.624" y2="68.326" width="0.3048" layer="1"/>
-<wire x1="39.624" y1="71.628" x2="39.624" y2="70.358" width="0.3048" layer="16"/>
-<wire x1="27.94" y1="83.312" x2="39.624" y2="71.628" width="0.3048" layer="16"/>
-<wire x1="28.956" y1="84.328" x2="27.94" y2="83.312" width="0.3048" layer="1"/>
+<wire x1="27.686" y1="82.296" x2="39.624" y2="70.358" width="0.3048" layer="16"/>
+<wire x1="27.686" y1="83.058" x2="27.686" y2="82.296" width="0.3048" layer="1"/>
+<wire x1="28.956" y1="84.328" x2="27.686" y2="83.058" width="0.3048" layer="1"/>
 <wire x1="28.956" y1="85.09" x2="28.956" y2="84.328" width="0.3048" layer="1"/>
 <wire x1="39.624" y1="68.326" x2="39.7" y2="68.1366" width="0.3048" layer="1"/>
 <wire x1="28.956" y1="85.09" x2="28.88" y2="85.3048" width="0.3048" layer="1"/>
-<via x="39.624" y="70.358" extent="1-16" drill="0.6"/>
-<via x="27.94" y="83.312" extent="1-16" drill="0.6"/>
+<via x="39.624" y="70.358" extent="1-16" drill="0.7" diameter="0.6096"/>
+<via x="27.686" y="82.296" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="ONES:N$9">
 <contactref element="ONES:D5" pad="4"/>
@@ -639,8 +707,8 @@ design rules under a new name.</description>
 <wire x1="36.576" y1="86.868" x2="36.576" y2="84.836" width="0.3048" layer="1"/>
 <wire x1="47.244" y1="70.104" x2="47.32" y2="69.8892" width="0.3048" layer="1"/>
 <wire x1="36.576" y1="86.868" x2="36.5" y2="87.0574" width="0.3048" layer="1"/>
-<via x="47.244" y="72.136" extent="1-16" drill="0.6"/>
-<via x="36.83" y="84.582" extent="1-16" drill="0.6"/>
+<via x="47.244" y="72.136" extent="1-16" drill="0.7" diameter="0.6096"/>
+<via x="36.83" y="84.582" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="ONES:N$13">
 <contactref element="ONES:D9" pad="2"/>
@@ -664,14 +732,14 @@ design rules under a new name.</description>
 <contactref element="TENS:D1" pad="2"/>
 <contactref element="ONES:D10" pad="4"/>
 <wire x1="57.404" y1="85.09" x2="57.404" y2="84.074" width="0.3048" layer="1"/>
-<wire x1="55.372" y1="87.122" x2="57.404" y2="85.09" width="0.3048" layer="1"/>
-<wire x1="45.212" y1="87.122" x2="55.372" y2="87.122" width="0.3048" layer="16"/>
-<wire x1="44.196" y1="88.138" x2="45.212" y2="87.122" width="0.3048" layer="1"/>
+<wire x1="56.896" y1="85.598" x2="57.404" y2="85.09" width="0.3048" layer="1"/>
+<wire x1="46.736" y1="85.598" x2="56.896" y2="85.598" width="0.3048" layer="16"/>
+<wire x1="44.196" y1="88.138" x2="46.736" y2="85.598" width="0.3048" layer="1"/>
 <wire x1="44.196" y1="88.646" x2="44.196" y2="88.138" width="0.3048" layer="1"/>
 <wire x1="57.404" y1="84.074" x2="57.48" y2="83.91" width="0.3048" layer="1"/>
 <wire x1="44.196" y1="88.646" x2="44.12" y2="88.81" width="0.3048" layer="1"/>
-<via x="55.372" y="87.122" extent="1-16" drill="0.6"/>
-<via x="45.212" y="87.122" extent="1-16" drill="0.6"/>
+<via x="56.896" y="85.598" extent="1-16" drill="0.7" diameter="0.6096"/>
+<via x="46.736" y="85.598" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="N$2">
 <contactref element="TENS:D10" pad="4"/>
@@ -731,8 +799,8 @@ design rules under a new name.</description>
 <wire x1="53.086" y1="83.566" x2="52.578" y2="83.058" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="83.82" x2="53.34" y2="83.82" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="83.82" x2="54.28" y2="83.91" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="83.058" x2="52.578" y2="79.248" width="0.8128" layer="1"/>
-<wire x1="52.578" y1="79.248" x2="52.578" y2="77.978" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="83.058" x2="52.578" y2="78.74" width="0.8128" layer="1"/>
+<wire x1="52.578" y1="78.74" x2="52.578" y2="77.978" width="0.8128" layer="1"/>
 <wire x1="53.594" y1="76.962" x2="54.102" y2="76.962" width="0.8128" layer="1"/>
 <wire x1="52.578" y1="77.978" x2="53.34" y2="77.216" width="0.8128" layer="1"/>
 <wire x1="53.34" y1="77.216" x2="53.594" y2="76.962" width="0.8128" layer="1"/>
@@ -743,7 +811,7 @@ design rules under a new name.</description>
 <wire x1="53.594" y1="70.104" x2="54.102" y2="70.104" width="0.8128" layer="1"/>
 <wire x1="52.578" y1="71.12" x2="53.594" y2="70.104" width="0.8128" layer="1"/>
 <wire x1="54.102" y1="70.104" x2="54.28" y2="69.8892" width="0.8128" layer="1"/>
-<wire x1="51.65" y1="79.248" x2="52.578" y2="79.248" width="0.3048" layer="1"/>
+<wire x1="51.65" y1="78.74" x2="52.578" y2="78.74" width="0.3048" layer="1"/>
 <wire x1="51.65" y1="72.39" x2="52.578" y2="72.39" width="0.3048" layer="1"/>
 <wire x1="52.07" y1="85.852" x2="52.324" y2="85.852" width="0.3048" layer="1"/>
 <wire x1="76.708" y1="78.486" x2="75.438" y2="79.756" width="0.8128" layer="1"/>
@@ -857,15 +925,15 @@ design rules under a new name.</description>
 <wire x1="70.524" y1="70.866" x2="75.438" y2="72.644" width="0" layer="19" extent="1-1"/>
 <wire x1="61.9" y1="75.147" x2="67.818" y2="74.422" width="0" layer="19" extent="1-1"/>
 <wire x1="55.284" y1="67.31" x2="60.198" y2="69.342" width="0" layer="19" extent="1-1"/>
-<wire x1="44.12" y1="76.8996" x2="51.65" y2="79.248" width="0" layer="19" extent="1-1"/>
+<wire x1="44.12" y1="76.8996" x2="51.65" y2="78.74" width="0" layer="19" extent="1-1"/>
 <wire x1="36.5" y1="82.1574" x2="42.418" y2="82.296" width="0" layer="19" extent="1-1"/>
 <wire x1="29.884" y1="70.612" x2="34.798" y2="71.628" width="0" layer="19" extent="1-1"/>
 <wire x1="22.606" y1="79.756" x2="27.178" y2="78.74" width="0" layer="19" extent="1-1"/>
 <wire x1="44.616" y1="54.864" x2="44.958" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="48.172" y1="45.212" x2="44.616" y2="54.864" width="0" layer="19" extent="1-1"/>
+<wire x1="41.314" y1="54.864" x2="44.616" y2="54.864" width="0" layer="19" extent="1-1"/>
 <wire x1="16.676" y1="54.864" x2="22.098" y2="69.088" width="0" layer="19" extent="1-1"/>
-<wire x1="16.676" y1="51.054" x2="16.676" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="20.486" y1="51.054" x2="16.676" y2="51.054" width="0" layer="19" extent="1-1"/>
+<wire x1="20.232" y1="54.864" x2="16.676" y2="54.864" width="0" layer="19" extent="1-1"/>
+<wire x1="23.534" y1="54.864" x2="20.232" y2="54.864" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
 <contactref element="TENS:C1" pad="2"/>
@@ -971,8 +1039,8 @@ design rules under a new name.</description>
 <wire x1="47.498" y1="88.646" x2="47.32" y2="88.81" width="0.8128" layer="1"/>
 <wire x1="47.498" y1="82.042" x2="47.32" y2="81.7996" width="0.8128" layer="1"/>
 <wire x1="49.022" y1="76.454" x2="47.498" y2="74.93" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="80.264" x2="49.022" y2="79.248" width="0.8128" layer="1"/>
-<wire x1="49.022" y1="79.248" x2="49.022" y2="76.454" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="80.264" x2="49.022" y2="78.74" width="0.8128" layer="1"/>
+<wire x1="49.022" y1="78.74" x2="49.022" y2="76.454" width="0.8128" layer="1"/>
 <wire x1="47.498" y1="74.93" x2="47.32" y2="74.7892" width="0.8128" layer="1"/>
 <wire x1="49.022" y1="80.264" x2="47.763353125" y2="81.46575625" width="0.8128" layer="1"/>
 <wire x1="47.763353125" y1="81.46575625" x2="47.32" y2="81.7996" width="0.8128" layer="1"/>
@@ -980,7 +1048,7 @@ design rules under a new name.</description>
 <wire x1="49.022" y1="85.852" x2="49.022" y2="87.122" width="0.8128" layer="1"/>
 <wire x1="48.006" y1="81.788" x2="49.022" y2="82.804" width="0.8128" layer="1"/>
 <wire x1="48.006" y1="81.788" x2="47.763353125" y2="81.46575625" width="0.8128" layer="1"/>
-<wire x1="49.95" y1="79.248" x2="49.022" y2="79.248" width="0.8128" layer="1"/>
+<wire x1="49.95" y1="78.74" x2="49.022" y2="78.74" width="0.8128" layer="1"/>
 <wire x1="39.878" y1="87.122" x2="41.402" y2="85.598" width="0.8128" layer="1"/>
 <wire x1="39.878" y1="87.122" x2="39.7" y2="87.0574" width="0.8128" layer="1"/>
 <wire x1="40.132" y1="80.264" x2="39.878" y2="80.264" width="0.8128" layer="1"/>
@@ -1040,10 +1108,10 @@ design rules under a new name.</description>
 <wire x1="31.584" y1="70.612" x2="32.258" y2="70.612" width="0" layer="19" extent="1-1"/>
 <wire x1="26.162" y1="70.866" x2="31.584" y2="70.612" width="0" layer="19" extent="1-1"/>
 <wire x1="46.316" y1="54.864" x2="39.878" y2="65.532" width="0" layer="19" extent="1-1"/>
-<wire x1="49.872" y1="45.212" x2="46.316" y2="54.864" width="0" layer="19" extent="1-1"/>
+<wire x1="43.014" y1="54.864" x2="46.316" y2="54.864" width="0" layer="19" extent="1-1"/>
 <wire x1="18.376" y1="54.864" x2="24.218" y2="69.088" width="0" layer="19" extent="1-1"/>
-<wire x1="18.376" y1="51.054" x2="18.376" y2="54.864" width="0" layer="19" extent="1-1"/>
-<wire x1="22.186" y1="51.054" x2="18.376" y2="51.054" width="0" layer="19" extent="1-1"/>
+<wire x1="21.932" y1="54.864" x2="18.376" y2="54.864" width="0" layer="19" extent="1-1"/>
+<wire x1="25.234" y1="54.864" x2="21.932" y2="54.864" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>
