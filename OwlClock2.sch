@@ -6826,6 +6826,11 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="VSS4" library="supply1" deviceset="VSS" device=""/>
 <part name="VSS5" library="supply1" deviceset="VSS" device=""/>
 <part name="VSS6" library="supply1" deviceset="VSS" device=""/>
+<part name="C6" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="1uF"/>
+<part name="C7" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="1uF"/>
+<part name="GND6" library="supply1" deviceset="GND" device=""/>
+<part name="GND13" library="supply1" deviceset="GND" device=""/>
+<part name="P+1" library="supply1" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -6848,7 +6853,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <instance part="GND2" gate="1" x="-2.54" y="132.08"/>
 <instance part="FRAME1" gate="G$1" x="-33.02" y="25.4"/>
 <instance part="FRAME1" gate="G$2" x="139.7" y="25.4"/>
-<instance part="GND5" gate="1" x="106.68" y="53.34"/>
+<instance part="GND5" gate="1" x="137.16" y="91.44"/>
 <instance part="C3" gate="G$1" x="17.78" y="111.76"/>
 <instance part="C4" gate="G$1" x="-17.78" y="124.46"/>
 <instance part="JP1" gate="A" x="218.44" y="215.9"/>
@@ -6859,7 +6864,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <instance part="DOWN" gate="G$1" x="76.2" y="210.82"/>
 <instance part="SET" gate="G$1" x="76.2" y="203.2"/>
 <instance part="R3" gate="G$1" x="86.36" y="116.84"/>
-<instance part="C5" gate="G$1" x="106.68" y="71.12"/>
+<instance part="C5" gate="G$1" x="137.16" y="104.14"/>
 <instance part="PHOTO_INSIDE" gate="G$1" x="203.2" y="93.98"/>
 <instance part="R4" gate="G$1" x="215.9" y="78.74" rot="R90"/>
 <instance part="GND3" gate="1" x="215.9" y="68.58"/>
@@ -6872,6 +6877,11 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <instance part="VSS4" gate="G$1" x="43.18" y="76.2" rot="R180"/>
 <instance part="VSS5" gate="G$1" x="175.26" y="109.22" rot="R180"/>
 <instance part="VSS6" gate="G$1" x="215.9" y="109.22" rot="R180"/>
+<instance part="C6" gate="G$1" x="101.6" y="66.04" rot="R180"/>
+<instance part="C7" gate="G$1" x="73.66" y="66.04" rot="R180"/>
+<instance part="GND6" gate="1" x="73.66" y="53.34"/>
+<instance part="GND13" gate="1" x="101.6" y="53.34"/>
+<instance part="P+1" gate="VCC" x="137.16" y="114.3"/>
 </instances>
 <busses>
 </busses>
@@ -6892,7 +6902,16 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
 <wire x1="68.58" y1="83.82" x2="68.58" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="VI"/>
-<wire x1="68.58" y1="78.74" x2="76.2" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="78.74" x2="73.66" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="2"/>
+<wire x1="73.66" y1="78.74" x2="76.2" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="68.58" x2="73.66" y2="78.74" width="0.1524" layer="91"/>
+<junction x="73.66" y="78.74"/>
+</segment>
+<segment>
+<pinref part="C5" gate="G$1" pin="+"/>
+<pinref part="P+1" gate="VCC" pin="VCC"/>
+<wire x1="137.16" y1="106.68" x2="137.16" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -6965,7 +6984,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <segment>
 <pinref part="GND5" gate="1" pin="GND"/>
 <pinref part="C5" gate="G$1" pin="-"/>
-<wire x1="106.68" y1="55.88" x2="106.68" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="137.16" y1="93.98" x2="137.16" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R4" gate="G$1" pin="1"/>
@@ -6976,6 +6995,16 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <pinref part="IC1" gate="G$1" pin="GND"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 <wire x1="86.36" y1="71.12" x2="86.36" y2="55.88" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="C7" gate="G$1" pin="1"/>
+<pinref part="GND6" gate="1" pin="GND"/>
+<wire x1="73.66" y1="60.96" x2="73.66" y2="55.88" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="C6" gate="G$1" pin="1"/>
+<pinref part="GND13" gate="1" pin="GND"/>
+<wire x1="101.6" y1="60.96" x2="101.6" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="MOSI" class="0">
@@ -7180,13 +7209,13 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 </net>
 <net name="VSS" class="0">
 <segment>
-<pinref part="C5" gate="G$1" pin="+"/>
-<wire x1="106.68" y1="73.66" x2="106.68" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="VO"/>
-<wire x1="96.52" y1="78.74" x2="106.68" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="VSS1" gate="G$1" pin="VSS"/>
-<wire x1="116.84" y1="78.74" x2="106.68" y2="78.74" width="0.1524" layer="91"/>
-<junction x="106.68" y="78.74"/>
+<wire x1="116.84" y1="78.74" x2="101.6" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="C6" gate="G$1" pin="2"/>
+<wire x1="101.6" y1="78.74" x2="96.52" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="68.58" x2="101.6" y2="78.74" width="0.1524" layer="91"/>
+<junction x="101.6" y="78.74"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="AVCC"/>
