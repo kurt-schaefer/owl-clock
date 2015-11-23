@@ -404,147 +404,147 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="TENS:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="51.054" y="85.852" smashed="yes" rot="R180">
+<element name="MTENS:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="51.054" y="85.852" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="51.054" y="85.852" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="52.07" y="86.995" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="81.534" smashed="yes" rot="R180">
+<element name="MTENS:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="81.534" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="50.8" y="81.534" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="51.816" y="82.677" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="69.85" smashed="yes" rot="R180">
+<element name="MTENS:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="69.85" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="50.8" y="69.85" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="51.816" y="70.993" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="56.134" y="67.31" smashed="yes">
+<element name="MTENS:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="56.134" y="67.31" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="56.134" y="67.31" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="55.118" y="66.167" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="63.754" y="65.532" smashed="yes">
+<element name="MTENS:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="63.754" y="65.532" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="63.754" y="65.532" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="62.738" y="64.389" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="71.374" y="70.866" smashed="yes">
+<element name="MTENS:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="71.374" y="70.866" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="71.374" y="70.866" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="70.358" y="69.723" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.994" y="69.088" smashed="yes">
+<element name="MTENS:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.994" y="69.088" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="78.994" y="69.088" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="77.978" y="67.945" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="TENS:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="72.39" y="87.63" smashed="yes" rot="R180">
+<element name="MTENS:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="72.39" y="87.63" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="72.39" y="87.63" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="73.406" y="88.773" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="TENS:D1" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="86.36" smashed="yes" rot="R90">
+<element name="MTENS:D1" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="86.36" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.014" y="82.994" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="57.48" y="90.36" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D10" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="74.0918" smashed="yes" rot="R90">
+<element name="MTENS:D10" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="74.0918" smashed="yes" rot="R90">
 <attribute name="NAME" x="82.874" y="70.7258" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="80.34" y="78.0918" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D2" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="79.3496" smashed="yes" rot="R90">
+<element name="MTENS:D2" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="79.3496" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.014" y="75.9836" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="57.48" y="83.3496" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D3" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="72.3392" smashed="yes" rot="R90">
+<element name="MTENS:D3" library="SparkFun-LED" package="WS2812B" value="" x="55.88" y="72.3392" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.014" y="68.9732" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="57.48" y="76.3392" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D4" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="70.5866" smashed="yes" rot="R90">
+<element name="MTENS:D4" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="70.5866" smashed="yes" rot="R90">
 <attribute name="NAME" x="67.634" y="67.2206" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="65.1" y="74.5866" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D5" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="77.597" smashed="yes" rot="R90">
+<element name="MTENS:D5" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="77.597" smashed="yes" rot="R90">
 <attribute name="NAME" x="67.634" y="74.231" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="65.1" y="81.597" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D6" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="84.6074" smashed="yes" rot="R90">
+<element name="MTENS:D6" library="SparkFun-LED" package="WS2812B" value="" x="63.5" y="84.6074" smashed="yes" rot="R90">
 <attribute name="NAME" x="67.634" y="81.2414" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="65.1" y="88.6074" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D7" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="82.8548" smashed="yes" rot="R90">
+<element name="MTENS:D7" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="82.8548" smashed="yes" rot="R90">
 <attribute name="NAME" x="75.254" y="79.4888" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="72.72" y="86.8548" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D8" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="75.8444" smashed="yes" rot="R90">
+<element name="MTENS:D8" library="SparkFun-LED" package="WS2812B" value="" x="71.12" y="75.8444" smashed="yes" rot="R90">
 <attribute name="NAME" x="75.254" y="72.4784" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="72.72" y="79.8444" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="TENS:D9" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="81.1022" smashed="yes" rot="R90">
+<element name="MTENS:D9" library="SparkFun-LED" package="WS2812B" value="" x="78.74" y="81.1022" smashed="yes" rot="R90">
 <attribute name="NAME" x="82.874" y="78.4982" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="80.34" y="85.1022" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="23.368" y="69.088" smashed="yes">
+<element name="MONES:C1" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="23.368" y="69.088" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="18.288" y="100.838" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="22.352" y="67.945" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.734" y="70.612" smashed="yes">
+<element name="MONES:C2" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.734" y="70.612" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="21.844" y="94.742" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="29.718" y="69.469" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="38.608" y="65.532" smashed="yes">
+<element name="MONES:C3" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="38.608" y="65.532" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="25.908" y="85.852" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="37.592" y="64.389" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="46.228" y="67.31" smashed="yes">
+<element name="MONES:C4" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="46.228" y="67.31" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="29.718" y="83.82" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="45.212" y="66.167" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="22.86" y="85.852" smashed="yes">
+<element name="MONES:C5" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="22.86" y="85.852" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="2.54" y="98.552" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="22.098" y="86.614" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.988" y="87.63" smashed="yes">
+<element name="MONES:C6" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="30.988" y="87.63" smashed="yes">
 <attribute name="PROD_ID" value="CAP-00810" x="6.858" y="96.52" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="30.226" y="88.392" size="0.4064" layer="27" font="vector"/>
 </element>
-<element name="ONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="74.422" smashed="yes" rot="R180">
+<element name="MONES:C7" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="50.8" y="74.422" smashed="yes" rot="R180">
 <attribute name="PROD_ID" value="CAP-00810" x="78.74" y="69.342" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="NAME" x="51.689" y="73.66" size="0.4064" layer="25" font="vector" rot="R180"/>
 <attribute name="VALUE" x="51.816" y="75.565" size="0.4064" layer="27" font="vector" rot="R180"/>
 </element>
-<element name="ONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852">
+<element name="MONES:C8" library="SparkFun-Capacitors" package="0603-CAP" value="0.1uF" x="78.74" y="85.852">
 <attribute name="PROD_ID" value="CAP-00810" x="78.74" y="90.932" size="1.778" layer="27" display="off"/>
 </element>
-<element name="ONES:D1" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="74.0918" smashed="yes" rot="R90">
+<element name="MONES:D1" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="74.0918" smashed="yes" rot="R90">
 <attribute name="NAME" x="19.882" y="70.7258" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="24.46" y="78.0918" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D10" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="86.36" smashed="yes" rot="R90">
+<element name="MONES:D10" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="86.36" smashed="yes" rot="R90">
 <attribute name="NAME" x="42.742" y="82.994" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="47.32" y="90.36" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D2" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="81.1022" smashed="yes" rot="R90">
+<element name="MONES:D2" library="SparkFun-LED" package="WS2812B" value="" x="22.86" y="81.1022" smashed="yes" rot="R90">
 <attribute name="NAME" x="19.882" y="77.9902" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="24.46" y="85.1022" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D3" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="75.8444" smashed="yes" rot="R90">
+<element name="MONES:D3" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="75.8444" smashed="yes" rot="R90">
 <attribute name="NAME" x="26.994" y="72.4784" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="32.08" y="79.8444" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D4" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="82.8548" smashed="yes" rot="R90">
+<element name="MONES:D4" library="SparkFun-LED" package="WS2812B" value="" x="30.48" y="82.8548" smashed="yes" rot="R90">
 <attribute name="NAME" x="26.994" y="79.4888" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="32.08" y="86.8548" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D5" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="70.5866" smashed="yes" rot="R90">
+<element name="MONES:D5" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="70.5866" smashed="yes" rot="R90">
 <attribute name="NAME" x="35.122" y="67.2206" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="39.7" y="74.5866" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D6" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="77.597" smashed="yes" rot="R90">
+<element name="MONES:D6" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="77.597" smashed="yes" rot="R90">
 <attribute name="NAME" x="35.122" y="74.231" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="39.7" y="81.597" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D7" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="84.6074" smashed="yes" rot="R90">
+<element name="MONES:D7" library="SparkFun-LED" package="WS2812B" value="" x="38.1" y="84.6074" smashed="yes" rot="R90">
 <attribute name="NAME" x="35.122" y="81.2414" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="39.7" y="88.6074" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D8" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="72.3392" smashed="yes" rot="R90">
+<element name="MONES:D8" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="72.3392" smashed="yes" rot="R90">
 <attribute name="NAME" x="42.742" y="68.9732" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="47.32" y="76.3392" size="0.6096" layer="27" rot="R90"/>
 </element>
-<element name="ONES:D9" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="79.3496" smashed="yes" rot="R90">
+<element name="MONES:D9" library="SparkFun-LED" package="WS2812B" value="" x="45.72" y="79.3496" smashed="yes" rot="R90">
 <attribute name="NAME" x="42.742" y="75.9836" size="1.016" layer="25" rot="R90"/>
 <attribute name="VALUE" x="47.32" y="83.3496" size="0.6096" layer="27" rot="R90"/>
 </element>
@@ -552,9 +552,9 @@ design rules under a new name.</description>
 <element name="U$2" library="SparkFun-Electromechanical" package="STAND-OFF" value="" x="88.392" y="67.564"/>
 </elements>
 <signals>
-<signal name="TENS:N$5">
-<contactref element="TENS:D2" pad="2"/>
-<contactref element="TENS:D1" pad="4"/>
+<signal name="MTENS:N$5">
+<contactref element="MTENS:D2" pad="2"/>
+<contactref element="MTENS:D1" pad="4"/>
 <wire x1="57.404" y1="78.994" x2="57.404" y2="76.962" width="0.3048" layer="1"/>
 <wire x1="55.88" y1="80.518" x2="57.404" y2="78.994" width="0.3048" layer="1"/>
 <wire x1="55.88" y1="85.344" x2="55.88" y2="80.518" width="0.3048" layer="1"/>
@@ -563,9 +563,9 @@ design rules under a new name.</description>
 <wire x1="57.404" y1="76.962" x2="57.48" y2="76.8996" width="0.3048" layer="1"/>
 <wire x1="54.356" y1="88.646" x2="54.28" y2="88.81" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$1">
-<contactref element="TENS:D3" pad="2"/>
-<contactref element="TENS:D2" pad="4"/>
+<signal name="MTENS:N$1">
+<contactref element="MTENS:D3" pad="2"/>
+<contactref element="MTENS:D2" pad="4"/>
 <wire x1="57.404" y1="72.136" x2="57.404" y2="70.104" width="0.3048" layer="1"/>
 <wire x1="55.88" y1="73.66" x2="57.404" y2="72.136" width="0.3048" layer="1"/>
 <wire x1="55.88" y1="78.486" x2="55.88" y2="73.66" width="0.3048" layer="1"/>
@@ -574,9 +574,9 @@ design rules under a new name.</description>
 <wire x1="57.404" y1="70.104" x2="57.48" y2="69.8892" width="0.3048" layer="1"/>
 <wire x1="54.356" y1="81.788" x2="54.28" y2="81.7996" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$6">
-<contactref element="TENS:D4" pad="2"/>
-<contactref element="TENS:D3" pad="4"/>
+<signal name="MTENS:N$6">
+<contactref element="MTENS:D4" pad="2"/>
+<contactref element="MTENS:D3" pad="4"/>
 <wire x1="63.5" y1="68.326" x2="65.024" y2="68.326" width="0.3048" layer="1"/>
 <wire x1="59.69" y1="68.326" x2="63.5" y2="68.326" width="0.3048" layer="16"/>
 <wire x1="54.864" y1="73.152" x2="59.69" y2="68.326" width="0.3048" layer="16"/>
@@ -587,27 +587,27 @@ design rules under a new name.</description>
 <via x="63.5" y="68.326" extent="1-16" drill="0.7" diameter="0.6096"/>
 <via x="54.864" y="73.152" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
-<signal name="TENS:N$7">
-<contactref element="TENS:D5" pad="2"/>
-<contactref element="TENS:D4" pad="4"/>
+<signal name="MTENS:N$7">
+<contactref element="MTENS:D5" pad="2"/>
+<contactref element="MTENS:D4" pad="4"/>
 <wire x1="62.738" y1="73.152" x2="61.976" y2="73.152" width="0.3048" layer="1"/>
 <wire x1="65.024" y1="75.438" x2="62.738" y2="73.152" width="0.3048" layer="1"/>
 <wire x1="65.278" y1="75.184" x2="65.024" y2="75.438" width="0.3048" layer="1"/>
 <wire x1="61.976" y1="73.152" x2="61.9" y2="73.0366" width="0.3048" layer="1"/>
 <wire x1="65.278" y1="75.184" x2="65.1" y2="75.147" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$9">
-<contactref element="TENS:D5" pad="4"/>
-<contactref element="TENS:D6" pad="2"/>
+<signal name="MTENS:N$9">
+<contactref element="MTENS:D5" pad="4"/>
+<contactref element="MTENS:D6" pad="2"/>
 <wire x1="62.738" y1="80.264" x2="61.976" y2="80.264" width="0.3048" layer="1"/>
 <wire x1="65.024" y1="82.55" x2="62.738" y2="80.264" width="0.3048" layer="1"/>
 <wire x1="65.278" y1="82.296" x2="65.024" y2="82.55" width="0.3048" layer="1"/>
 <wire x1="61.976" y1="80.264" x2="61.9" y2="80.047" width="0.3048" layer="1"/>
 <wire x1="65.278" y1="82.296" x2="65.1" y2="82.1574" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$10">
-<contactref element="TENS:D7" pad="2"/>
-<contactref element="TENS:D6" pad="4"/>
+<signal name="MTENS:N$10">
+<contactref element="MTENS:D7" pad="2"/>
+<contactref element="MTENS:D6" pad="4"/>
 <wire x1="72.644" y1="82.55" x2="71.12" y2="84.074" width="0.3048" layer="1"/>
 <wire x1="72.644" y1="80.518" x2="72.644" y2="82.55" width="0.3048" layer="1"/>
 <wire x1="72.644" y1="80.518" x2="72.72" y2="80.4048" width="0.3048" layer="1"/>
@@ -619,9 +619,9 @@ design rules under a new name.</description>
 <wire x1="71.12" y1="85.598" x2="70.104" y2="86.614" width="0.3048" layer="1"/>
 <wire x1="67.056" y1="88.9" x2="63.754" y2="88.9" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$12">
-<contactref element="TENS:D8" pad="2"/>
-<contactref element="TENS:D7" pad="4"/>
+<signal name="MTENS:N$12">
+<contactref element="MTENS:D8" pad="2"/>
+<contactref element="MTENS:D7" pad="4"/>
 <wire x1="72.644" y1="74.93" x2="71.12" y2="76.454" width="0.3048" layer="1"/>
 <wire x1="72.644" y1="73.406" x2="72.644" y2="74.93" width="0.3048" layer="1"/>
 <wire x1="72.644" y1="73.406" x2="72.72" y2="73.3944" width="0.3048" layer="1"/>
@@ -630,14 +630,14 @@ design rules under a new name.</description>
 <wire x1="71.12" y1="76.454" x2="71.12" y2="81.534" width="0.3048" layer="1"/>
 <wire x1="69.596" y1="85.09" x2="69.52" y2="85.3048" width="0.3048" layer="1"/>
 </signal>
-<signal name="TENS:N$13">
-<contactref element="TENS:D9" pad="2"/>
-<contactref element="TENS:D8" pad="4"/>
+<signal name="MTENS:N$13">
+<contactref element="MTENS:D9" pad="2"/>
+<contactref element="MTENS:D8" pad="4"/>
 <wire x1="69.52" y1="78.2944" x2="80.34" y2="78.6522" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="TENS:N$15">
-<contactref element="TENS:D10" pad="2"/>
-<contactref element="TENS:D9" pad="4"/>
+<signal name="MTENS:N$15">
+<contactref element="MTENS:D10" pad="2"/>
+<contactref element="MTENS:D9" pad="4"/>
 <wire x1="80.264" y1="71.882" x2="80.264" y2="73.66" width="0.3048" layer="1"/>
 <wire x1="80.264" y1="71.882" x2="80.34" y2="71.6418" width="0.3048" layer="1"/>
 <wire x1="77.216" y1="81.28" x2="77.216" y2="83.312" width="0.3048" layer="1"/>
@@ -646,18 +646,18 @@ design rules under a new name.</description>
 <wire x1="80.264" y1="73.66" x2="78.74" y2="75.184" width="0.3048" layer="1"/>
 <wire x1="77.216" y1="83.312" x2="77.14" y2="83.5522" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$5">
-<contactref element="ONES:D2" pad="2"/>
-<contactref element="ONES:D1" pad="4"/>
+<signal name="MONES:N$5">
+<contactref element="MONES:D2" pad="2"/>
+<contactref element="MONES:D1" pad="4"/>
 <wire x1="22.098" y1="76.708" x2="21.336" y2="76.708" width="0.3048" layer="1"/>
 <wire x1="24.384" y1="78.994" x2="22.098" y2="76.708" width="0.3048" layer="1"/>
 <wire x1="24.638" y1="78.74" x2="24.384" y2="78.994" width="0.3048" layer="1"/>
 <wire x1="21.336" y1="76.708" x2="21.26" y2="76.5418" width="0.3048" layer="1"/>
 <wire x1="24.638" y1="78.74" x2="24.46" y2="78.6522" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$1">
-<contactref element="ONES:D3" pad="2"/>
-<contactref element="ONES:D2" pad="4"/>
+<signal name="MONES:N$1">
+<contactref element="MONES:D3" pad="2"/>
+<contactref element="MONES:D2" pad="4"/>
 <wire x1="30.48" y1="73.406" x2="32.004" y2="73.406" width="0.3048" layer="1"/>
 <wire x1="29.972" y1="73.406" x2="30.48" y2="73.406" width="0.3048" layer="16"/>
 <wire x1="21.336" y1="82.042" x2="29.972" y2="73.406" width="0.3048" layer="16"/>
@@ -667,18 +667,18 @@ design rules under a new name.</description>
 <via x="30.48" y="73.406" extent="1-16" drill="0.7" diameter="0.6096"/>
 <via x="21.336" y="82.042" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
-<signal name="ONES:N$6">
-<contactref element="ONES:D4" pad="2"/>
-<contactref element="ONES:D3" pad="4"/>
+<signal name="MONES:N$6">
+<contactref element="MONES:D4" pad="2"/>
+<contactref element="MONES:D3" pad="4"/>
 <wire x1="29.718" y1="78.486" x2="28.956" y2="78.486" width="0.3048" layer="1"/>
 <wire x1="32.004" y1="80.772" x2="29.718" y2="78.486" width="0.3048" layer="1"/>
 <wire x1="32.258" y1="80.518" x2="32.004" y2="80.772" width="0.3048" layer="1"/>
 <wire x1="28.956" y1="78.486" x2="28.88" y2="78.2944" width="0.3048" layer="1"/>
 <wire x1="32.258" y1="80.518" x2="32.08" y2="80.4048" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$7">
-<contactref element="ONES:D5" pad="2"/>
-<contactref element="ONES:D4" pad="4"/>
+<signal name="MONES:N$7">
+<contactref element="MONES:D5" pad="2"/>
+<contactref element="MONES:D4" pad="4"/>
 <wire x1="39.624" y1="70.358" x2="39.624" y2="68.326" width="0.3048" layer="1"/>
 <wire x1="27.686" y1="82.296" x2="39.624" y2="70.358" width="0.3048" layer="16"/>
 <wire x1="27.686" y1="83.058" x2="27.686" y2="82.296" width="0.3048" layer="1"/>
@@ -689,27 +689,27 @@ design rules under a new name.</description>
 <via x="39.624" y="70.358" extent="1-16" drill="0.7" diameter="0.6096"/>
 <via x="27.686" y="82.296" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
-<signal name="ONES:N$9">
-<contactref element="ONES:D5" pad="4"/>
-<contactref element="ONES:D6" pad="2"/>
+<signal name="MONES:N$9">
+<contactref element="MONES:D5" pad="4"/>
+<contactref element="MONES:D6" pad="2"/>
 <wire x1="37.338" y1="73.152" x2="36.576" y2="73.152" width="0.3048" layer="1"/>
 <wire x1="39.624" y1="75.438" x2="37.338" y2="73.152" width="0.3048" layer="1"/>
 <wire x1="39.878" y1="75.184" x2="39.624" y2="75.438" width="0.3048" layer="1"/>
 <wire x1="36.576" y1="73.152" x2="36.5" y2="73.0366" width="0.3048" layer="1"/>
 <wire x1="39.878" y1="75.184" x2="39.7" y2="75.147" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$10">
-<contactref element="ONES:D7" pad="2"/>
-<contactref element="ONES:D6" pad="4"/>
+<signal name="MONES:N$10">
+<contactref element="MONES:D7" pad="2"/>
+<contactref element="MONES:D6" pad="4"/>
 <wire x1="37.338" y1="80.264" x2="36.576" y2="80.264" width="0.3048" layer="1"/>
 <wire x1="39.624" y1="82.55" x2="37.338" y2="80.264" width="0.3048" layer="1"/>
 <wire x1="39.878" y1="82.296" x2="39.624" y2="82.55" width="0.3048" layer="1"/>
 <wire x1="36.576" y1="80.264" x2="36.5" y2="80.047" width="0.3048" layer="1"/>
 <wire x1="39.878" y1="82.296" x2="39.7" y2="82.1574" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$12">
-<contactref element="ONES:D8" pad="2"/>
-<contactref element="ONES:D7" pad="4"/>
+<signal name="MONES:N$12">
+<contactref element="MONES:D8" pad="2"/>
+<contactref element="MONES:D7" pad="4"/>
 <wire x1="47.244" y1="72.136" x2="47.244" y2="70.104" width="0.3048" layer="1"/>
 <wire x1="47.244" y1="74.168" x2="47.244" y2="72.136" width="0.3048" layer="16"/>
 <wire x1="36.83" y1="84.582" x2="47.244" y2="74.168" width="0.3048" layer="16"/>
@@ -720,18 +720,18 @@ design rules under a new name.</description>
 <via x="47.244" y="72.136" extent="1-16" drill="0.7" diameter="0.6096"/>
 <via x="36.83" y="84.582" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
-<signal name="ONES:N$13">
-<contactref element="ONES:D9" pad="2"/>
-<contactref element="ONES:D8" pad="4"/>
+<signal name="MONES:N$13">
+<contactref element="MONES:D9" pad="2"/>
+<contactref element="MONES:D8" pad="4"/>
 <wire x1="44.958" y1="74.93" x2="44.196" y2="74.93" width="0.3048" layer="1"/>
 <wire x1="47.244" y1="77.216" x2="44.958" y2="74.93" width="0.3048" layer="1"/>
 <wire x1="47.498" y1="76.962" x2="47.244" y2="77.216" width="0.3048" layer="1"/>
 <wire x1="44.196" y1="74.93" x2="44.12" y2="74.7892" width="0.3048" layer="1"/>
 <wire x1="47.498" y1="76.962" x2="47.32" y2="76.8996" width="0.3048" layer="1"/>
 </signal>
-<signal name="ONES:N$15">
-<contactref element="ONES:D10" pad="2"/>
-<contactref element="ONES:D9" pad="4"/>
+<signal name="MONES:N$15">
+<contactref element="MONES:D10" pad="2"/>
+<contactref element="MONES:D9" pad="4"/>
 <wire x1="44.958" y1="82.042" x2="44.196" y2="82.042" width="0.3048" layer="1"/>
 <wire x1="47.244" y1="84.328" x2="44.958" y2="82.042" width="0.3048" layer="1"/>
 <wire x1="47.498" y1="84.074" x2="47.244" y2="84.328" width="0.3048" layer="1"/>
@@ -739,8 +739,8 @@ design rules under a new name.</description>
 <wire x1="47.498" y1="84.074" x2="47.32" y2="83.91" width="0.3048" layer="1"/>
 </signal>
 <signal name="N$1">
-<contactref element="TENS:D1" pad="2"/>
-<contactref element="ONES:D10" pad="4"/>
+<contactref element="MTENS:D1" pad="2"/>
+<contactref element="MONES:D10" pad="4"/>
 <wire x1="57.404" y1="85.09" x2="57.404" y2="84.074" width="0.3048" layer="1"/>
 <wire x1="56.896" y1="85.598" x2="57.404" y2="85.09" width="0.3048" layer="1"/>
 <wire x1="46.736" y1="85.598" x2="56.896" y2="85.598" width="0.3048" layer="16"/>
@@ -752,48 +752,48 @@ design rules under a new name.</description>
 <via x="46.736" y="85.598" extent="1-16" drill="0.7" diameter="0.6096"/>
 </signal>
 <signal name="N$2">
-<contactref element="TENS:D10" pad="4"/>
+<contactref element="MTENS:D10" pad="4"/>
 </signal>
 <signal name="N$3">
-<contactref element="ONES:D1" pad="2"/>
+<contactref element="MONES:D1" pad="2"/>
 </signal>
 <signal name="VCC">
-<contactref element="TENS:C1" pad="1"/>
-<contactref element="TENS:D1" pad="1"/>
-<contactref element="TENS:C2" pad="1"/>
-<contactref element="TENS:D2" pad="1"/>
-<contactref element="TENS:C3" pad="1"/>
-<contactref element="TENS:D3" pad="1"/>
-<contactref element="TENS:C4" pad="1"/>
-<contactref element="TENS:D4" pad="1"/>
-<contactref element="TENS:C5" pad="1"/>
-<contactref element="TENS:D5" pad="1"/>
-<contactref element="TENS:C6" pad="1"/>
-<contactref element="TENS:D6" pad="1"/>
-<contactref element="TENS:C7" pad="1"/>
-<contactref element="TENS:D7" pad="1"/>
-<contactref element="TENS:C8" pad="1"/>
-<contactref element="TENS:D8" pad="1"/>
-<contactref element="TENS:D9" pad="1"/>
-<contactref element="TENS:D10" pad="1"/>
-<contactref element="ONES:C1" pad="1"/>
-<contactref element="ONES:D1" pad="1"/>
-<contactref element="ONES:C2" pad="1"/>
-<contactref element="ONES:D2" pad="1"/>
-<contactref element="ONES:C3" pad="1"/>
-<contactref element="ONES:D3" pad="1"/>
-<contactref element="ONES:C4" pad="1"/>
-<contactref element="ONES:D4" pad="1"/>
-<contactref element="ONES:C5" pad="1"/>
-<contactref element="ONES:D5" pad="1"/>
-<contactref element="ONES:C6" pad="1"/>
-<contactref element="ONES:D6" pad="1"/>
-<contactref element="ONES:C7" pad="1"/>
-<contactref element="ONES:D7" pad="1"/>
-<contactref element="ONES:C8" pad="1"/>
-<contactref element="ONES:D8" pad="1"/>
-<contactref element="ONES:D9" pad="1"/>
-<contactref element="ONES:D10" pad="1"/>
+<contactref element="MTENS:C1" pad="1"/>
+<contactref element="MTENS:D1" pad="1"/>
+<contactref element="MTENS:C2" pad="1"/>
+<contactref element="MTENS:D2" pad="1"/>
+<contactref element="MTENS:C3" pad="1"/>
+<contactref element="MTENS:D3" pad="1"/>
+<contactref element="MTENS:C4" pad="1"/>
+<contactref element="MTENS:D4" pad="1"/>
+<contactref element="MTENS:C5" pad="1"/>
+<contactref element="MTENS:D5" pad="1"/>
+<contactref element="MTENS:C6" pad="1"/>
+<contactref element="MTENS:D6" pad="1"/>
+<contactref element="MTENS:C7" pad="1"/>
+<contactref element="MTENS:D7" pad="1"/>
+<contactref element="MTENS:C8" pad="1"/>
+<contactref element="MTENS:D8" pad="1"/>
+<contactref element="MTENS:D9" pad="1"/>
+<contactref element="MTENS:D10" pad="1"/>
+<contactref element="MONES:C1" pad="1"/>
+<contactref element="MONES:D1" pad="1"/>
+<contactref element="MONES:C2" pad="1"/>
+<contactref element="MONES:D2" pad="1"/>
+<contactref element="MONES:C3" pad="1"/>
+<contactref element="MONES:D3" pad="1"/>
+<contactref element="MONES:C4" pad="1"/>
+<contactref element="MONES:D4" pad="1"/>
+<contactref element="MONES:C5" pad="1"/>
+<contactref element="MONES:D5" pad="1"/>
+<contactref element="MONES:C6" pad="1"/>
+<contactref element="MONES:D6" pad="1"/>
+<contactref element="MONES:C7" pad="1"/>
+<contactref element="MONES:D7" pad="1"/>
+<contactref element="MONES:C8" pad="1"/>
+<contactref element="MONES:D8" pad="1"/>
+<contactref element="MONES:D9" pad="1"/>
+<contactref element="MONES:D10" pad="1"/>
 <wire x1="76.962" y1="78.74" x2="76.708" y2="78.486" width="0.8128" layer="1"/>
 <wire x1="76.708" y1="78.486" x2="75.438" y2="77.216" width="0.8128" layer="1"/>
 <wire x1="76.962" y1="78.74" x2="77.14" y2="78.6522" width="0.8128" layer="1"/>
@@ -936,42 +936,42 @@ design rules under a new name.</description>
 <wire x1="22.606" y1="79.756" x2="27.178" y2="78.74" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
-<contactref element="TENS:C1" pad="2"/>
-<contactref element="TENS:D1" pad="3"/>
-<contactref element="TENS:C2" pad="2"/>
-<contactref element="TENS:D2" pad="3"/>
-<contactref element="TENS:C3" pad="2"/>
-<contactref element="TENS:D3" pad="3"/>
-<contactref element="TENS:C4" pad="2"/>
-<contactref element="TENS:D4" pad="3"/>
-<contactref element="TENS:C5" pad="2"/>
-<contactref element="TENS:D5" pad="3"/>
-<contactref element="TENS:C6" pad="2"/>
-<contactref element="TENS:D6" pad="3"/>
-<contactref element="TENS:C7" pad="2"/>
-<contactref element="TENS:D7" pad="3"/>
-<contactref element="TENS:C8" pad="2"/>
-<contactref element="TENS:D8" pad="3"/>
-<contactref element="TENS:D9" pad="3"/>
-<contactref element="TENS:D10" pad="3"/>
-<contactref element="ONES:C1" pad="2"/>
-<contactref element="ONES:D1" pad="3"/>
-<contactref element="ONES:C2" pad="2"/>
-<contactref element="ONES:D2" pad="3"/>
-<contactref element="ONES:C3" pad="2"/>
-<contactref element="ONES:D3" pad="3"/>
-<contactref element="ONES:C4" pad="2"/>
-<contactref element="ONES:D4" pad="3"/>
-<contactref element="ONES:C5" pad="2"/>
-<contactref element="ONES:D5" pad="3"/>
-<contactref element="ONES:C6" pad="2"/>
-<contactref element="ONES:D6" pad="3"/>
-<contactref element="ONES:C7" pad="2"/>
-<contactref element="ONES:D7" pad="3"/>
-<contactref element="ONES:C8" pad="2"/>
-<contactref element="ONES:D8" pad="3"/>
-<contactref element="ONES:D9" pad="3"/>
-<contactref element="ONES:D10" pad="3"/>
+<contactref element="MTENS:C1" pad="2"/>
+<contactref element="MTENS:D1" pad="3"/>
+<contactref element="MTENS:C2" pad="2"/>
+<contactref element="MTENS:D2" pad="3"/>
+<contactref element="MTENS:C3" pad="2"/>
+<contactref element="MTENS:D3" pad="3"/>
+<contactref element="MTENS:C4" pad="2"/>
+<contactref element="MTENS:D4" pad="3"/>
+<contactref element="MTENS:C5" pad="2"/>
+<contactref element="MTENS:D5" pad="3"/>
+<contactref element="MTENS:C6" pad="2"/>
+<contactref element="MTENS:D6" pad="3"/>
+<contactref element="MTENS:C7" pad="2"/>
+<contactref element="MTENS:D7" pad="3"/>
+<contactref element="MTENS:C8" pad="2"/>
+<contactref element="MTENS:D8" pad="3"/>
+<contactref element="MTENS:D9" pad="3"/>
+<contactref element="MTENS:D10" pad="3"/>
+<contactref element="MONES:C1" pad="2"/>
+<contactref element="MONES:D1" pad="3"/>
+<contactref element="MONES:C2" pad="2"/>
+<contactref element="MONES:D2" pad="3"/>
+<contactref element="MONES:C3" pad="2"/>
+<contactref element="MONES:D3" pad="3"/>
+<contactref element="MONES:C4" pad="2"/>
+<contactref element="MONES:D4" pad="3"/>
+<contactref element="MONES:C5" pad="2"/>
+<contactref element="MONES:D5" pad="3"/>
+<contactref element="MONES:C6" pad="2"/>
+<contactref element="MONES:D6" pad="3"/>
+<contactref element="MONES:C7" pad="2"/>
+<contactref element="MONES:D7" pad="3"/>
+<contactref element="MONES:C8" pad="2"/>
+<contactref element="MONES:D8" pad="3"/>
+<contactref element="MONES:D9" pad="3"/>
+<contactref element="MONES:D10" pad="3"/>
 <wire x1="80.518" y1="83.312" x2="82.042" y2="81.788" width="0.8128" layer="1"/>
 <wire x1="80.518" y1="83.312" x2="80.34" y2="83.5522" width="0.8128" layer="1"/>
 <wire x1="82.042" y1="81.788" x2="82.042" y2="77.47" width="0.8128" layer="1"/>
