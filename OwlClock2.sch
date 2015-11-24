@@ -6788,7 +6788,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="R1" library="SparkFun-Resistors" deviceset="0.22OHM1/4W1%(0805)" device="" value="10k"/>
 <part name="Q1" library="adafruit" deviceset="CRYSTAL" device="HC18U-V" value="16Mhz"/>
 <part name="C1" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="22pF"/>
-<part name="C2" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.22pF"/>
+<part name="C2" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="22pF"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="FRAME1" library="frames" deviceset="FRAME_A_L" device=""/>
@@ -7094,6 +7094,11 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <pinref part="JP1" gate="A" pin="1"/>
 <wire x1="215.9" y1="223.52" x2="203.2" y2="223.52" width="0.1524" layer="91"/>
 <label x="203.2" y="223.52" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="PB1(OC1A)"/>
+<wire x1="71.12" y1="106.68" x2="86.36" y2="106.68" width="0.1524" layer="91"/>
+<label x="86.36" y="106.68" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SQW" class="0">
