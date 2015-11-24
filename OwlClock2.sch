@@ -6786,7 +6786,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="P+11" library="supply1" deviceset="VCC" device=""/>
 <part name="GND23" library="supply1" deviceset="GND" device=""/>
 <part name="R1" library="SparkFun-Resistors" deviceset="0.22OHM1/4W1%(0805)" device="" value="10k"/>
-<part name="Q1" library="adafruit" deviceset="CRYSTAL" device="HC18U-V"/>
+<part name="Q1" library="adafruit" deviceset="CRYSTAL" device="HC18U-V" value="16Mhz"/>
 <part name="C1" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="22pF"/>
 <part name="C2" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.22pF"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
@@ -6795,7 +6795,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
 <part name="C3" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.1uF"/>
 <part name="C4" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.1uF"/>
-<part name="JP1" library="adafruit" deviceset="PINHD-1X6" device=""/>
+<part name="JP1" library="adafruit" deviceset="PINHD-1X6" device="" value="REAL TIME CLOCK"/>
 <part name="PHOTO_TOP" library="SparkFun-Connectors" deviceset="M02" device="LOCK"/>
 <part name="R2" library="SparkFun-Resistors" deviceset="0.22OHM1/4W1%(0805)" device="" value="10k"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
@@ -6803,7 +6803,7 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="DOWN" library="SparkFun-Electromechanical" deviceset="SWITCH-MOMENTARY-2" device="PTH"/>
 <part name="SET" library="SparkFun-Electromechanical" deviceset="SWITCH-MOMENTARY-2" device="PTH"/>
 <part name="R3" library="SparkFun-Resistors" deviceset="0.22OHM1/4W1%(0805)" device="" value="470"/>
-<part name="C5" library="SparkFun-Capacitors" deviceset="CAP_POL" device="PTH4"/>
+<part name="C5" library="SparkFun-Capacitors" deviceset="CAP_POL" device="PTH4" value="1000uF"/>
 <part name="FRAME3" library="frames" deviceset="FRAME_A_L" device=""/>
 <part name="P+8" library="supply1" deviceset="VCC" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
