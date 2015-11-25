@@ -6894,11 +6894,6 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <wire x1="43.18" y1="205.74" x2="43.18" y2="220.98" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="5"/>
-<wire x1="215.9" y1="213.36" x2="203.2" y2="213.36" width="0.1524" layer="91"/>
-<label x="203.2" y="213.36" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
 <wire x1="68.58" y1="83.82" x2="68.58" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="VI"/>
@@ -7260,6 +7255,11 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <wire x1="210.82" y1="96.52" x2="215.9" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="215.9" y1="96.52" x2="215.9" y2="106.68" width="0.1524" layer="91"/>
 <pinref part="VSS6" gate="G$1" pin="VSS"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="5"/>
+<wire x1="215.9" y1="213.36" x2="203.2" y2="213.36" width="0.1524" layer="91"/>
+<label x="203.2" y="213.36" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
