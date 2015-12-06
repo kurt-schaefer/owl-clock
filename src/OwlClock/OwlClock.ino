@@ -12,6 +12,16 @@
 // Neo pixel interface for all the LEDS is though the single pin LED_DIG_OUT
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, LED_DIG_OUT, NEO_GRB + NEO_KHZ800);
 
+// digit to LED index for the clock digits. Tens and Ones are sequenced differently.
+static cont unsigned char gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
+static cont unsigned char gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
+
+// To addess each digit use these bases + the above index.
+#define HOURS_TENS_BASE 20
+#define HOURS_ONES_BASE 30
+#define MINS_TENS_BASE   0
+#define MINS_ONES_BASE  10
+
 void setup()
 {
   Serial.begin(19200);
