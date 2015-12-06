@@ -2,25 +2,22 @@
 #include <DS3232RTC.h>         // http://github.com/JChristensen/DS3232RTC
 #include <Time.h>              // http://www.arduino.cc/playground/Code/Time
 #include <Wire.h>              // http://arduino.cc/en/Reference/Wire (included with Arduino IDE)
-#include "WS2812_Definitions.h"
 
 #define LED_DIG_OUT 6
 #define LED_COUNT 1  // TODO Eventually this will be 40
-
-#define PIN 6 // Remove these eventually
 
 // Neo pixel interface for all the LEDS is though the single pin LED_DIG_OUT
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, LED_DIG_OUT, NEO_GRB + NEO_KHZ800);
 
 // digit to LED index for the clock digits. Tens and Ones are sequenced differently.
-static cont unsigned char gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
-static cont unsigned char gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
+static const unsigned char gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
+static const unsigned char gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
 // To addess each digit use these bases + the above index.
-#define HOURS_TENS_BASE 20
-#define HOURS_ONES_BASE 30
-#define MINS_TENS_BASE   0
-#define MINS_ONES_BASE  10
+#define HOUR_TENS_BASE 20
+#define HOUR_ONES_BASE 30
+#define MINUTE_TENS_BASE   0
+#define MINUTE_ONES_BASE  10
 
 void setup()
 {
@@ -39,9 +36,44 @@ void setup()
   leds.show();
 }
 
+void showTime(int hours, int minutes, uint32_t color)
+{
+  clearLEDs();
+
+  if (minutes > 59) {
+    minutes = 59;
+  }
+
+  if (hours > 24) {
+    hours = 24;
+  }
+
+  // For now only support 12 hour display.
+  while (hours > 12) {
+    hours -= 12;
+  }
+
+  int hourTens = floor(hours/10);
+  int hourOnes = hours - 10*hourTens;
+  
+  if (hourTens > 0) {
+    leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], color);
+  }
+  leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], color);
+
+  int minuteTens = floor(minutes/10);
+  int minuteOnes = minutes - minuteTens*10;
+
+  leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], color);
+  leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
+}
+
 void loop()
 {
-    delay(1000);
+    delay(500);
+
+    time_t t = now();
+    showTime(hour(t), minute(t), leds.Color(255, 10, 10));
 }
 
 // Sets all LEDs to off, but DOES NOT update the display;
