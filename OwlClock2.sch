@@ -6831,6 +6831,10 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
+<part name="SUPPLY_BYPASS" library="SparkFun-Connectors" deviceset="M02" device="LOCK"/>
+<part name="P+2" library="supply1" deviceset="VCC" device=""/>
+<part name="VSS7" library="supply1" deviceset="VSS" device=""/>
+<part name="VSS8" library="supply1" deviceset="VSS" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -6882,6 +6886,10 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <instance part="GND6" gate="1" x="73.66" y="53.34"/>
 <instance part="GND13" gate="1" x="101.6" y="53.34"/>
 <instance part="P+1" gate="VCC" x="137.16" y="114.3"/>
+<instance part="SUPPLY_BYPASS" gate="G$1" x="121.92" y="149.86"/>
+<instance part="P+2" gate="VCC" x="134.62" y="160.02"/>
+<instance part="VSS7" gate="G$1" x="43.18" y="76.2" rot="R180"/>
+<instance part="VSS8" gate="G$1" x="142.24" y="160.02" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -6907,6 +6915,12 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <pinref part="C5" gate="G$1" pin="+"/>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
 <wire x1="137.16" y1="106.68" x2="137.16" y2="111.76" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="SUPPLY_BYPASS" gate="G$1" pin="2"/>
+<wire x1="129.54" y1="152.4" x2="134.62" y2="152.4" width="0.1524" layer="91"/>
+<pinref part="P+2" gate="VCC" pin="VCC"/>
+<wire x1="134.62" y1="157.48" x2="134.62" y2="152.4" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -7243,6 +7257,8 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <wire x1="30.48" y1="68.58" x2="43.18" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="VSS4" gate="G$1" pin="VSS"/>
 <wire x1="43.18" y1="68.58" x2="43.18" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="VSS7" gate="G$1" pin="VSS"/>
+<junction x="43.18" y="73.66"/>
 </segment>
 <segment>
 <pinref part="PHOTO_TOP" gate="G$1" pin="2"/>
@@ -7260,6 +7276,12 @@ Source: http://ww1.microchip.com/downloads/en/DeviceDoc/22049b.pdf</description>
 <pinref part="JP1" gate="A" pin="5"/>
 <wire x1="215.9" y1="213.36" x2="203.2" y2="213.36" width="0.1524" layer="91"/>
 <label x="203.2" y="213.36" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="SUPPLY_BYPASS" gate="G$1" pin="1"/>
+<wire x1="129.54" y1="149.86" x2="142.24" y2="149.86" width="0.1524" layer="91"/>
+<pinref part="VSS8" gate="G$1" pin="VSS"/>
+<wire x1="142.24" y1="157.48" x2="142.24" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
