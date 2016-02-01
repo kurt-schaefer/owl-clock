@@ -40,7 +40,8 @@ static int gGMTOffsetInSeconds = -8*60*60;
 #define EIGHTY_PERCENT_MOON_ARC 5
 #define ONE_HUNDRED_PERCENT_MOON_ARC 7
 
-void setup()
+void 
+setup()
 {
   // TODO: Only switch these to 0, 1, 2 when we're programming the actual boards, 
   // otherwise Serial uses 0 and 1.
@@ -63,20 +64,26 @@ void setup()
   leds.show();
 }
 
-void setLedsWithTime(int hours, int minutes, uint32_t color)
+int 
+twelveHourValueFrom24HourTime(int hour)
+{
+  while (hour > 12) {
+    hour -= 12;
+  }
+  if (hour == 0) {
+    hour = 12;
+  }
+  return hour;
+}
+
+void 
+setLedsWithTime(int hours, int minutes, uint32_t color)
 {
   if (minutes > 59) {
     minutes = 59;
   }
 
-  if (hours > 24) {
-    hours = 24;
-  }
-
-  // For now only support 12 hour display.
-  while (hours > 12) {
-    hours -= 12;
-  }
+  hours = twelveHourValueFrom24HourTime(hours);
 
   int hourTens = floor(hours/10);
   int hourOnes = hours - 10*hourTens;
@@ -93,7 +100,8 @@ void setLedsWithTime(int hours, int minutes, uint32_t color)
   leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
 }
 
-void setLedsWithDigits(int hours, int minutes, uint32_t color)
+void 
+setLedsWithDigits(int hours, int minutes, uint32_t color)
 {
   int hourTens = floor(hours/10);
   int hourOnes = hours - 10*hourTens;
@@ -108,7 +116,8 @@ void setLedsWithDigits(int hours, int minutes, uint32_t color)
   leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
 }
 
-void displayCountdown(int minutes, int seconds)
+void 
+displayCountdown(int minutes, int seconds)
 {
   while (minutes > 0 && seconds > 0) {
     seconds--;
@@ -125,7 +134,8 @@ void displayCountdown(int minutes, int seconds)
 }
 
 
-void colorTest()
+void 
+colorTest()
 {
   for (int i=0; i<10; ++i) {
     clearLeds();
@@ -192,7 +202,9 @@ void colorTest()
     delay(500);
   }
 }
-void test()
+
+void 
+test()
 { 
   for (int j=0; j<100; j += 1) {
     for (int i=0; i<100; i += 1) {
@@ -291,9 +303,7 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
     boolean isWaxing = isWaxingFromTime(year, month, fday);
     
     // If the moon is going to over lap with a digit we show it very dimmly.
-    while (hour > 12) {
-      hour -= 12;
-    }
+    hour = twelveHourValueFrom24HourTime(hour);
     uint32_t moonColor = (hour <= 9) ? leds.Color(255, 248, 209) : leds.Color(15,18,13);
 
     // We use a .05 on either side to make new/full a bit more discriminating.  We might want to
