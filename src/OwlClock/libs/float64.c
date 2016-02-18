@@ -76,15 +76,15 @@ add64(float64 a,  float64 b)
     return s;
 }
 
-void
-doubleSplit(double a, float *aHi, float *aLo)
-{
-    double t = a*((1 << 29) + 1);
-    double tHi = t - (t - a);
-    double tLo = a - tHi;
-    *aHi = (float)tHi;
-    *aLo = (float)tLo;
-}
+//void
+//doubleSplit(double a, float *aHi, float *aLo)
+//{
+//    double t = a*((1 << 29) + 1);
+//    double tHi = t - (t - a);
+//    double tLo = a - tHi;
+//    *aHi = (float)tHi;
+//    *aLo = (float)tLo;
+//}
 
 float64
 twoProd(float a, float b)

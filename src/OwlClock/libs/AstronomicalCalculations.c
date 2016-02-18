@@ -1,3 +1,4 @@
+
 //
 //  AstronomicalCalculations.c
 //  OwlSim
@@ -128,7 +129,7 @@ illuminatedFractionKForDate(int year, unsigned char month, float day)
     return merge(illuminatedFractionK(julianYearFromTime(split((float)year), split((float)month), split(day))));
 }
 
-unsigned char isWaxing(int year, unsigned char month, float day)
+unsigned char isWaxingForDate(int year, unsigned char month, float day)
 {
     float illuminationNow = illuminatedFractionKForDate(year, month, day);
     float illuminationSoon = illuminatedFractionKForDate(year, month, day + 1.3);
@@ -286,4 +287,59 @@ computeDateFromSolarEventJDE(float64 JDE, int *yearOut, int *monthOut, float *da
     (*dayOut) = B - D - floorf(30.6001*E) + merge(F);
     (*monthOut) = (E < 14) ? E - 1.0 : E - 13;
     (*yearOut) = ((*monthOut) > 2) ? C - 4716 : C - 4715;
+}
+
+void
+easterForYear(int year, unsigned char *monthOut, unsigned char *dayOut)
+{
+  // From page 67
+    
+  int a = year % 19;
+  int b = year/100;
+  int c = year%100;
+  int d = b/4;
+  int e = b%4;
+    
+  int f = (b +8)/25;
+  int g = (b - f + 1)/3;
+  int h = (19*a + b - d - g + 15)%30;
+  int i = c/4;
+  int k = c%4;
+  int l = (32 + 2*e + 2*i - h - k)%7;
+  int m = (a + 11*h + 22*l)/451;
+    
+  (*monthOut) = (unsigned char) ((h + l - 7*m + 114)/31);
+  (*dayOut)   = (unsigned char)(((h + l - 7*m + 114)%31) + 1);
+}
+
+unsigned char dayOfTheWeek(int year, unsigned char month, unsigned char day)
+{
+  // from p65
+  float JD = merge(julianEphemerisDay(split(year), split(month), split(day)));
+  JD = JD + 1.5;
+  return (unsigned char)floorf(JD)%7;
+}
+
+unsigned char computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount)
+{
+  unsigned char curDay = 1;
+  unsigned char curDayOfWeek = dayOfTheWeek(year, month, curDay);
+   
+  while (curDay < 32 && dayOfWeekCount > 0) {
+    if (curDayOfWeek == dayOfWeek) {
+      dayOfWeekCount--;
+      if (dayOfWeekCount == 0) {
+	break;
+      }
+    }
+    curDay++;
+    curDayOfWeek = (curDayOfWeek + 1)%7;
+  }
+    
+  if (curDay < 32) {
+    return curDay;
+  }
+
+  // If you ask for the 54th Sunday of of June you will fail to find it.
+  return UNKNOWN_DAY;
 }
