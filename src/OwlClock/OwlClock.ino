@@ -59,6 +59,53 @@ static unsigned char gCurrentDay = 0;
 #define DEFAULT_LATITUDE 36.3894     // These are burned into the EEPROM on starup/version bump.
 #define DEFAULT_LONGITUDE -122.0819
 
+// I wrote a ton of code to compute these sun events, but the code took 24k of program space,
+// so instead I'm compressing the next 100 years of sun events into these arrays.  The
+// values are RLE with the bottom 5 bits being the count and the top 3 being the value offset from day 18
+
+const unsigned char springEquinoxRLEDayArray[] PROGMEM = { 92, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 34, 
+              66, 34, 66, 34, 66, 34, 66, 34, 66, 34, 68, 98, 66, 98, 67, 97, 67, 97 };
+
+const unsigned char summerSolsticeRLEDayArray[] PROGMEM = { 65, 99, 65, 99, 65, 99, 65, 99, 65, 99, 65, 99, 66, 98, 66, 98, 
+              66, 98, 66, 98, 66, 98, 66, 98, 66, 98, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 68, 112,  };
+
+const unsigned char fallEquinoxRLEDayArray[] PROGMEM = { 130, 162, 130, 162, 130, 162, 131, 161, 131, 161, 131, 161, 131, 161, 
+              131, 161, 131, 161, 131, 161, 131, 161, 159, 129, 97, 131, 97, 132, 163, 129, 163, 129, 163, 129, 163 };
+              
+const unsigned char winterSolsticeRLEDayArray[] PROGMEM = { 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 127, 
+              101, 65, 99, 65, 99, 65, 99, 65, 99, 65, 100, 131, 97, 131, 97, 131, 98, 130,  };
+              
+#define SUN_EVENT_DAY_BASE 18
+#define SUN_EVENT_YEAR_BASE 2016
+#define SUN_EVENT_YEAR_RANGE 100
+#define RLE_COUNT_MASK 31
+#define RLE_VALUE_MASK 224
+#define RLE_COUNT_BITS 5
+
+// This returns the day given the array and the year. Once the year goes beyond 2116
+// the values just repeat and will no longer be accurate.
+// All the people I've given these clocks to will be dead by then.
+unsigned char unpackSunEventDay(unsigned char *RLEArray, int year)
+{
+    int index = year - SUN_EVENT_YEAR_BASE
+    index = index % SUN_EVENT_YEAR_RANGE;
+    
+    int curIndex = 0;
+    
+    while (index > 0) {
+        if ((array[curIndex] & RLE_COUNT_MASK) > index) {
+            index = 0;
+        } else {
+            index -= (array[curIndex] & RLE_COUNT_MASK);
+            curIndex++;
+        }
+    }
+    
+    return ((array[curIndex] & RLE_VALUE_MASK) >> RLE_COUNT_BITS) + SUN_EVENT_DAY_BASE;
+}
+
+
+
 // This is the set of things we keep track of in eeprom.  This is mostly 
 // so we can record peruser info, and only have to compute the various
 // holidays once a year.
