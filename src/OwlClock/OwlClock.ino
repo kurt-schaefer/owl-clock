@@ -6,7 +6,7 @@
 #include <Wire.h>              // http://arduino.cc/en/Reference/Wire (included with Arduino IDE)
 #include <EEPROM.h>
 
-// My two helper libs that hold the extran precision math, and the astronomical calculations.
+// My two helper libs that hold the extra precision math, and the astronomical calculations.
 extern "C" {
 #include "float64.h"
 #include "AstronomicalCalculations.h"
@@ -32,6 +32,10 @@ static const unsigned char gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
 static int gGMTOffsetInSeconds = -8*60*60;
 
+static unsigned short gCurrentYear = 0;
+static unsigned char gCurrentMonth = 0;
+static unsigned char gCurrentDay = 0;
+
 // To addess each digit use these bases + the above index.
 #define HOUR_TENS_BASE    20
 #define HOUR_ONES_BASE    30
@@ -47,24 +51,43 @@ static int gGMTOffsetInSeconds = -8*60*60;
 #define EIGHTY_PERCENT_MOON_ARC 5
 #define ONE_HUNDRED_PERCENT_MOON_ARC 7
 
+#define EEPROM_INFO_ADDRESS 0
+#define EEPROM_NEVER_WAS_SET 255
+#define EEPROM_INFO_VERSION 1   // Increment this if you change/reorder the EEPROMInfo
+
+
+#define DEFAULT_LATITUDE 36.3894     // These are burned into the EEPROM on starup/version bump.
+#define DEFAULT_LONGITUDE -122.0819
+
+// This is the set of things we keep track of in eeprom.  This is mostly 
+// so we can record peruser info, and only have to compute the various
+// holidays once a year.
 typedef struct {
-  unsigned short year;
-  unsigned char month;
-  unsigned char day;
+  unsigned char version;  // incremented if the info struct changes, also used to check
+                          // never having been written state.
+  
+  unsigned short year;    // Most recent handled year, year all the holidays are computed for.
+  unsigned char month;    // Most recently handled month.
+  unsigned char day;      // Most recently handled day.
 
   int gmtOffsetInSeconds;
 
-  float longitude;
   float latitude;
-
+  float longitude;
+ 
   unsigned char springEquinoxDay;  // in March
   unsigned char summerSolsticeDay; // in June
   unsigned char fallEquinoxDay;    // in September
   unsigned char winterSolsticeDay; // in December
+
+  unsigned char easterMonth;       // March or April
+  unsigned char easterDay;         // in the above month.
   
-  unsigned char easterDay;
+  unsigned char mothersDay;        // in May
+  unsigned char fathersDay;        // in June
+  unsigned char presidentsDay;     // in February
   
-} eepromInfo;
+} EEPROMInfo;
 
 void setup(void)
 {
@@ -74,7 +97,7 @@ void setup(void)
   //  pinMode(SWITCH_DOWN_DIG_IN, INPUT_PULLUP);
   //  pinMode(SWITCH_SET_DIG_IN, INPUT_PULLUP);
   
-//  Serial.begin(19200);
+  Serial.begin(19200);
 
   //setSyncProvider() causes the Time library to synchronize with the
   //external RTC by calling RTC.get() every five minutes by default.
@@ -83,13 +106,76 @@ void setup(void)
   // if (timeStatus() != timeSet) {
   //   Serial.print(F("RTC Sync setup failed."));
   // }
+
+  readAndValidateEEProm();
  
   leds.begin();
   clearLeds();
   leds.show();
 }
 
+void
+readAndValidateEEProm()
+{
+  EEPROMInfo info;
+  EEPROM.get(EEPROM_INFO_ADDRESS, info);
 
+  time_t t = now();
+
+  // If we have never saved this info off to eeprom
+  // we have to assume the current clock is ok and recompute everything based on that.
+  if (info.version != EEPROM_INFO_VERSION) {
+    info.version = EEPROM_INFO_VERSION;
+    info.year = (unsigned short)year(t);
+    info.month = month(t);
+    info.day = month(t);
+
+    info.latitude = DEFAULT_LATITUDE;
+    info.longitude = DEFAULT_LONGITUDE;
+
+    computeHolidays(&info);
+  }
+
+//        bool oscStopped(bool clearOSF = true);  //defaults to clear the OSF bit if argument not supplied
+
+
+  if (info.year != (unsigned short)year(t)) {
+    
+  }
+
+  
+  
+  
+}
+
+void
+computeHolidays(EEPROMInfo *info)
+{
+
+  int computedYear = 0;
+  int computedMonth = 0;
+  float computedDay = 0.0;
+
+// These pull in too much code to compute dynamically.
+// 
+//  computeDateFromSolarEventJDE(springEquinox(info->year), &computedYear, &computedMonth, &computedDay);
+//  info->springEquinoxDay = floor(computedDay);
+
+//  computeDateFromSolarEventJDE(summerSolstice(info->year), &computedYear, &computedMonth, &computedDay);
+//  info->summerSolsticeDay = floor(computedDay); 
+
+//  computeDateFromSolarEventJDE(fallEquinox(info->year), &computedYear, &computedMonth, &computedDay);
+//  info->fallEquinoxDay = floor(computedDay); 
+
+//  computeDateFromSolarEventJDE(winterSolstice(info->year), &computedYear, &computedMonth, &computedDay);
+//  info->winterSolsticeDay = floor(computedDay); 
+  
+  easterForYear(info->year, &(info->easterMonth), &(info->easterDay));
+
+  info->mothersDay = computeHolidayBasedOnDayOfWeek(info->year, MAY, SUNDAY, 2);
+  info->fathersDay = computeHolidayBasedOnDayOfWeek(info->year, JUNE, SUNDAY, 3);
+  info->presidentsDay = computeHolidayBasedOnDayOfWeek(info->year, FEBRUARY, MONDAY, 3);
+}
 
 int 
 twelveHourValueFrom24HourTime(int hour)
@@ -227,6 +313,7 @@ void loop()
   clearLeds();
   setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
   setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
+
   leds.show();
 }
 

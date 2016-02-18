@@ -40,21 +40,9 @@ float64 winterSolstice(int year);
 // This JDE should be a value returned from the above spring/summer/fall/winter Equinox/Solstice calculations.
 // This is not as accurate as if actual doubles were used, but the values seem to only differ by only maybe
 // 50 seconds from the values given in the book so I deam that good enough.  We only care about the days, so this
-// will rarely be off except when the even in question is very close to midnight.
+// will rarely be off except when the even in question is very close to midnight. 
 void computeDateFromSolarEventJDE(float64 JDE, int *yearOut, int *monthOut, float *dayOut);
 
-#define JANUARY 1
-#define FEBRUARY 2
-#define MARCH 3
-#define APRIL 4
-#define MAY 5
-#define JUNE 6
-#define JULY 7
-#define AUGUST 8
-#define SEPTEMBER 9
-#define OCTOBER 10
-#define NOVEMBER 11
-#define DECEMBER 12
 
 #define SUNDAY 0
 #define MONDAY 1
@@ -74,6 +62,20 @@ void easterForYear(int year, unsigned char *monthOut, unsigned char *dayOut);
 // So if for example you wanted the second Sunday in May you would use (<year>, MAY, SUNDAY, 2)
 // If this fails to find the requested day it returns 255 (UNKNOWN_DAY). This isn't super smart about month lengths/leap years, etc.
 // So don't use it for that, but it's great for mothers/fathers day, etc.
+
+#define JANUARY 1
+#define FEBRUARY 2
+#define MARCH 3
+#define APRIL 4
+#define MAY 5
+#define JUNE 6
+#define JULY 7
+#define AUGUST 8
+#define SEPTEMBER 9
+#define OCTOBER 10
+#define NOVEMBER 11
+#define DECEMBER 12
+
 unsigned char computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount);
 
 // Martin Luther King      Third Monday in January

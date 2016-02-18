@@ -312,7 +312,8 @@ easterForYear(int year, unsigned char *monthOut, unsigned char *dayOut)
   (*dayOut)   = (unsigned char)(((h + l - 7*m + 114)%31) + 1);
 }
 
-unsigned char dayOfTheWeek(int year, unsigned char month, unsigned char day)
+unsigned char
+dayOfTheWeek(int year, unsigned char month, unsigned char day)
 {
   // from p65
   float JD = merge(julianEphemerisDay(split(year), split(month), split(day)));
@@ -320,7 +321,8 @@ unsigned char dayOfTheWeek(int year, unsigned char month, unsigned char day)
   return (unsigned char)floorf(JD)%7;
 }
 
-unsigned char computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount)
+unsigned char
+computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount)
 {
   unsigned char curDay = 1;
   unsigned char curDayOfWeek = dayOfTheWeek(year, month, curDay);
