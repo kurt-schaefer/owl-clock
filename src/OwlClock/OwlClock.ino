@@ -47,28 +47,6 @@ static int gGMTOffsetInSeconds = -8*60*60;
 #define EIGHTY_PERCENT_MOON_ARC 5
 #define ONE_HUNDRED_PERCENT_MOON_ARC 7
 
-#define SUNDAY 0
-#define MONDAY 1
-#define TUESDAY 2
-#define WEDNESDAY 3
-#define THURSDAY 4
-#define FRIDAY 5
-#define SATURDAY 6
-#define UNKNOWN_DAY_OF_WEEK 255
-
-#define JANUARY 1
-#define FEBRUARY 2
-#define MARCH 3
-#define APRIL 4
-#define MAY 5
-#define JUNE 6
-#define JULY 7
-#define AUGUST 8
-#define SEPTEMBER 9
-#define OCTOBER 10
-#define NOVEMBER 11
-#define DECEMBER 12
-
 typedef struct {
   unsigned short year;
   unsigned char month;
