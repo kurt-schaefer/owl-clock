@@ -60,51 +60,44 @@ static unsigned char gCurrentDay = 0;
 #define DEFAULT_LONGITUDE -122.0819
 
 // I wrote a ton of code to compute these sun events, but the code took 24k of program space,
-// so instead I'm compressing the next 100 years of sun events into these arrays.  The
-// values are RLE with the bottom 5 bits being the count and the top 3 being the value offset from day 18
+// so instead I'm squeezing the next 100 years of sun events into these arrays.  The
+// values are two bit offsets from their base value.  So 4 days per byte.
 
-const unsigned char springEquinoxRLEDayArray[] PROGMEM = { 92, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 33, 67, 34, 
-              66, 34, 66, 34, 66, 34, 66, 34, 66, 34, 68, 98, 66, 98, 67, 97, 67, 97 };
+const unsigned char springEquinoxArray[] PROGMEM = { 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84, 84, 84, 84, 80, 80, 80, 80, 80, 80, 165, 165, 149, 149, };
+const unsigned char summerSolsticeArray[] PROGMEM = { 84, 84, 84, 84, 84, 84, 80, 80, 80, 80, 80, 80, 80, 64, 64, 64, 64, 64, 64, 64, 0, 85, 85, 85, 85, };
+const unsigned char fallEquinoxArray[] PROGMEM = { 165, 165, 165, 149, 149, 149, 149, 149, 149, 149, 149, 85, 85, 85, 85, 85, 85, 85, 85, 84, 84, 169, 169, 169, 169, };
+const unsigned char winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 149, 149, 85, 85, 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84, 169, 169, 169, 165, };
 
-const unsigned char summerSolsticeRLEDayArray[] PROGMEM = { 65, 99, 65, 99, 65, 99, 65, 99, 65, 99, 65, 99, 66, 98, 66, 98, 
-              66, 98, 66, 98, 66, 98, 66, 98, 66, 98, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 67, 97, 68, 112,  };
+#define SPRING_EQUINOX_DAY_BASE 19
+#define SUMMER_SOLSTICE_DAY_BASE 20
+#define FALL_EQUINOX_DAY_BASE 21
+#define WINTER_SOLSTICE_DAY_BASE 20
 
-const unsigned char fallEquinoxRLEDayArray[] PROGMEM = { 130, 162, 130, 162, 130, 162, 131, 161, 131, 161, 131, 161, 131, 161, 
-              131, 161, 131, 161, 131, 161, 131, 161, 159, 129, 97, 131, 97, 132, 163, 129, 163, 129, 163, 129, 163 };
-              
-const unsigned char winterSolsticeRLEDayArray[] PROGMEM = { 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 99, 129, 127, 
-              101, 65, 99, 65, 99, 65, 99, 65, 99, 65, 100, 131, 97, 131, 97, 131, 98, 130,  };
-              
-#define SUN_EVENT_DAY_BASE 18
+
 #define SUN_EVENT_YEAR_BASE 2016
 #define SUN_EVENT_YEAR_RANGE 100
-#define RLE_COUNT_MASK 31
-#define RLE_VALUE_MASK 224
-#define RLE_COUNT_BITS 5
 
-// This returns the day given the array and the year. Once the year goes beyond 2116
-// the values just repeat and will no longer be accurate.
-// All the people I've given these clocks to will be dead by then.
-unsigned char unpackSunEventDay(unsigned char *RLEArray, int year)
+// This should be passed one of the PROGMEM solar event arrays above with the matching DAY_BASE
+unsigned char unpackSunEventDay(unsigned char *pgmArray, unsigned char dayBase, int year)
 {
-    int index = year - SUN_EVENT_YEAR_BASE
-    index = index % SUN_EVENT_YEAR_RANGE;
-    
-    int curIndex = 0;
-    
-    while (index > 0) {
-        if ((array[curIndex] & RLE_COUNT_MASK) > index) {
-            index = 0;
-        } else {
-            index -= (array[curIndex] & RLE_COUNT_MASK);
-            curIndex++;
-        }
-    }
-    
-    return ((array[curIndex] & RLE_VALUE_MASK) >> RLE_COUNT_BITS) + SUN_EVENT_DAY_BASE;
+  // If the year is in the past, something has gone wrong, and we don't 
+  // care the the solar events are wrong.
+  if (year < SUN_EVENT_YEAR_BASE) {
+    year = SUN_EVENT_YEAR_BASE;
+  }
+  
+  int index = (year - SUN_EVENT_YEAR_BASE)/4;
+  int shift = ((year - SUN_EVENT_YEAR_BASE)%4)*2;
+
+  // To keep things from crashing 100 years from now we loop around
+  // after that time the sun events will be incorrect, but all the people
+  // I have given the clocks to will be dead so no one will care.
+  index = index%SUN_EVENT_YEAR_RANGE;
+
+  unsigned char mask = 3 << shift;
+  
+  return ((pgm_read_byte(&pgmArray[index]) & mask) >> shift) + dayBase;
 }
-
-
 
 // This is the set of things we keep track of in eeprom.  This is mostly 
 // so we can record peruser info, and only have to compute the various
@@ -117,23 +110,7 @@ typedef struct {
   unsigned char month;    // Most recently handled month.
   unsigned char day;      // Most recently handled day.
 
-  int gmtOffsetInSeconds;
-
-  float latitude;
-  float longitude;
- 
-  unsigned char springEquinoxDay;  // in March
-  unsigned char summerSolsticeDay; // in June
-  unsigned char fallEquinoxDay;    // in September
-  unsigned char winterSolsticeDay; // in December
-
-  unsigned char easterMonth;       // March or April
-  unsigned char easterDay;         // in the above month.
-  
-  unsigned char mothersDay;        // in May
-  unsigned char fathersDay;        // in June
-  unsigned char presidentsDay;     // in February
-  
+  int gmtOffsetInSeconds; 
 } EEPROMInfo;
 
 void setup(void)
@@ -177,10 +154,10 @@ readAndValidateEEProm()
     info.month = month(t);
     info.day = month(t);
 
-    info.latitude = DEFAULT_LATITUDE;
-    info.longitude = DEFAULT_LONGITUDE;
+  //  info.latitude = DEFAULT_LATITUDE;
+  //  info.longitude = DEFAULT_LONGITUDE;
 
-    computeHolidays(&info);
+  //  computeHolidays(&info);
   }
 
 //        bool oscStopped(bool clearOSF = true);  //defaults to clear the OSF bit if argument not supplied
@@ -195,13 +172,12 @@ readAndValidateEEProm()
   
 }
 
-void
-computeHolidays(EEPROMInfo *info)
-{
+//void computeHolidays(EEPROMInfo *info)
+//{
 
-  int computedYear = 0;
-  int computedMonth = 0;
-  float computedDay = 0.0;
+//  int computedYear = 0;
+//  int computedMonth = 0;
+//  float computedDay = 0.0;
 
 // These pull in too much code to compute dynamically.
 // 
@@ -217,12 +193,12 @@ computeHolidays(EEPROMInfo *info)
 //  computeDateFromSolarEventJDE(winterSolstice(info->year), &computedYear, &computedMonth, &computedDay);
 //  info->winterSolsticeDay = floor(computedDay); 
   
-  easterForYear(info->year, &(info->easterMonth), &(info->easterDay));
+//  easterForYear(info->year, &(info->easterMonth), &(info->easterDay));
 
-  info->mothersDay = computeHolidayBasedOnDayOfWeek(info->year, MAY, SUNDAY, 2);
-  info->fathersDay = computeHolidayBasedOnDayOfWeek(info->year, JUNE, SUNDAY, 3);
-  info->presidentsDay = computeHolidayBasedOnDayOfWeek(info->year, FEBRUARY, MONDAY, 3);
-}
+//  info->mothersDay = computeHolidayBasedOnDayOfWeek(info->year, MAY, SUNDAY, 2);
+//  info->fathersDay = computeHolidayBasedOnDayOfWeek(info->year, JUNE, SUNDAY, 3);
+//  info->presidentsDay = computeHolidayBasedOnDayOfWeek(info->year, FEBRUARY, MONDAY, 3);
+//}
 
 int 
 twelveHourValueFrom24HourTime(int hour)
