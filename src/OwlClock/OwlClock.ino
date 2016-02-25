@@ -5,6 +5,7 @@
 #include <Time.h>              // http://www.arduino.cc/playground/Code/Time
 #include <Wire.h>              // http://arduino.cc/en/Reference/Wire (included with Arduino IDE)
 #include <EEPROM.h>
+#include "Declarations.h"
 
 // My two helper libs that hold the extra precision math, and the astronomical calculations.
 extern "C" {
@@ -18,29 +19,45 @@ extern "C" {
 
 #define LED_DIG_OUT        6
 
-// TODO convert these to 0,1,2 I hope using 0 & 1 isn't a big problem.  :b
-#define SWITCH_UP_DIG_IN   4
-#define SWITCH_DOWN_DIG_IN 5
-#define SWITCH_SET_DIG_IN  7
+#define NOT_RUNNING_ON_UNO
+
+#ifdef NOT_RUNNING_ON_UNO
+    #define DEBUG_PRINT(x)    Serial.print(x)
+    #define DEBUG_PRINTLN(x)  Serial.println(x)
+#else
+    #define DEBUG_PRINT(x)    {}  
+    #define DEBUG_PRINTLN(x ) {} 
+#endif
+
+#ifdef RUNNING_ON_UNO
+    #define SWITCH_UP_DIG_IN   2
+    #define SWITCH_DOWN_DIG_IN 3
+    #define SWITCH_SET_DIG_IN  4
+#else
+    #define SWITCH_UP_DIG_IN   0
+    #define SWITCH_DOWN_DIG_IN 1
+    #define SWITCH_SET_DIG_IN  2
+#endif
 
 // Neo pixel interface for all the LEDS is though the single pin LED_DIG_OUT
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, LED_DIG_OUT, NEO_GRB + NEO_KHZ800);
 
 // digit to LED index for the clock digits. Tens and Ones are sequenced differently.
-static const unsigned char gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
-static const unsigned char gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
+static const uint8_t gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
+static const uint8_t gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
 static int gGMTOffsetInSeconds = -8*60*60;
 
 static unsigned short gCurrentYear = 0;
-static unsigned char gCurrentMonth = 0;
-static unsigned char gCurrentDay = 0;
+static uint8_t gCurrentMonth = 0;
+static uint8_t gCurrentDay = 0;
 
 // To addess each digit use these bases + the above index.
 #define HOUR_TENS_BASE    20
 #define HOUR_ONES_BASE    30
 #define MINUTE_TENS_BASE   0
 #define MINUTE_ONES_BASE  10
+#define NO_INDEX 255
 
 // The various moon arcs, have digit equivalents, so we list those here.
 // The percentages go from upper right to lower left.
@@ -61,12 +78,17 @@ static unsigned char gCurrentDay = 0;
 
 // I wrote a ton of code to compute these sun events, but the code took 24k of program space,
 // so instead I'm squeezing the next 100 years of sun events into these arrays.  The
-// values are two bit offsets from their base value.  So 4 days per byte.
+// values are two bit offsets from their base value.  So 4 years per byte. That makes it
+// simple to do the progmem lookup for the correct byte and mask from there.
 
-const unsigned char springEquinoxArray[] PROGMEM = { 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84, 84, 84, 84, 80, 80, 80, 80, 80, 80, 165, 165, 149, 149, };
-const unsigned char summerSolsticeArray[] PROGMEM = { 84, 84, 84, 84, 84, 84, 80, 80, 80, 80, 80, 80, 80, 64, 64, 64, 64, 64, 64, 64, 0, 85, 85, 85, 85, };
-const unsigned char fallEquinoxArray[] PROGMEM = { 165, 165, 165, 149, 149, 149, 149, 149, 149, 149, 149, 85, 85, 85, 85, 85, 85, 85, 85, 84, 84, 169, 169, 169, 169, };
-const unsigned char winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 149, 149, 85, 85, 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84, 169, 169, 169, 165, };
+const uint8_t springEquinoxArray[] PROGMEM = { 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84,
+                                               84, 84, 84, 80, 80, 80, 80, 80, 80, 165, 165, 149, 149, };
+const uint8_t summerSolsticeArray[] PROGMEM = { 84, 84, 84, 84, 84, 84, 80, 80, 80, 80, 80, 80, 
+                                                80, 64, 64, 64, 64, 64, 64, 64, 0, 85, 85, 85, 85, };
+const uint8_t fallEquinoxArray[] PROGMEM = { 165, 165, 165, 149, 149, 149, 149, 149, 149, 149, 149, 85, 85, 
+                                             85, 85, 85, 85, 85, 85, 84, 84, 169, 169, 169, 169, };
+const uint8_t winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 149, 149, 85, 85, 85, 85, 85, 85, 85, 
+                                                85, 85, 84, 84, 84, 84, 84, 169, 169, 169, 165, };
 
 #define SPRING_EQUINOX_DAY_BASE 19
 #define SUMMER_SOLSTICE_DAY_BASE 20
@@ -78,7 +100,7 @@ const unsigned char winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 1
 #define SUN_EVENT_YEAR_RANGE 100
 
 // This should be passed one of the PROGMEM solar event arrays above with the matching DAY_BASE
-unsigned char unpackSunEventDay(unsigned char *pgmArray, unsigned char dayBase, int year)
+uint8_t unpackSunEventDay(uint8_t *pgmArray, uint8_t dayBase, int year)
 {
   // If the year is in the past, something has gone wrong, and we don't 
   // care the the solar events are wrong.
@@ -94,43 +116,38 @@ unsigned char unpackSunEventDay(unsigned char *pgmArray, unsigned char dayBase, 
   // I have given the clocks to will be dead so no one will care.
   index = index%SUN_EVENT_YEAR_RANGE;
 
-  unsigned char mask = 3 << shift;
+  uint8_t mask = 3 << shift;
   
   return ((pgm_read_byte(&pgmArray[index]) & mask) >> shift) + dayBase;
 }
 
-// This is the set of things we keep track of in eeprom.  This is mostly 
-// so we can record peruser info, and only have to compute the various
-// holidays once a year.
-typedef struct {
-  unsigned char version;  // incremented if the info struct changes, also used to check
-                          // never having been written state.
-  
-  unsigned short year;    // Most recent handled year, year all the holidays are computed for.
-  unsigned char month;    // Most recently handled month.
-  unsigned char day;      // Most recently handled day.
-
-  int gmtOffsetInSeconds; 
-} EEPROMInfo;
+// This looks up a display digit based on the base and the ordering arrays.
+uint8_t ledIndex(uint8_t base, uint8_t digit)
+{
+    // Possibly make this do PROGMEM lookups
+    if (base == MINUTE_ONES_BASE || base == HOUR_ONES_BASE) {
+        return base + gOnesDigit[digit];
+    }
+    return base + gTensDigit[digit];
+}
 
 void setup(void)
 {
-  // TODO: Only switch these to 0, 1, 2 when we're programming the actual boards, 
-  // otherwise Serial uses 0 and 1.
-  //  pinMode(SWITCH_UP_DIG_IN, INPUT_PULLUP);
-  //  pinMode(SWITCH_DOWN_DIG_IN, INPUT_PULLUP);
-  //  pinMode(SWITCH_SET_DIG_IN, INPUT_PULLUP);
+    pinMode(SWITCH_UP_DIG_IN, INPUT_PULLUP);
+    pinMode(SWITCH_DOWN_DIG_IN, INPUT_PULLUP);
+    pinMode(SWITCH_SET_DIG_IN, INPUT_PULLUP);
   
-  Serial.begin(19200);
 
   //setSyncProvider() causes the Time library to synchronize with the
   //external RTC by calling RTC.get() every five minutes by default.
   setSyncProvider(RTC.get);
-  
-  // if (timeStatus() != timeSet) {
-  //   Serial.print(F("RTC Sync setup failed."));
-  // }
 
+#ifdef RUNNING_ON_UNO
+   Serial.begin(19200);
+   if (timeStatus() != timeSet) {
+     Serial.print(F("RTC Sync setup failed."));
+   }
+#endif
   readAndValidateEEProm();
  
   leds.begin();
@@ -325,8 +342,148 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
     }
 }
 
+
+// This info is shared across multiple indepedent buttons with the
+// assumption that only one button at a time can be sending auto repeat events.
+// So for example using this holding down both up and down buttons would press/autorepeat/release only
+// the first of the buttons pressed, not both.
+void clearSharedEventState(SharedEventState *eventState)
+{
+    eventState->buttonPressTime = 0;
+    eventState->mostRecentAutoRepeatTime = 0;
+    eventState->autoRepeatCount = 0;
+    eventState->autoRepeatInterval = MAX_AUTO_REPEAT_INTERVAL;
+}
+
+void
+initializeButtonInfo(ButtonInfo *buttonInfo, uint8_t pin, uint8_t canAutoRepeat)
+{
+    buttonInfo->state = 0;
+    if (digitalRead(pin)) {
+        buttonInfo->state |= BUTTON_STATE_MOST_RECENT_STATE;
+    }
+    if (canAutoRepeat) {
+        buttonInfo->state |= BUTTON_STATE_CAN_AUTO_REPEAT;
+    }
+    buttonInfo->pin = pin;
+}
+
+uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
+                                         SharedEventState *eventState,
+                                         ButtonInfo *buttonInfo)
+{
+    bool currentState = digitalRead(buttonInfo->pin);
+    //DEBUG_PRINT(F("update "));
+    //DEBUG_PRINT(buttonInfo->pin);
+    //DEBUG_PRINT(F(" currentState: "));
+    //DEBUG_PRINTLN(currentState);
+    //DEBUG_PRINT(F("eventState buttonPressTime: "));
+    //DEBUG_PRINTLN(eventState->buttonPressTime);
+    // If the state is changing then we react to the event.
+    if (currentState != ((buttonInfo->state & BUTTON_STATE_MOST_RECENT_STATE) != 0)) {
+        DEBUG_PRINT(F(" state changed for pin "));
+        DEBUG_PRINTLN(buttonInfo->pin);
+      
+        // Button is released.
+        if (currentState) {
+            DEBUG_PRINTLN(F("  released"));
+            buttonInfo->state |= BUTTON_STATE_MOST_RECENT_STATE;
+            // If we owned the press time we clear our hold and return a release.
+            if (buttonInfo->state & BUTTON_STATE_OWNS_START_TIME) {
+                DEBUG_PRINTLN(F("  we owned it, clearing state"));
+                clearSharedEventState(eventState);
+                buttonInfo->state &= ~BUTTON_STATE_OWNS_START_TIME;
+
+                // Only send the release if we sent a press.  Otherwise this was noise.
+                if (buttonInfo->state & BUTTON_STATE_OFFICALLY_PRESSED) {
+                    buttonInfo->state &= ~BUTTON_STATE_OFFICALLY_PRESSED;
+                    DEBUG_PRINT(F("OFFICALLY RELEASED PIN: "));
+                    DEBUG_PRINTLN(buttonInfo->pin);
+                    return BUTTON_RELEASED;
+                }
+            } else {
+                DEBUG_PRINTLN(F("  did not own"));
+            }
+        } else {
+            DEBUG_PRINTLN(F("  pressed"));
+            // Button is pressed.
+            buttonInfo->state &= ~BUTTON_STATE_MOST_RECENT_STATE;
+
+            // If no one owns the event state we grab it to lock out other buttons.
+            if (eventState->buttonPressTime == 0) {
+                DEBUG_PRINTLN(F("  Not owned, grabbing state"));
+                eventState->buttonPressTime = currentTime;
+                eventState->mostRecentAutoRepeatTime = 0;
+                buttonInfo->state |= BUTTON_STATE_OWNS_START_TIME;
+            }
+        }
+        
+        // State changed, but we don't have an offical event, so we
+        // just return no event. Presses are delayed to supress bounce.
+        return BUTTON_NO_EVENT;
+    }
+    
+    
+    if (buttonInfo->state & BUTTON_STATE_OWNS_START_TIME) {
+        
+        // If we haven't offically sent out the press we do that.
+        if (!(buttonInfo->state & BUTTON_STATE_OFFICALLY_PRESSED)) {
+            DEBUG_PRINTLN(F("Not offically pressed, checking for long enough delay"));
+            if (currentTime - eventState->buttonPressTime > BUTTON_DEBOUNCE_INTERVAL ) {
+                DEBUG_PRINT(F("Long Enough, OFFICALLY PRESSED PIN: "));
+                DEBUG_PRINTLN(buttonInfo->pin);         
+                buttonInfo->state |= BUTTON_STATE_OFFICALLY_PRESSED;
+                // Set this so we can get the max time until first auto repeat.
+                eventState->mostRecentAutoRepeatTime = currentTime;
+                return BUTTON_PRESSED;
+            }
+            return BUTTON_NO_EVENT;
+        } else {
+            if (buttonInfo->state & BUTTON_STATE_CAN_AUTO_REPEAT) {
+                DEBUG_PRINT(buttonInfo->pin);
+                DEBUG_PRINT(".");
+            } else {
+                DEBUG_PRINT(buttonInfo->pin);                
+                DEBUG_PRINT("*");
+            }
+            // If we may need to emit an auto repeat press we check for that.
+            if (buttonInfo->state & BUTTON_STATE_CAN_AUTO_REPEAT) {
+                if (currentTime - eventState->mostRecentAutoRepeatTime > eventState->autoRepeatInterval) {
+                    eventState->mostRecentAutoRepeatTime = currentTime;
+                
+                    // For a while we step along at the max interval
+                    if (eventState->autoRepeatCount < AUTO_REPEAT_RAMP_DELAY) {
+                        eventState->autoRepeatInterval = MAX_AUTO_REPEAT_INTERVAL;
+                        eventState->autoRepeatCount++;
+                        // Then we ramp to the fastest interval
+                    } else if (eventState->autoRepeatInterval > MIN_AUTO_REPEAT_INTERVAL) {
+                        eventState->autoRepeatInterval -= AUTO_REPEAT_RAMP_STEP;
+                    } else {
+                        // Then we just hold there forever.
+                        eventState->autoRepeatInterval = MIN_AUTO_REPEAT_INTERVAL;
+                    }
+
+                    DEBUG_PRINT(F("AUTO REPEATE PIN: "));
+                    DEBUG_PRINTLN(buttonInfo->pin);             
+                    
+                    return BUTTON_AUTO_REPEAT;
+                }
+            }
+        }
+    }
+    
+    return BUTTON_NO_EVENT;
+}
+
+
 void loop()
 {
+    DEBUG_PRINTLN(F("LOOP"));
+    // If the user hits the set button, we go though the setup sequence.
+    if (digitalRead(SWITCH_SET_DIG_IN) == false) {
+        delay(50);
+        performUserSetupSequence();
+    }
   //   colorTest();
   // while (1) {
   //  test();
@@ -342,8 +499,284 @@ void loop()
 
 void clearLeds()
 {
-  for (int i=0; i<LED_COUNT; i++) {
-    leds.setPixelColor(i, 0);
-  }
+    for (int i=0; i<LED_COUNT; i++) {
+        leds.setPixelColor(i, 0);
+    }
+}
+
+void clearSpecialCharacterLeds()
+{
+    leds.setPixelColor(ledIndex(HOUR_TENS_BASE, 0), 0);
+    for (int i=3; i<10; ++i ) {
+        leds.setPixelColor(ledIndex(HOUR_TENS_BASE, i), 0);
+    }
+}
+
+void setAllDigits(uint8_t base, uint32_t color)
+{
+    if (base == NO_INDEX) {
+        return;
+    }
+    for (uint8_t digit = 0; digit < 10; ++digit) {
+        leds.setPixelColor(ledIndex(base, digit), color);
+    }
+}
+
+
+void displayValue(int value,
+                  uint8_t digitOnesBase,
+                  uint8_t digitTensBase,
+                  uint8_t digitHundredsBase,
+                  uint8_t digitThousandsBase,
+                  uint8_t colorScale,
+                  bool forceAllDigitDisplay)
+{
+    uint32_t color = (value < 0) ? leds.Color(0, 128, 255) : leds.Color(254, 200, 0);
+    uint32_t colorBlack = 0;
+    
+    uint8_t onesDigit = value%10;
+    value = value/10;
+    uint8_t tensDigit = value%10;
+    value = value/10;
+    uint8_t hundredsDigit = value%10;
+    value = value/10;
+    uint8_t thousandsDigit = value%10;
+    
+    bool foundNonZeroDigit = forceAllDigitDisplay;
+
+    // Clear any digits we will be writing into.
+    setAllDigits(digitOnesBase, 0);
+    setAllDigits(digitTensBase, 0);
+    setAllDigits(digitHundredsBase, 0);
+    setAllDigits(digitThousandsBase, 0);
+
+    color = scaleColor(color, colorScale);
+    
+    foundNonZeroDigit |= thousandsDigit != 0;
+    if (digitThousandsBase != NO_INDEX) {
+        leds.setPixelColor(ledIndex(digitThousandsBase, thousandsDigit), (foundNonZeroDigit) ? color : colorBlack);
+    }
+
+    foundNonZeroDigit |= hundredsDigit != 0;
+    if (digitHundredsBase != NO_INDEX) {
+        leds.setPixelColor(ledIndex(digitHundredsBase, hundredsDigit), (foundNonZeroDigit) ? color : colorBlack);
+    }
+
+    foundNonZeroDigit |= tensDigit != 0;
+    if (digitTensBase != NO_INDEX) {
+        leds.setPixelColor(ledIndex(digitTensBase, tensDigit), (foundNonZeroDigit) ? color : colorBlack);
+    }
+
+    foundNonZeroDigit |= onesDigit != 0;
+    if (digitOnesBase != NO_INDEX) {
+        leds.setPixelColor(ledIndex(digitOnesBase, onesDigit), (foundNonZeroDigit) ? color : colorBlack);
+    }
+
+    leds.show();
+}
+
+#define USER_TIMEOUT 1
+#define USER_HIT_SET 2
+
+// Simple color scale so we can do color brightness animations.
+uint32_t scaleColor(uint32_t color, uint8_t scale)
+{
+    // The cast chops off the high bits without having to mask them.
+    uint8_t r = (uint8_t)(color >> 16);
+    uint8_t g = (uint8_t)(color >> 8);
+    uint8_t b = (uint8_t)(color);
+   
+    r = (r*scale) >> 8;
+    g = (g*scale) >> 8;
+    b = (b*scale) >> 8;
+
+//DEBUG_PRINT(F("color       r:"));
+//    DEBUG_PRINT(r);
+//    DEBUG_PRINT(F(" g:"));
+//    DEBUG_PRINT(g);
+//    DEBUG_PRINT(F(" b:"));
+//    DEBUG_PRINTLN(b);
+
+//    DEBUG_PRINT(F("scaledColor r:"));
+//    DEBUG_PRINT(r);
+//    DEBUG_PRINT(F(" g:"));
+//    DEBUG_PRINT(g);
+//    DEBUG_PRINT(F(" b:"));
+//    DEBUG_PRINT(b);
+//    DEBUG_PRINT(F("   scale:"));
+//    DEBUG_PRINTLN(scale);
+
+    return (r << 16) | (g << 8) | b;
+}
+    
+
+uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
+                          uint8_t digitOnesBase,
+                          uint8_t digitTensBase,
+                          uint8_t digitHundredsBase,
+                          uint8_t digitThousandsBase,
+                             bool forceAllDigitDisplay)
+{
+    SharedEventState eventState;
+    ButtonInfo setButtonInfo;
+    ButtonInfo upButtonInfo;
+    ButtonInfo downButtonInfo;
+    
+    clearSharedEventState(&eventState);
+    initializeButtonInfo(&setButtonInfo, SWITCH_SET_DIG_IN, false);
+    initializeButtonInfo(&upButtonInfo, SWITCH_UP_DIG_IN, true);
+    initializeButtonInfo(&downButtonInfo, SWITCH_DOWN_DIG_IN, true);
+
+    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, 255, forceAllDigitDisplay);
+
+    time_t startTime = millis();
+    time_t currentTime = startTime;
+    time_t mostRecentEventTime = currentTime;
+  
+    uint8_t event;
+    uint8_t colorScale;
+  
+    do {
+        currentTime = millis();
+
+        // Compute a saw tooth that cycles every second from 255 down to 205 and then back up to 255
+        // so we can "blink" the digits you are setting in a way that's familar to clock setting people.
+        colorScale = 255 - (((currentTime - startTime)%500)/10);
+        //   DEBUG_PRINT(F("scale: "));
+        //   DEBUG_PRINTLN(colorScale);
+        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+
+        event = updateButtonInfoWithCurrentState(currentTime, &eventState, &setButtonInfo);     
+        if (event != BUTTON_NO_EVENT) {
+            if (event == BUTTON_PRESSED) {
+                DEBUG_PRINTLN(F("user hit SET"));
+                return USER_HIT_SET;
+            }
+        } else {
+            event = updateButtonInfoWithCurrentState(currentTime, &eventState, &upButtonInfo);
+            if (event != BUTTON_NO_EVENT) {
+                DEBUG_PRINT(F("user UP event: "));
+                DEBUG_PRINTLN(event);
+                if (event == BUTTON_PRESSED || event == BUTTON_AUTO_REPEAT) {   
+                    if (*currentValue >= maxValue) {
+                        *currentValue = minValue;
+                    } else {
+                        (*currentValue)++;
+                    }
+                    DEBUG_PRINT(F("VALUE: "));
+                    DEBUG_PRINTLN((*currentValue));
+                    mostRecentEventTime = currentTime;
+                    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+                }
+            } else {
+                event = updateButtonInfoWithCurrentState(currentTime, &eventState, &downButtonInfo);
+                if (event != BUTTON_NO_EVENT) {
+                    DEBUG_PRINT(F("user DOWN event: "));
+                    DEBUG_PRINTLN(event);
+                    if (event == BUTTON_PRESSED || event == BUTTON_AUTO_REPEAT) {
+                        // check before decrement so minValue 0 doesn't wrap.
+                        if (*currentValue == minValue) {
+                            *currentValue = maxValue;
+                        } else {
+                            (*currentValue)--;
+                        }
+                        DEBUG_PRINT(F("VALUE: "));
+                        DEBUG_PRINTLN((*currentValue));
+                        mostRecentEventTime = currentTime;
+                        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+                    }
+                }
+            }
+        }
+    } while (currentTime - mostRecentEventTime < USER_INPUT_TIMEOUT);
+    
+    return USER_TIMEOUT;
+}
+
+
+void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMTOffset, int newYear, int newMonth, int newDay)
+{
+    tmElements_t tm;
+    
+    if (newMinutes == minute(timeAtStart) &&
+        newGMTOffset == gGMTOffsetInSeconds &&
+        newYear == year(timeAtStart) &&
+        newMonth == month(timeAtStart) &&
+        newDay == day(timeAtStart)) {
+       
+        // User did nothing.
+        if (newHours == hour(timeAtStart)) {
+            return;
+        }
+        
+        // User only changed the hour, assume this is a daylight savings time adjustment
+        // and fiddle with the gMT offset intead of fully setting the time.
+        int changeInHours = newHours - hour(timeAtStart);
+        
+        if (abs(changeInHours) == 1) {
+            gGMTOffsetInSeconds += changeInHours*60*60;
+            return;
+        }
+    }
+    
+    tm.Year = y2kYearToTm(newYear);
+    tm.Month = newMonth;
+    tm.Day = newDay;
+    tm.Hour = newHours;
+    tm.Minute = newMinutes;
+    tm.Second = 0;
+    
+    time_t t = makeTime(tm);
+    RTC.set(t);        //use the time_t value to ensure correct weekday is set
+    setTime(t);
+}
+
+void redrawTime(time_t t)
+{
+    clearLeds();
+    setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
+    leds.show();
+}
+   
+void performUserSetupSequence()
+{
+    time_t timeAtStart = now() + gGMTOffsetInSeconds;
+    
+    int newHours = hour(timeAtStart);
+    int newMinutes = minute(timeAtStart);
+    int newGMTOffset = gGMTOffsetInSeconds/(60*60);
+    int newYear = year(timeAtStart);
+    int newMonth = month(timeAtStart);
+    int newDay = day(timeAtStart);
+
+    DEBUG_PRINTLN(F("setup sequence"));
+    uint8_t result = setValueUsingButtons(&newHours, 0, 23, HOUR_ONES_BASE, HOUR_TENS_BASE, NO_INDEX, NO_INDEX, false);
+    redrawTime(timeAtStart);
+    
+    if (result != USER_TIMEOUT) {
+        result = setValueUsingButtons(&newMinutes, 0, 59, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, true);
+    }
+
+    // GMT offset zones seem to go from -11 to + 14
+    if (result != USER_TIMEOUT) {
+        clearSpecialCharacterLeds();
+        result = setValueUsingButtons(&newGMTOffset, -11.0, 14.0, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+    }
+    
+    if (result != USER_TIMEOUT) {
+        result = setValueUsingButtons(&newYear, 2016, 2116, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+    }
+    
+    if (result != USER_TIMEOUT) {
+        result = setValueUsingButtons(&newMonth, 1, 12, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+    }
+    
+    // To save code space we don't enfoce month lengths so this value could be wrong for the chosen month.
+    if (result != USER_TIMEOUT) {
+        result = setValueUsingButtons(&newDay, 1, 31, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, false);
+    }
+
+    applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
 }
 
