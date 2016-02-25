@@ -30,6 +30,15 @@ typedef struct
     uint8_t pin;
 } ButtonInfo;
 
+// Because we do some tricky things with color/indicating AM PM, forcing leading
+// zeros, etc. It is useful for us to have a digit type during display.
+#define DIGIT_TYPE_HOURS      0
+#define DIGIT_TYPE_MINUTES    1
+#define DIGIT_TYPE_GMT_OFFSET 2
+#define DIGIT_TYPE_YEAR       3
+#define DIGIT_TYPE_MONTH      4
+#define DIGIT_TYPE_DAY        5
+
 #define BUTTON_DEBOUNCE_INTERVAL 50
 #define MAX_AUTO_REPEAT_INTERVAL 350
 #define MIN_AUTO_REPEAT_INTERVAL 200

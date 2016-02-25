@@ -301,13 +301,15 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
     // We use a .05 on either side to make new/full a bit more discriminating.  We might want to
     // make it even smaller.
     if (isWaxing) {
-        if (percentIlluminated < 0.05) {
+        if (percentIlluminated < 0.01) {
             // New moon, we're done.
         } else {
             // Turn on the upper right rim.
             leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], moonColor);
-            
-            if (percentIlluminated < 0.3) {
+
+            if (percentIlluminated < 0.05) {
+                // For very low percentages we just show a one arc sliver of moon                
+            } else if (percentIlluminated < 0.3) {
                 leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[TWENTY_PERCENT_MOON_ARC], moonColor);
             } else if (percentIlluminated < 0.5) {
                 leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[FORTY_PERCENT_MOON_ARC], moonColor);
@@ -321,13 +323,15 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
         }
     } else {
        // Use the lower left rim.
-        if (percentIlluminated < 0.05) {
+        if (percentIlluminated < 0.01) {
             // New moon, we're done.
         } else {
             // Turn on the lower left rim.
             leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], moonColor);
-            
-            if (percentIlluminated < 0.3) {
+
+            if (percentIlluminated < 0.05) {
+                // For very low percentages we just show a one arc sliver of moon
+            } else if (percentIlluminated < 0.3) {
                 leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[EIGHTY_PERCENT_MOON_ARC], moonColor);
             } else if (percentIlluminated < 0.5) {
                 leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[SIXTY_PERCENT_MOON_ARC], moonColor);
@@ -529,10 +533,20 @@ void displayValue(int value,
                   uint8_t digitHundredsBase,
                   uint8_t digitThousandsBase,
                   uint8_t colorScale,
-                  bool forceAllDigitDisplay)
+                  uint8_t digitType)
 {
-    uint32_t color = (value < 0) ? leds.Color(0, 128, 255) : leds.Color(254, 200, 0);
+    uint32_t color = (value < 0) ? leds.Color(0, 128, 255) : leds.Color(254, 120, 0);
     uint32_t colorBlack = 0;
+
+    clearSpecialCharacterLeds();
+
+    bool isPM = false;
+    if (digitType == DIGIT_TYPE_HOURS) {
+        if (value >= 12) {
+            isPM = true;
+        }
+        value = twelveHourValueFrom24HourTime(value);
+    }
     
     uint8_t onesDigit = value%10;
     value = value/10;
@@ -541,8 +555,9 @@ void displayValue(int value,
     uint8_t hundredsDigit = value%10;
     value = value/10;
     uint8_t thousandsDigit = value%10;
-    
-    bool foundNonZeroDigit = forceAllDigitDisplay;
+
+    // If we're showing minutes, we always show the leading zeros.
+    bool foundNonZeroDigit = digitType == DIGIT_TYPE_MINUTES;
 
     // Clear any digits we will be writing into.
     setAllDigits(digitOnesBase, 0);
@@ -550,7 +565,14 @@ void displayValue(int value,
     setAllDigits(digitHundredsBase, 0);
     setAllDigits(digitThousandsBase, 0);
 
-    color = scaleColor(color, colorScale);
+    // As a "PM Indicator" we display a big circle behind the hour tens digit.
+    if (isPM) {
+        uint32_t moonColor = leds.Color(255, 248, 209);//leds.Color(15,18,13);
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], moonColor);
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], moonColor);
+    }
+    
+    //    color = scaleColor(color, colorScale);
     
     foundNonZeroDigit |= thousandsDigit != 0;
     if (digitThousandsBase != NO_INDEX) {
@@ -615,7 +637,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                           uint8_t digitTensBase,
                           uint8_t digitHundredsBase,
                           uint8_t digitThousandsBase,
-                             bool forceAllDigitDisplay)
+                          uint8_t digitType)
 {
     SharedEventState eventState;
     ButtonInfo setButtonInfo;
@@ -627,7 +649,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
     initializeButtonInfo(&upButtonInfo, SWITCH_UP_DIG_IN, true);
     initializeButtonInfo(&downButtonInfo, SWITCH_DOWN_DIG_IN, true);
 
-    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, 255, forceAllDigitDisplay);
+    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, 255, digitType);
 
     time_t startTime = millis();
     time_t currentTime = startTime;
@@ -644,7 +666,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
         colorScale = 255 - (((currentTime - startTime)%500)/10);
         //   DEBUG_PRINT(F("scale: "));
         //   DEBUG_PRINTLN(colorScale);
-        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, digitType);
 
         event = updateButtonInfoWithCurrentState(currentTime, &eventState, &setButtonInfo);     
         if (event != BUTTON_NO_EVENT) {
@@ -666,7 +688,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                     DEBUG_PRINT(F("VALUE: "));
                     DEBUG_PRINTLN((*currentValue));
                     mostRecentEventTime = currentTime;
-                    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+                    displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, digitType);
                 }
             } else {
                 event = updateButtonInfoWithCurrentState(currentTime, &eventState, &downButtonInfo);
@@ -683,7 +705,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                         DEBUG_PRINT(F("VALUE: "));
                         DEBUG_PRINTLN((*currentValue));
                         mostRecentEventTime = currentTime;
-                        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, forceAllDigitDisplay);
+                        displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, digitType);
                     }
                 }
             }
@@ -751,30 +773,29 @@ void performUserSetupSequence()
     int newDay = day(timeAtStart);
 
     DEBUG_PRINTLN(F("setup sequence"));
-    uint8_t result = setValueUsingButtons(&newHours, 0, 23, HOUR_ONES_BASE, HOUR_TENS_BASE, NO_INDEX, NO_INDEX, false);
+    uint8_t result = setValueUsingButtons(&newHours, 0, 23, HOUR_ONES_BASE, HOUR_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_HOURS);
     redrawTime(timeAtStart);
     
     if (result != USER_TIMEOUT) {
-        result = setValueUsingButtons(&newMinutes, 0, 59, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, true);
+        result = setValueUsingButtons(&newMinutes, 0, 59, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_MINUTES);
     }
 
     // GMT offset zones seem to go from -11 to + 14
     if (result != USER_TIMEOUT) {
-        clearSpecialCharacterLeds();
-        result = setValueUsingButtons(&newGMTOffset, -11.0, 14.0, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+        result = setValueUsingButtons(&newGMTOffset, -11.0, 14.0, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, DIGIT_TYPE_GMT_OFFSET);
     }
     
     if (result != USER_TIMEOUT) {
-        result = setValueUsingButtons(&newYear, 2016, 2116, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+        result = setValueUsingButtons(&newYear, 2016, 2116, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, DIGIT_TYPE_YEAR);
     }
     
     if (result != USER_TIMEOUT) {
-        result = setValueUsingButtons(&newMonth, 1, 12, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, false);
+        result = setValueUsingButtons(&newMonth, 1, 12, MINUTE_ONES_BASE, MINUTE_TENS_BASE, HOUR_ONES_BASE, HOUR_TENS_BASE, DIGIT_TYPE_MONTH);
     }
     
     // To save code space we don't enfoce month lengths so this value could be wrong for the chosen month.
     if (result != USER_TIMEOUT) {
-        result = setValueUsingButtons(&newDay, 1, 31, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, false);
+        result = setValueUsingButtons(&newDay, 1, 31, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_DAY);
     }
 
     applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
