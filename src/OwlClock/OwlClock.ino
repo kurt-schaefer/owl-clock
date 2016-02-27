@@ -34,8 +34,10 @@ extern "C" {
     #define SWITCH_DOWN_DIG_IN 3
     #define SWITCH_SET_DIG_IN  4
 #else
-    #define SWITCH_UP_DIG_IN   0
-    #define SWITCH_DOWN_DIG_IN 1
+// This has up/down reversed from what is silscreened on the boards, but this
+// is the "right" way around in term of feel.
+    #define SWITCH_UP_DIG_IN   1
+    #define SWITCH_DOWN_DIG_IN 0
     #define SWITCH_SET_DIG_IN  2
 #endif
 
@@ -68,6 +70,9 @@ static uint8_t gCurrentDay = 0;
 #define EIGHTY_PERCENT_MOON_ARC 5
 #define ONE_HUNDRED_PERCENT_MOON_ARC 7
 
+#define SUN_OUTLINE 0
+#define EYE_OUTLINE 9
+
 #define EEPROM_INFO_ADDRESS 0
 #define EEPROM_NEVER_WAS_SET 255
 #define EEPROM_INFO_VERSION 1   // Increment this if you change/reorder the EEPROMInfo
@@ -78,7 +83,7 @@ static uint8_t gCurrentDay = 0;
 
 // I wrote a ton of code to compute these sun events, but the code took 24k of program space,
 // so instead I'm squeezing the next 100 years of sun events into these arrays.  The
-// values are two bit offsets from their base value.  So 4 years per byte. That makes it
+// value are two bit offsets from their base value.  So 4 years per byte. That makes it
 // simple to do the progmem lookup for the correct byte and mask from there.
 
 const uint8_t springEquinoxArray[] PROGMEM = { 85, 85, 85, 85, 85, 85, 85, 84, 84, 84, 84, 84,
@@ -479,6 +484,14 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
     return BUTTON_NO_EVENT;
 }
 
+void showCurrentMoonAndTime()
+{
+    time_t t = now() + gGMTOffsetInSeconds;
+    clearLeds();
+    setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
+    leds.show();
+}
 
 void loop()
 {
@@ -493,12 +506,7 @@ void loop()
   //  test();
   // }
 
-  time_t t = now() + gGMTOffsetInSeconds;
-  clearLeds();
-  setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
-  setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
-
-  leds.show();
+    showCurrentMoonAndTime();
 }
 
 void clearLeds()
@@ -547,6 +555,8 @@ void displayValue(int value,
         }
         value = twelveHourValueFrom24HourTime(value);
     }
+
+    value = abs(value);
     
     uint8_t onesDigit = value%10;
     value = value/10;
@@ -566,13 +576,25 @@ void displayValue(int value,
     setAllDigits(digitThousandsBase, 0);
 
     // As a "PM Indicator" we display a big circle behind the hour tens digit.
-    if (isPM) {
-        uint32_t moonColor = leds.Color(255, 248, 209);//leds.Color(15,18,13);
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], moonColor);
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], moonColor);
+    // In either the "first half of the 24 hour clock face" or seconds half.
+    if (digitType == DIGIT_TYPE_HOURS) {
+        if (isPM) {
+            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(255, 5, 5));
+        } else {
+            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], leds.Color(255, 5, 5));
+        }
+    } else if (digitType == DIGIT_TYPE_MONTH) {
+        // For months we show a moon
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(255, 248, 209));
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[EIGHTY_PERCENT_MOON_ARC], leds.Color(255, 248, 209));
+    } else if (digitType == DIGIT_TYPE_DAY) {
+        // For days we show a sun.
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(254, 120, 0));
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], leds.Color(254, 120, 0));
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[SUN_OUTLINE], leds.Color(254, 120, 0));
     }
-    
-    //    color = scaleColor(color, colorScale);
+
+    color = scaleColor(color, colorScale);
     
     foundNonZeroDigit |= thousandsDigit != 0;
     if (digitThousandsBase != NO_INDEX) {
@@ -589,9 +611,11 @@ void displayValue(int value,
         leds.setPixelColor(ledIndex(digitTensBase, tensDigit), (foundNonZeroDigit) ? color : colorBlack);
     }
 
+    // We never show nothing, so if we've gotten all the way down here
+    // and the last digit is 0 we still show it.
     foundNonZeroDigit |= onesDigit != 0;
     if (digitOnesBase != NO_INDEX) {
-        leds.setPixelColor(ledIndex(digitOnesBase, onesDigit), (foundNonZeroDigit) ? color : colorBlack);
+        leds.setPixelColor(ledIndex(digitOnesBase, onesDigit), color);
     }
 
     leds.show();
@@ -628,7 +652,7 @@ uint32_t scaleColor(uint32_t color, uint8_t scale)
 //    DEBUG_PRINT(F("   scale:"));
 //    DEBUG_PRINTLN(scale);
 
-    return (r << 16) | (g << 8) | b;
+    return ((uint32_t )r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
 }
     
 
@@ -663,7 +687,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
 
         // Compute a saw tooth that cycles every second from 255 down to 205 and then back up to 255
         // so we can "blink" the digits you are setting in a way that's familar to clock setting people.
-        colorScale = 255 - (((currentTime - startTime)%500)/10);
+        colorScale = 255 - (((currentTime - startTime)%500)/2);
         //   DEBUG_PRINT(F("scale: "));
         //   DEBUG_PRINTLN(colorScale);
         displayValue(*currentValue, digitOnesBase, digitTensBase, digitHundredsBase, digitThousandsBase, colorScale, digitType);
@@ -698,7 +722,11 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                     if (event == BUTTON_PRESSED || event == BUTTON_AUTO_REPEAT) {
                         // check before decrement so minValue 0 doesn't wrap.
                         if (*currentValue == minValue) {
-                            *currentValue = maxValue;
+                            // Keep them from wrapping around on the year since going up to
+                            // max year is useless and disorienting.
+                            if (minValue != 2016) {
+                                *currentValue = maxValue;
+                            }
                         } else {
                             (*currentValue)--;
                         }
@@ -747,8 +775,11 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
     tm.Hour = newHours;
     tm.Minute = newMinutes;
     tm.Second = 0;
+
+    // TODO: Flush this out to EEProm
+    gGMTOffsetInSeconds = newGMTOffset;
     
-    time_t t = makeTime(tm);
+    time_t t = makeTime(tm) - gGMTOffsetInSeconds;
     RTC.set(t);        //use the time_t value to ensure correct weekday is set
     setTime(t);
 }
@@ -799,5 +830,9 @@ void performUserSetupSequence()
     }
 
     applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
+
+    // We update what's displayed but wait a second so users won't re-trigger set accedently.
+    showCurrentMoonAndTime();
+    delay(1000);
 }
 
