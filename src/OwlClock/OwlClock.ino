@@ -488,6 +488,7 @@ void showCurrentMoonAndTime()
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     clearLeds();
     setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    //    goldenRingSpin();
     //    spinGlobe();
     //    eyeAnimation();
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
@@ -915,4 +916,45 @@ void spinGlobe()
     
     doColorSpin(globColors, sizeof(globColors)/sizeof(uint32_t), false);
     delay(175);
+}
+
+
+void goldenRingSpin()
+{
+    static uint8_t step = 0;
+
+    //    clearSpecialCharacterLeds();
+
+    uint32_t frontColor = leds.Color(255, 200, 0);
+    uint32_t backColor = frontColor;
+    
+    switch(step) {
+        case 0:
+            leds.setPixelColor(ZERO_PERCENT_MOON_ARC, scaleColor(frontColor, 128));
+            leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, scaleColor(backColor, 128));
+            break;
+        case 1:
+            leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, scaleColor(frontColor, 204));
+            leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, scaleColor(backColor, 102));
+            break;
+        case 2:
+            leds.setPixelColor(FORTY_PERCENT_MOON_ARC, frontColor);
+            leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, scaleColor(backColor, 51));
+            break;
+        case 3:
+            leds.setPixelColor(FORTY_PERCENT_MOON_ARC, scaleColor(backColor, 51));
+            leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, frontColor);
+            break;
+        case 4:
+            leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, scaleColor(backColor, 102));
+            leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, scaleColor(frontColor, 204));
+            break;
+        case 5:
+            leds.setPixelColor(ZERO_PERCENT_MOON_ARC, scaleColor(backColor, 128));
+            leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, scaleColor(frontColor, 128));
+            break;
+    }
+    
+    step = (step + 1)%5;
+    delay(150);
 }
