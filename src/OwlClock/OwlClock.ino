@@ -636,22 +636,6 @@ uint32_t scaleColor(uint32_t color, uint8_t scale)
     g = (g*scale) >> 8;
     b = (b*scale) >> 8;
 
-//DEBUG_PRINT(F("color       r:"));
-//    DEBUG_PRINT(r);
-//    DEBUG_PRINT(F(" g:"));
-//    DEBUG_PRINT(g);
-//    DEBUG_PRINT(F(" b:"));
-//    DEBUG_PRINTLN(b);
-
-//    DEBUG_PRINT(F("scaledColor r:"));
-//    DEBUG_PRINT(r);
-//    DEBUG_PRINT(F(" g:"));
-//    DEBUG_PRINT(g);
-//    DEBUG_PRINT(F(" b:"));
-//    DEBUG_PRINT(b);
-//    DEBUG_PRINT(F("   scale:"));
-//    DEBUG_PRINTLN(scale);
-
     return ((uint32_t )r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
 }
     
@@ -721,11 +705,14 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                     DEBUG_PRINTLN(event);
                     if (event == BUTTON_PRESSED || event == BUTTON_AUTO_REPEAT) {
                         // check before decrement so minValue 0 doesn't wrap.
-                        if (*currentValue == minValue) {
+                        if (*currentValue <= minValue) {
                             // Keep them from wrapping around on the year since going up to
                             // max year is useless and disorienting.
                             if (minValue != 2016) {
                                 *currentValue = maxValue;
+                            } else {
+                                // Otherwise just clamp
+                                *currentValue = minValue;
                             }
                         } else {
                             (*currentValue)--;
@@ -769,7 +756,7 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
         }
     }
     
-    tm.Year = y2kYearToTm(newYear);
+    tm.Year = CalendarYrToTm(newYear);
     tm.Month = newMonth;
     tm.Day = newDay;
     tm.Hour = newHours;
