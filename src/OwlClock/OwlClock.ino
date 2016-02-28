@@ -48,11 +48,9 @@ Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, LED_DIG_OUT, NEO_GRB + NEO
 static const uint8_t gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
 static const uint8_t gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
-static int gGMTOffsetInSeconds = -8*60*60;
+EEPROMInfo gInfo;
 
-static unsigned short gCurrentYear = 0;
-static uint8_t gCurrentMonth = 0;
-static uint8_t gCurrentDay = 0;
+#define DEFAULT_GMT_OFFSET -8*60*60;
 
 // To addess each digit use these bases + the above index.
 #define HOUR_TENS_BASE    20
@@ -153,7 +151,7 @@ void setup(void)
      Serial.print(F("RTC Sync setup failed."));
    }
 #endif
-  readAndValidateEEProm();
+  readAndValidateEEPromInfo();
  
   leds.begin();
   clearLeds();
@@ -161,37 +159,36 @@ void setup(void)
 }
 
 void
-readAndValidateEEProm()
+readAndValidateEEPromInfo()
 {
-  EEPROMInfo info;
-  EEPROM.get(EEPROM_INFO_ADDRESS, info);
+    EEPROM.get(EEPROM_INFO_ADDRESS, gInfo);
 
-  time_t t = now();
+    time_t t = now();
 
-  // If we have never saved this info off to eeprom
-  // we have to assume the current clock is ok and recompute everything based on that.
-  if (info.version != EEPROM_INFO_VERSION) {
-    info.version = EEPROM_INFO_VERSION;
-    info.year = (unsigned short)year(t);
-    info.month = month(t);
-    info.day = month(t);
+    // If we have never saved this info off to eeprom
+    // we have to assume the current clock is ok and recompute everything based on that.
+    if (gInfo.version != EEPROM_INFO_VERSION) {
+        gInfo.gmtOffsetInSeconds = DEFAULT_GMT_OFFSET;
+        writeEEProm(t);
+    }
 
-  //  info.latitude = DEFAULT_LATITUDE;
-  //  info.longitude = DEFAULT_LONGITUDE;
-
-  //  computeHolidays(&info);
-  }
-
-//        bool oscStopped(bool clearOSF = true);  //defaults to clear the OSF bit if argument not supplied
+    //        bool oscStopped(bool clearOSF = true);  //defaults to clear the OSF bit if argument not supplied
 
 
-  if (info.year != (unsigned short)year(t)) {
+    if (gInfo.year != (unsigned short)year(t)) {
     
-  }
+    }
+}
 
-  
-  
-  
+void
+writeEEProm(time_t t)
+{
+    gInfo.version = EEPROM_INFO_VERSION;
+    gInfo.year = (unsigned short)year(t);
+    gInfo.month = month(t);
+    gInfo.day = day(t);
+
+    EEPROM.put(EEPROM_INFO_VERSION, gInfo);
 }
 
 //void computeHolidays(EEPROMInfo *info)
@@ -486,7 +483,7 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
 
 void showCurrentMoonAndTime()
 {
-    time_t t = now() + gGMTOffsetInSeconds;
+    time_t t = now() + gInfo.gmtOffsetInSeconds;
     clearLeds();
     setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
@@ -736,7 +733,7 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
     tmElements_t tm;
     
     if (newMinutes == minute(timeAtStart) &&
-        newGMTOffset == gGMTOffsetInSeconds &&
+        newGMTOffset == gInfo.gmtOffsetInSeconds &&
         newYear == year(timeAtStart) &&
         newMonth == month(timeAtStart) &&
         newDay == day(timeAtStart)) {
@@ -751,7 +748,8 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
         int changeInHours = newHours - hour(timeAtStart);
         
         if (abs(changeInHours) == 1) {
-            gGMTOffsetInSeconds += changeInHours*60*60;
+            gInfo.gmtOffsetInSeconds += changeInHours*60*60;
+            writeEEProm(timeAtStart);
             return;
         }
     }
@@ -763,12 +761,14 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
     tm.Minute = newMinutes;
     tm.Second = 0;
 
-    // TODO: Flush this out to EEProm
-    gGMTOffsetInSeconds = newGMTOffset;
+    gInfo.gmtOffsetInSeconds = newGMTOffset;
     
-    time_t t = makeTime(tm) - gGMTOffsetInSeconds;
+    time_t t = makeTime(tm) - gInfo.gmtOffsetInSeconds;
     RTC.set(t);        //use the time_t value to ensure correct weekday is set
     setTime(t);
+
+    // Save the GMT offset/time off into eeprom.
+    writeEEProm(t);
 }
 
 void redrawTime(time_t t)
@@ -781,11 +781,11 @@ void redrawTime(time_t t)
    
 void performUserSetupSequence()
 {
-    time_t timeAtStart = now() + gGMTOffsetInSeconds;
+    time_t timeAtStart = now() + gInfo.gmtOffsetInSeconds;
     
     int newHours = hour(timeAtStart);
     int newMinutes = minute(timeAtStart);
-    int newGMTOffset = gGMTOffsetInSeconds/(60*60);
+    int newGMTOffset = gInfo.gmtOffsetInSeconds/(60*60);
     int newYear = year(timeAtStart);
     int newMonth = month(timeAtStart);
     int newDay = day(timeAtStart);

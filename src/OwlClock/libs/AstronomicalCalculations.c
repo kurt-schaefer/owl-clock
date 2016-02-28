@@ -321,8 +321,7 @@ dayOfTheWeek(int year, unsigned char month, unsigned char day)
   return (unsigned char)floorf(JD)%7;
 }
 
-unsigned char
-computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount)
+unsigned char computeHolidayBasedOnDayOfWeek(int year, unsigned char month, unsigned char dayOfWeek, unsigned dayOfWeekCount)
 {
   unsigned char curDay = 1;
   unsigned char curDayOfWeek = dayOfTheWeek(year, month, curDay);
