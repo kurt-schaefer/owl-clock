@@ -61,15 +61,16 @@ EEPROMInfo gInfo;
 
 // The various moon arcs, have digit equivalents, so we list those here.
 // The percentages go from upper right to lower left.
-#define ZERO_PERCENT_MOON_ARC 8
-#define TWENTY_PERCENT_MOON_ARC 6
-#define FORTY_PERCENT_MOON_ARC 4
-#define SIXTY_PERCENT_MOON_ARC 3
-#define EIGHTY_PERCENT_MOON_ARC 5
-#define ONE_HUNDRED_PERCENT_MOON_ARC 7
+#define ZERO_PERCENT_MOON_ARC 20
+#define TWENTY_PERCENT_MOON_ARC 25
+#define FORTY_PERCENT_MOON_ARC 21
+#define SIXTY_PERCENT_MOON_ARC 23
+#define EIGHTY_PERCENT_MOON_ARC 28
+#define ONE_HUNDRED_PERCENT_MOON_ARC 22
 
-#define SUN_OUTLINE 0
-#define EYE_OUTLINE 9
+// The other special characters.
+#define SUN_OUTLINE 26
+#define EYE_OUTLINE 27
 
 #define EEPROM_INFO_ADDRESS 0
 #define EEPROM_NEVER_WAS_SET 255
@@ -307,20 +308,20 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
             // New moon, we're done.
         } else {
             // Turn on the upper right rim.
-            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], moonColor);
+            leds.setPixelColor(ZERO_PERCENT_MOON_ARC, moonColor);
 
             if (percentIlluminated < 0.05) {
                 // For very low percentages we just show a one arc sliver of moon                
             } else if (percentIlluminated < 0.3) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[TWENTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.5) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[FORTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(FORTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.7) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[SIXTY_PERCENT_MOON_ARC], moonColor);
+                    leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.95) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[EIGHTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, moonColor);
             } else {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, moonColor);
             }
         }
     } else {
@@ -329,20 +330,20 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
             // New moon, we're done.
         } else {
             // Turn on the lower left rim.
-            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], moonColor);
+            leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, moonColor);
 
             if (percentIlluminated < 0.05) {
                 // For very low percentages we just show a one arc sliver of moon
             } else if (percentIlluminated < 0.3) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[EIGHTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.5) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[SIXTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.7) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[FORTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(FORTY_PERCENT_MOON_ARC, moonColor);
             } else if (percentIlluminated < 0.95) {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[TWENTY_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, moonColor);
             } else {
-                leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], moonColor);
+                leds.setPixelColor(ZERO_PERCENT_MOON_ARC, moonColor);
             }
         }
     }
@@ -576,19 +577,19 @@ void displayValue(int value,
     // In either the "first half of the 24 hour clock face" or seconds half.
     if (digitType == DIGIT_TYPE_HOURS) {
         if (isPM) {
-            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(255, 5, 5));
+            leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, leds.Color(255, 5, 5));
         } else {
-            leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], leds.Color(255, 5, 5));
+            leds.setPixelColor(ZERO_PERCENT_MOON_ARC, leds.Color(255, 5, 5));
         }
     } else if (digitType == DIGIT_TYPE_MONTH) {
         // For months we show a moon
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(255, 248, 209));
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[EIGHTY_PERCENT_MOON_ARC], leds.Color(255, 248, 209));
+        leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, leds.Color(255, 248, 209));
+        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, leds.Color(255, 248, 209));
     } else if (digitType == DIGIT_TYPE_DAY) {
         // For days we show a sun.
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ONE_HUNDRED_PERCENT_MOON_ARC], leds.Color(254, 120, 0));
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ZERO_PERCENT_MOON_ARC], leds.Color(254, 120, 0));
-        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[SUN_OUTLINE], leds.Color(254, 120, 0));
+        leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, leds.Color(254, 120, 0));
+        leds.setPixelColor(ZERO_PERCENT_MOON_ARC, leds.Color(254, 120, 0));
+        leds.setPixelColor(SUN_OUTLINE, leds.Color(254, 120, 0));
     }
 
     color = scaleColor(color, colorScale);
