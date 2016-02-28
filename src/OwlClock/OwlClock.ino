@@ -488,6 +488,7 @@ void showCurrentMoonAndTime()
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     clearLeds();
     setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    //    spinGlobe();
     //    eyeAnimation();
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
@@ -875,4 +876,43 @@ void eyeAnimation()
             seakDuration = EYE_SEAK_DURATION;
         }
     }
+}
+
+void doColorSpin(uint32_t colorArray[], uint8_t count, bool left)
+{
+    unsigned char indexArray[] = {7, 5, 3, 4, 6, 8};
+    static unsigned char offset = 0;
+    
+    for (int i=0; i<6; ++i) {
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ (int)indexArray[i]], colorArray[(i + offset)%count]);
+    }
+    
+    if (left) {
+        offset = (offset + 1)%count;
+    } else {
+        if (offset == 0) {
+            offset = count - 1;
+        } else {
+            offset--;
+        }
+    }
+}
+
+void spinGlobe()
+{
+    uint32_t globColors[] = { 0x8888ff,
+                            0xffffff,
+                            0x8888ff,
+                            0x3333ff,
+                            0x8888ff,
+                            0xaaccff,
+                            0x8888ff,
+                            0x3333ff,
+                            0x0000ff,
+                            0x0000ff,
+                            0x0066ff,
+                            0x0000ff };
+    
+    doColorSpin(globColors, sizeof(globColors)/sizeof(uint32_t), false);
+    delay(175);
 }
