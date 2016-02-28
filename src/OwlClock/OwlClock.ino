@@ -7,9 +7,8 @@
 #include <EEPROM.h>
 #include "Declarations.h"
 
-// My two helper libs that hold the extra precision math, and the astronomical calculations.
+// My helper lib that has moon and holiday code in it.
 extern "C" {
-#include "float64.h"
 #include "AstronomicalCalculations.h"
 }
 
@@ -71,6 +70,8 @@ EEPROMInfo gInfo;
 // The other special characters.
 #define SUN_OUTLINE 26
 #define EYE_OUTLINE 27
+
+#define EYE_SEAK_DURATION 150
 
 #define EEPROM_INFO_ADDRESS 0
 #define EEPROM_NEVER_WAS_SET 255
@@ -487,6 +488,7 @@ void showCurrentMoonAndTime()
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     clearLeds();
     setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    //    eyeAnimation();
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
 }
@@ -499,10 +501,6 @@ void loop()
         delay(50);
         performUserSetupSequence();
     }
-  //   colorTest();
-  // while (1) {
-  //  test();
-  // }
 
     showCurrentMoonAndTime();
 }
@@ -824,3 +822,57 @@ void performUserSetupSequence()
     delay(1000);
 }
 
+void eyeAnimation()
+{
+    clearSpecialCharacterLeds();
+    leds.setPixelColor(EYE_OUTLINE,  leds.Color(0, 200, 0));
+    
+    static int state = 1;
+    static int seakDuration = EYE_SEAK_DURATION;
+    static int goal = 1;
+    static int duration = 10;
+
+    uint32_t goldColor = leds.Color(128, 50, 0);
+    uint32_t yellowColor = leds.Color(255, 200, 0);
+    
+    if (state == 0) {
+        leds.setPixelColor(ZERO_PERCENT_MOON_ARC, yellowColor);
+        leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, yellowColor);
+    } else if (state == 1) {
+        leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, yellowColor);
+        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, yellowColor);
+    } else if (state == 2) {
+        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, yellowColor);
+        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, goldColor);
+        leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, yellowColor);
+    }
+    
+    if (state > goal) {
+        if (seakDuration > 0) {
+            seakDuration--;
+        } else {
+            state--;
+            seakDuration = EYE_SEAK_DURATION;            
+        }
+    } else if (state < goal) {
+        if (seakDuration > 0) {
+            seakDuration--;
+        } else {
+            state++;
+            seakDuration = EYE_SEAK_DURATION;
+        }
+    } else {
+        if (duration > 0) {
+            duration--;
+        } else {
+            goal = (rand()%2) ? 1 : (rand()%2) ? 2 : 0;
+            duration = (goal == 1) ? random(800, 6000) : random(800, 1500);
+            seakDuration = EYE_SEAK_DURATION;
+        }
+    }
+}
