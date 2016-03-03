@@ -48,6 +48,16 @@ static const uint8_t gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
 static const uint8_t gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
 EEPROMInfo gInfo;
+uint32_t gHourTensColor = 0xff0a0a;
+uint32_t gHourOnesColor = 0xff0a0a;
+uint32_t gMinTensColor  = 0xff0a0a;
+uint32_t gMinOnesColor  = 0xff0a0a;
+
+uint32_t gHourTensScale = 0xff;
+uint32_t gHourOnesScale = 0xff;
+uint32_t gMinTensScale  = 0xff;
+uint32_t gMinOnesScale  = 0xff;
+
 
 #define DEFAULT_GMT_OFFSET -8*60*60;
 
@@ -166,12 +176,11 @@ readAndValidateEEPromInfo()
 {
     EEPROM.get(EEPROM_INFO_ADDRESS, gInfo);
 
-    time_t t = now();
-
     // If we have never saved this info off to eeprom
     // we have to assume the current clock is ok and recompute everything based on that.
     if (gInfo.version != EEPROM_INFO_VERSION) {
         gInfo.gmtOffsetInSeconds = DEFAULT_GMT_OFFSET;
+        time_t t = now() + gInfo.gmtOffsetInSeconds;        
         writeEEProm(t);
     }
 
@@ -221,20 +230,17 @@ writeEEProm(time_t t)
 int 
 twelveHourValueFrom24HourTime(int hour)
 {
-  while (hour > 12) {
-    hour -= 12;
-  }
-  if (hour == 0) {
-    hour = 12;
-  }
-  return hour;
+    while (hour > 12) {
+        hour -= 12;
+    }
+    if (hour == 0) {
+        hour = 12;
+    }
+    return hour;
 }
 
-
-// Kurt you were about to split out this color into global digit colors so we can
-// do color animations indepedent of who's setting the time.
 void 
-setLedsWithTime(int hours, int minutes, uint32_t color)
+setLedsWithTime(int hours, int minutes)
 {
   if (minutes > 59) {
     minutes = 59;
@@ -246,33 +252,33 @@ setLedsWithTime(int hours, int minutes, uint32_t color)
   int hourOnes = hours - 10*hourTens;
   
   if (hourTens > 0) {
-    leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], color);
+      leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], scaleColor(gHourTensColor, gHourTensScale));
   }
-  leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], color);
+  leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(gHourOnesColor, gHourOnesScale));
 
   int minuteTens = floor(minutes/10);
   int minuteOnes = minutes - minuteTens*10;
 
-  leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], color);
-  leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
+  leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(gMinTensColor, gMinTensScale));
+  leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(gMinOnesColor, gMinOnesScale));
 }
 
 
 void 
 displayCountdown(int minutes, int seconds)
 {
-  while (minutes > 0 && seconds > 0) {
-    seconds--;
-    if (seconds < 0) {
-      seconds = 59;
-      minutes--;
-    }
+    while (minutes > 0 && seconds > 0) {
+        seconds--;
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+        }
 
-    clearLeds();
-    setLedsWithTime(minutes, seconds, leds.Color(255, 128, 128));
-    leds.show();
-    delay(1000);
-  }
+        clearLeds();
+        setLedsWithTime(minutes, seconds);
+        leds.show();
+        delay(1000);
+    }
 }
 
 
@@ -468,16 +474,24 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
     return BUTTON_NO_EVENT;
 }
 
-void showCurrentMoonAndTime()
+void showCurrentMoonAndTime(time_t t)
 {
-    time_t t = now() + gInfo.gmtOffsetInSeconds;
     clearLeds();
-    setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
-    //    goldenRingSpin();
-    //    spinGlobe();
+    //    flagWaveAnimation();    
+    setLedsWithTime(hour(t), minute(t));
+    //goldenRingSpin();
+    //spinGlobe();
       //        eyeAnimation();
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
+}
+
+void checkForDayDisplayModeChange(time_t t)
+{
+    // If the day has changed, we need to check if this is a day holiday, etc.
+    if (gInfo.day == day(t)) {
+        return;
+    }    
 }
 
 void loop()
@@ -489,7 +503,10 @@ void loop()
         performUserSetupSequence();
     }
 
-    showCurrentMoonAndTime();
+    time_t t = now() + gInfo.gmtOffsetInSeconds;
+    
+    //    checkForDayDisplayModeChange(t);
+    showCurrentMoonAndTime(t);
 }
 
 void clearLeds()
@@ -760,7 +777,7 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
 void redrawTime(time_t t)
 {
     clearLeds();
-    setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
+    setLedsWithTime(hour(t), minute(t));
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
 }
@@ -805,8 +822,24 @@ void performUserSetupSequence()
     applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
 
     // We update what's displayed but wait a second so users won't re-trigger set accedently.
-    showCurrentMoonAndTime();
+    showCurrentMoonAndTime(now() + gInfo.gmtOffsetInSeconds);
     delay(1000);
+}
+
+void flagWaveAnimation()
+{
+    // Flag pole gray, then blue white and red flag.
+    gHourTensColor = 0x555510; // Dimmer white.
+    gHourOnesColor = 0x0000ff; // Blue
+    gMinTensColor = 0xffffaa;  // Warm White
+    gMinOnesColor = 0xff0000;  // Red
+
+    float value = ((float)(millis()%2000)/2000.0)*M_PI*2.0;
+
+    // Have them "flap" more the further they are from the flag pole.
+    gHourOnesScale = 255 - (int)(((sin(value) + 1.0)/2.0)*110.0);
+    gMinTensScale = 255 -  (int)(((sin(value + M_PI/2.0) + 1.0)/2.0)*150.0);
+    gMinOnesScale = 255 - (int)(((sin(value + M_PI) + 1.0)/2.0)*200.0);
 }
 
 void eyeAnimation()
