@@ -138,6 +138,7 @@ uint8_t ledIndex(uint8_t base, uint8_t digit)
 
 void setup(void)
 {
+    // Add pullup resistors to all the switch inputs.
     pinMode(SWITCH_UP_DIG_IN, INPUT_PULLUP);
     pinMode(SWITCH_DOWN_DIG_IN, INPUT_PULLUP);
     pinMode(SWITCH_SET_DIG_IN, INPUT_PULLUP);
@@ -175,11 +176,7 @@ readAndValidateEEPromInfo()
     }
 
     //        bool oscStopped(bool clearOSF = true);  //defaults to clear the OSF bit if argument not supplied
-
-
-    if (gInfo.year != (unsigned short)year(t)) {
-    
-    }
+    // TODO: Maybe I should add some code that blinks if the oscStopped flag has been set on reboot.
 }
 
 void
@@ -233,6 +230,9 @@ twelveHourValueFrom24HourTime(int hour)
   return hour;
 }
 
+
+// Kurt you were about to split out this color into global digit colors so we can
+// do color animations indepedent of who's setting the time.
 void 
 setLedsWithTime(int hours, int minutes, uint32_t color)
 {
@@ -257,21 +257,6 @@ setLedsWithTime(int hours, int minutes, uint32_t color)
   leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
 }
 
-void 
-setLedsWithDigits(int hours, int minutes, uint32_t color)
-{
-  int hourTens = floor(hours/10);
-  int hourOnes = hours - 10*hourTens;
-  
-  leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], color);
-  leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], color);
-
-  int minuteTens = floor(minutes/10);
-  int minuteOnes = minutes - minuteTens*10;
-
-  leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], color);
-  leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], color);
-}
 
 void 
 displayCountdown(int minutes, int seconds)
@@ -490,7 +475,7 @@ void showCurrentMoonAndTime()
     setLedsWithTime(hour(t), minute(t), leds.Color(255, 10, 10));
     //    goldenRingSpin();
     //    spinGlobe();
-    //    eyeAnimation();
+      //        eyeAnimation();
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
 }
@@ -833,9 +818,22 @@ void eyeAnimation()
     static int seakDuration = EYE_SEAK_DURATION;
     static int goal = 1;
     static int duration = 10;
+    static int value = 229;
 
     uint32_t goldColor = leds.Color(128, 50, 0);
     uint32_t yellowColor = leds.Color(255, 200, 0);
+
+    if (millis()%10 == 0) {
+        value = 0;
+        for (int i=0; i<12; ++i) {
+            value += random(120, 255);
+        }
+        value = value/12;
+
+    }
+
+    yellowColor = scaleColor(yellowColor, value);
+    goldColor = scaleColor(goldColor, value);
     
     if (state == 0) {
         leds.setPixelColor(ZERO_PERCENT_MOON_ARC, yellowColor);
