@@ -48,15 +48,19 @@ static const uint8_t gTensDigit[] = {6, 9, 4, 3, 1, 8, 5, 2, 0, 7};
 static const uint8_t gOnesDigit[] = {5, 0, 3, 6, 8, 1, 4, 7, 9, 2};
 
 EEPROMInfo gInfo;
-uint32_t gHourTensColor = 0xff0a0a;
-uint32_t gHourOnesColor = 0xff0a0a;
-uint32_t gMinTensColor  = 0xff0a0a;
-uint32_t gMinOnesColor  = 0xff0a0a;
+uint32_t gHourTensColor = COLOR_DEFAULT_DIGITS;
+uint32_t gHourOnesColor = COLOR_DEFAULT_DIGITS;
+uint32_t gMinTensColor  = COLOR_DEFAULT_DIGITS;
+uint32_t gMinOnesColor  = COLOR_DEFAULT_DIGITS;
 
 uint32_t gHourTensScale = 0xff;
 uint32_t gHourOnesScale = 0xff;
 uint32_t gMinTensScale  = 0xff;
 uint32_t gMinOnesScale  = 0xff;
+
+uint32_t gHolidayDigitColor = COLOR_DEFAULT_DIGITS;
+uint8_t gDayDisplayType = DAY_TYPE_NORMAL_DAY;
+uint8_t gSpecialCharacterType = SPECIAL_CHAR_TYPE_CURRENT_MOON;
 
 
 #define DEFAULT_GMT_OFFSET -8*60*60;
@@ -115,7 +119,7 @@ const uint8_t winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 149, 14
 #define SUN_EVENT_YEAR_RANGE 100
 
 // This should be passed one of the PROGMEM solar event arrays above with the matching DAY_BASE
-uint8_t unpackSunEventDay(uint8_t *pgmArray, uint8_t dayBase, int year)
+uint8_t unpackSunEventDay(const uint8_t *pgmArray, uint8_t dayBase, int year)
 {
   // If the year is in the past, something has gone wrong, and we don't 
   // care the the solar events are wrong.
@@ -199,33 +203,195 @@ writeEEProm(time_t t)
     EEPROM.put(EEPROM_INFO_VERSION, gInfo);
 }
 
-//void computeHolidays(EEPROMInfo *info)
-//{
+uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
+{
+        // Birthdays put in so far:
+    // Inge/Lawrence/M&D/Us/Gran&Gram/?
+    int currentYear = year(t);
+    int currentMonth = month(t);
+    int currentDay = day(t);
 
-//  int computedYear = 0;
-//  int computedMonth = 0;
-//  float computedDay = 0.0;
+    (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_CURRENT_MOON;
+    uint8_t dayType = DAY_TYPE_NORMAL_DAY;
 
-// These pull in too much code to compute dynamically.
-// 
-//  computeDateFromSolarEventJDE(springEquinox(info->year), &computedYear, &computedMonth, &computedDay);
-//  info->springEquinoxDay = floor(computedDay);
+    unsigned char easterMonth = 0;
+    unsigned char easterDay = 0;
 
-//  computeDateFromSolarEventJDE(summerSolstice(info->year), &computedYear, &computedMonth, &computedDay);
-//  info->summerSolsticeDay = floor(computedDay); 
+    // If this month might have Easer in it we compute Easter.
+    if (currentMonth == MARCH || currentMonth == APRIL) {
+        easterForYear(currentYear, &easterMonth, &easterDay);
+    }
 
-//  computeDateFromSolarEventJDE(fallEquinox(info->year), &computedYear, &computedMonth, &computedDay);
-//  info->fallEquinoxDay = floor(computedDay); 
+    if (currentMonth == JANUARY) {
+        if (currentDay == 3) { // J. R. R. Tolkien's birthday.
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_SAURON_EYE;
+            gHolidayDigitColor = COLOR_RED;
+            dayType = DAY_TYPE_TOLKIENS_BIRTHDAY;
+        } else  if (currentDay == 27) { // Kurt S. Green
+            gHolidayDigitColor = COLOR_GREEN;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+    } else if (currentMonth == FEBRUARY) {
+        if (currentDay == 2) { // Ground Hog Day
+            
+        } else if (currentDay == 3) { // Cheryl ???
+            gHolidayDigitColor = COLOR_UNKNOWN;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 12) { // Lawrence Green.
+            gHolidayDigitColor = COLOR_GREEN;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 14) { // Valentine's Day
+            gHolidayDigitColor = COLOR_PINK;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_BEATING_HEART;
+            dayType = DAY_TYPE_VALENTINES_DAY;
+        }
 
-//  computeDateFromSolarEventJDE(winterSolstice(info->year), &computedYear, &computedMonth, &computedDay);
-//  info->winterSolsticeDay = floor(computedDay); 
-  
-//  easterForYear(info->year, &(info->easterMonth), &(info->easterDay));
-
-//  info->mothersDay = computeHolidayBasedOnDayOfWeek(info->year, MAY, SUNDAY, 2);
-//  info->fathersDay = computeHolidayBasedOnDayOfWeek(info->year, JUNE, SUNDAY, 3);
-//  info->presidentsDay = computeHolidayBasedOnDayOfWeek(info->year, FEBRUARY, MONDAY, 3);
-//}
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, FEBRUARY, MONDAY, 3)) {
+            dayType = DAY_TYPE_FLAG_DAY;
+        }
+        
+        // Chinese New Year?
+    } else if (currentMonth == MARCH) {
+        if (currentDay == 1) { // Stan W. Yellow
+            gHolidayDigitColor = COLOR_YELLOW;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 9) { // Pioneer ???
+            gHolidayDigitColor = COLOR_UNKNOWN;
+            dayType = DAY_TYPE_BIRTHDAY;            
+        } else if (currentDay == 17) { // Saint Patrics Day
+            gHolidayDigitColor = COLOR_GREEN;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_GOLDEN_RING;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+        } else if (currentDay == 18) { // Mikaela G. Pink
+            gHolidayDigitColor = COLOR_PINK;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 20) { // Karl's dad, blue.
+            gHolidayDigitColor = COLOR_BLUE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+        // If it's the equinox we always show the symbol, but don't
+        // override the color unless no one else has set it.
+        if (currentDay == unpackSunEventDay(springEquinoxArray, SPRING_EQUINOX_DAY_BASE, currentYear)) {
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_SPRING_EQUINOX;
+            if (dayType == DAY_TYPE_NORMAL_DAY) {
+                gHolidayDigitColor = COLOR_GOLD;
+                dayType = DAY_TYPE_COLOR_HOLIDAY;
+            }
+        }
+        if (currentMonth == easterMonth && currentDay == easterDay) {
+            gHolidayDigitColor = COLOR_PINK;
+            dayType = DAY_TYPE_EASTER;
+        }            
+    } else if (currentMonth == APRIL) {
+        if (currentDay == 7) { // Luther Turquoise
+            gHolidayDigitColor = COLOR_TURQUOISE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 22) { // Arbor day/earth day
+            gHolidayDigitColor = COLOR_GREEN;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_SPINNING_GLOBE;
+        }
+        if (currentMonth == easterMonth && currentDay == easterDay) {
+            gHolidayDigitColor = COLOR_PINK;
+            dayType = DAY_TYPE_EASTER;
+        }            
+    } else if (currentMonth == MAY) {
+        if (currentDay == 18) { // Gabe G. Orange
+            gHolidayDigitColor = COLOR_ORANGE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+        // Mothers day is the second Sunday of may.
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, MAY, SUNDAY, 2)) {
+            gHolidayDigitColor = COLOR_PINK;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+        }        
+    } else if (currentMonth == JUNE) {
+        if (currentDay == 7) { // Milo K. Purple
+            gHolidayDigitColor = COLOR_PURPLE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 26) { // Mom blue
+            gHolidayDigitColor = COLOR_BLUE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+        // Fathers day is the third sunday of June so check that.
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, JUNE, SUNDAY, 3)) {
+            gHolidayDigitColor = COLOR_BLUE;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+        }
+        
+        if (currentDay == unpackSunEventDay(summerSolsticeArray, SUMMER_SOLSTICE_DAY_BASE, currentYear)) {
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE;
+            if (dayType == DAY_TYPE_NORMAL_DAY) {
+                gHolidayDigitColor = COLOR_GOLD;
+            }
+        }
+    } else if (currentMonth == JULY) {
+        if (currentDay == 4) { // Forth of July
+            dayType = DAY_TYPE_FLAG_DAY;
+        } else if (currentDay == 23) { // Kaspar bright green
+            gHolidayDigitColor = COLOR_GREEN;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+    } else if (currentMonth == AUGUST) {
+        if (currentDay == 2) { // Mark G. Purple
+            gHolidayDigitColor = COLOR_PURPLE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 11) { // Inge yellow
+            gHolidayDigitColor = COLOR_YELLOW;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+    } else if (currentMonth == SEPTEMBER) {
+        if (currentDay == unpackSunEventDay(fallEquinoxArray, FALL_EQUINOX_DAY_BASE, currentYear)) {
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_FALL_EQUINOX;
+            if (dayType == DAY_TYPE_NORMAL_DAY) {
+                gHolidayDigitColor = COLOR_GOLD;
+            }            
+        }
+    } else if (currentMonth == OCTOBER) {
+        if (currentDay == 19) { // Simon ???
+            gHolidayDigitColor = COLOR_UNKNOWN;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 31) {
+            gHolidayDigitColor = COLOR_COPPER;
+            dayType = DAY_TYPE_HALLOWEEN;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_MONSTER_EYE;
+        }
+    } else if (currentMonth == NOVEMBER) {
+        if (currentDay == 10) { // Neil G. ???
+            gHolidayDigitColor = COLOR_GOLD;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 14) { // Jennifer K. Purple
+            gHolidayDigitColor = COLOR_PURPLE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        }
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, NOVEMBER, THURSDAY, 4)) { // Thanksgiving
+            gHolidayDigitColor = COLOR_GOLD;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+        }
+    } else if (currentMonth == DECEMBER) {
+        if (currentDay == 12) { // Deb G. Blue
+            gHolidayDigitColor = COLOR_BLUE;
+            dayType = DAY_TYPE_BIRTHDAY;
+        } else if (currentDay == 24) { // Christmas Eve.
+            gHolidayDigitColor = COLOR_MOON_BRIGHT;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+        } else if (currentDay == 25) { // Chritmas Day.
+            gHolidayDigitColor = COLOR_GREEN;
+            dayType = DAY_TYPE_COLOR_HOLIDAY;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_SPINNING_ORNAMENT;
+        } else if (currentDay == 31) {  // New Years Eve.
+            gHolidayDigitColor = COLOR_GOLD;
+            dayType = DAY_TYPE_MIDNIGHT_COUNTDOWN_DAY;
+        }
+        if (currentDay == unpackSunEventDay(winterSolsticeArray, WINTER_SOLSTICE_DAY_BASE, currentYear)) {
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_WINTER_SOLSTICE;
+            if (dayType == DAY_TYPE_NORMAL_DAY) {
+                gHolidayDigitColor = COLOR_GOLD;
+            }            
+        }
+    }
+    return dayType;
+}
 
 int 
 twelveHourValueFrom24HourTime(int hour)
@@ -341,6 +507,26 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
     }
 }
 
+void drawSolarEventSpecialCharacters(uint8_t specialCharacterType)
+{
+    leds.setPixelColor(SUN_OUTLINE, COLOR_COPPER);
+    leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, COLOR_GOLD);
+    leds.setPixelColor(ZERO_PERCENT_MOON_ARC, COLOR_GOLD);
+
+    // We put the spring equinox on the right hand side so it waxes like the moon.
+    if (specialCharacterType == SPECIAL_CHAR_TYPE_SPRING_EQUINOX ||
+        specialCharacterType == SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE) {
+        leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, COLOR_GOLD);
+        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, COLOR_GOLD);
+    }
+
+    // We put the fall equinox on the left hand size so it wains like the moon.
+    if (specialCharacterType == SPECIAL_CHAR_TYPE_FALL_EQUINOX ||
+        specialCharacterType == SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE) {
+        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, COLOR_GOLD);
+        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, COLOR_GOLD);
+    }
+}
 
 // This info is shared across multiple indepedent buttons with the
 // assumption that only one button at a time can be sending auto repeat events.
@@ -447,7 +633,7 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
             }
             // If we may need to emit an auto repeat press we check for that.
             if (buttonInfo->state & BUTTON_STATE_CAN_AUTO_REPEAT) {
-                if (currentTime - eventState->mostRecentAutoRepeatTime > eventState->autoRepeatInterval) {
+                if (currentTime - eventState->mostRecentAutoRepeatTime > (unsigned short)eventState->autoRepeatInterval) {
                     eventState->mostRecentAutoRepeatTime = currentTime;
                 
                     // For a while we step along at the max interval
@@ -474,24 +660,106 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
     return BUTTON_NO_EVENT;
 }
 
-void showCurrentMoonAndTime(time_t t)
+uint8_t flickerValue(int min, int max)
+{
+    static unsigned int value = 255;
+    if (millis()%10 == 0) {
+        value = 0;
+        for (int i=0; i<12; ++i) {
+            value += random(min, max);
+        }
+        value = value/12;
+    }
+    return (uint8_t)value;
+}
+
+void showTimeUsingCurrentDisplayMode(time_t t)
 {
     clearLeds();
-    //    flagWaveAnimation();    
-    setLedsWithTime(hour(t), minute(t));
-    //goldenRingSpin();
-    //spinGlobe();
-      //        eyeAnimation();
-    setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
+
+    gHourTensScale = gHourOnesScale = gMinTensScale = gMinOnesScale = 255;
+    bool hasDoneSetLedsWithTime = false;
+
+    switch (gDayDisplayType) {
+    case DAY_TYPE_NORMAL_DAY:
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = COLOR_DEFAULT_DIGITS;
+        break;
+    case DAY_TYPE_COLOR_HOLIDAY:
+    case DAY_TYPE_BIRTHDAY:
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor;
+        break;
+    case DAY_TYPE_FLAG_DAY:
+        flagWaveAnimation();
+        break;
+    case DAY_TYPE_MIDNIGHT_COUNTDOWN_DAY:
+        if (hour(t) >= 23 && minute(t) >= 50) {     
+            gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor; 
+            gHourTensScale = gHourOnesScale = gMinTensScale = gMinOnesScale = flickerValue(120, 255);
+            setLedsWithTime(59 - minute(t), 59 - second(t));
+            hasDoneSetLedsWithTime = true;
+        }
+        break;
+    case DAY_TYPE_VALENTINES_DAY:
+        // TODO: Add beating heart digit color animations/pulsing special characters.
+        break;
+    case DAY_TYPE_EASTER:
+        // TODO: Um, occationally fade pink/blue/yellow eggs (zeros) in and out?
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor;        
+        break;
+    case DAY_TYPE_TOLKIENS_BIRTHDAY:
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor;
+        digitBreathAnimation2();
+        // One third of the time we show The Ring.  Other wise we show the eye.
+        if (hour(t)%2) {
+            gSpecialCharacterType = SPECIAL_CHAR_TYPE_SAURON_EYE;
+        } else {
+            gSpecialCharacterType = SPECIAL_CHAR_TYPE_GOLDEN_RING;
+        }
+    case DAY_TYPE_HALLOWEEN:
+        flameAnimation();
+        break;
+    }
+
+    if (!hasDoneSetLedsWithTime) {
+        setLedsWithTime(hour(t), minute(t));
+    }
+
+    switch (gSpecialCharacterType) {
+    case SPECIAL_CHAR_TYPE_CURRENT_MOON:
+        setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
+        break;
+    case SPECIAL_CHAR_TYPE_GOLDEN_RING:
+        goldenRingSpin();
+        break;
+    case SPECIAL_CHAR_TYPE_SPRING_EQUINOX:
+    case SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE:
+    case SPECIAL_CHAR_TYPE_FALL_EQUINOX:
+    case SPECIAL_CHAR_TYPE_WINTER_SOLSTICE:
+        drawSolarEventSpecialCharacters(gSpecialCharacterType);
+        break;
+    case SPECIAL_CHAR_TYPE_SPINNING_GLOBE:
+        spinGlobe();
+        break;
+    case SPECIAL_CHAR_TYPE_SPINNING_ORNAMENT:
+        spinOrnament();
+        break;
+    case SPECIAL_CHAR_TYPE_MONSTER_EYE:
+    case SPECIAL_CHAR_TYPE_SAURON_EYE:
+        eyeAnimation(gSpecialCharacterType);
+        break;
+    }    
+    
     leds.show();
 }
 
-void checkForDayDisplayModeChange(time_t t)
+void checkForDisplayModeChange(time_t t)
 {
     // If the day has changed, we need to check if this is a day holiday, etc.
-    if (gInfo.day == day(t)) {
-        return;
-    }    
+    if (gInfo.month != month(t) || gInfo.day != day(t)) {
+        gInfo.day = day(t);
+        gDayDisplayType = computeDayTypeForTime(t, &gSpecialCharacterType);
+        writeEEProm(t);
+    }
 }
 
 void loop()
@@ -505,8 +773,8 @@ void loop()
 
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     
-    //    checkForDayDisplayModeChange(t);
-    showCurrentMoonAndTime(t);
+    checkForDisplayModeChange(t);
+    showTimeUsingCurrentDisplayMode(t);
 }
 
 void clearLeds()
@@ -822,7 +1090,11 @@ void performUserSetupSequence()
     applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
 
     // We update what's displayed but wait a second so users won't re-trigger set accedently.
-    showCurrentMoonAndTime(now() + gInfo.gmtOffsetInSeconds);
+    time_t t = now() + gInfo.gmtOffsetInSeconds;
+    // NOCOMMIT  Force an update.
+    gDayDisplayType = computeDayTypeForTime(t, &gSpecialCharacterType);
+    checkForDisplayModeChange(t);
+    showTimeUsingCurrentDisplayMode(t);
     delay(1000);
 }
 
@@ -842,10 +1114,104 @@ void flagWaveAnimation()
     gMinOnesScale = 255 - (int)(((sin(value + M_PI) + 1.0)/2.0)*200.0);
 }
 
-void eyeAnimation()
+void swapFloats(float *x1, float *x2)
+{
+    float temp = *x1;
+    *x1 = *x2;
+    *x2 = temp;
+}
+
+float clamp(float x, float min, float max)
+{
+    if (min > max) {
+        swapFloats(&min, &max);
+    }
+
+    if (x > max) {
+        return max;
+    } else if (x < min) {
+        return min;
+    } else {
+        return x;
+    }
+}
+
+float linear(float edge0, float edge1, float x)
+{
+    float t = (x - edge0)/(edge1 - edge0);
+    t = clamp(t, 0.0, 1.0);
+
+    return t;
+}
+
+float easeInOut(float edge0, float edge1, float x)
+{
+    float t = linear(edge0, edge1, x);
+
+    return t*t*(3.0 - 2.0*t);
+}
+
+float easeIn(float edge0, float edge1, float x)
+{
+    return clamp(easeInOut(edge0, edge1 + (edge1 - edge0), x)*2.0, 0.0, 1.0);
+}
+
+float easeOut(float edge0, float edge1, float x)
+{
+    return clamp(easeInOut(edge0 - (edge1 - edge0), edge1, x)*2.0 - 1.0, 0.0, 1.0);
+}
+
+void digitBreathAnimation()
+{
+    // We have the digits breath in and out slowly at 12 cycles per minute
+    // like the macbook power led.  I don't know if this should instead be ease in ease out.
+    float value = ((float)(millis()%5000)/5000.0)*M_PI*2.0;
+    float digitStep = M_PI/8.0;
+   
+    gHourTensScale = 255 - (int)(((sin(value) + 1.0)/2.0)*220.0);
+    gHourOnesScale = 255 - (int)(((sin(value + digitStep) + 1.0)/2.0)*220.0);
+    gMinTensScale = 255 -  (int)(((sin(value + digitStep*2.0) + 1.0)/2.0)*220.0);
+    gMinOnesScale = 255 - (int)(((sin(value + digitStep*3.0) + 1.0)/2.0)*220.0);
+}
+
+void digitBreathAnimation2()
+{
+    // Do breath animation at 12 cycles per minute with easeOut action both in and out.
+    // That should be a natutal rate and feel. Put the digits sligly out of phase so
+    // the levels ripple a bit.
+    long curMillis = millis();
+    long millisStep = 300;
+    float value = ((float)(curMillis%5000)/2500.0);
+    value = (value < 1.0) ? easeOut(0.0, 1.0, value) : easeOut(1.0, 0.0, value - 1.0);
+    gHourTensScale = 255 - (int)(220.0*value);
+
+    curMillis += millisStep;
+    value = ((float)(curMillis%5000)/2500.0);
+    value = (value < 1.0) ? easeOut(0.0, 1.0, value) : easeOut(1.0, 0.0, value - 1.0);
+    gHourOnesScale = 255 - (int)(220.0*value);
+
+    curMillis += millisStep;
+    value = ((float)(curMillis%5000)/2500.0);
+    value = (value < 1.0) ? easeOut(0.0, 1.0, value) : easeOut(1.0, 0.0, value - 1.0);
+    gMinTensScale = 255 - (int)(220.0*value);
+
+    curMillis += millisStep;
+    value = ((float)(curMillis%5000)/2500.0);
+    value = (value < 1.0) ? easeOut(0.0, 1.0, value) : easeOut(1.0, 0.0, value - 1.0);
+    gMinOnesScale = 255 - (int)(220.0*value);    
+}
+
+void flameAnimation()
+{
+    // TODO: This should do something to modulate the digit colors like flames.  Fine
+    // tune something in the simulator first.
+}
+
+// The specialCharacter type colors eye color and maybe other attributes.
+void eyeAnimation(uint8_t specialCharacterType)
 {
     clearSpecialCharacterLeds();
-    leds.setPixelColor(EYE_OUTLINE,  leds.Color(0, 200, 0));
+    leds.setPixelColor(EYE_OUTLINE, (specialCharacterType == SPECIAL_CHAR_TYPE_SAURON_EYE) ? COLOR_RED :  COLOR_EYE_GREEN);
     
     static int state = 1;
     static int seakDuration = EYE_SEAK_DURATION;
@@ -912,8 +1278,8 @@ void eyeAnimation()
 
 void doColorSpin(uint32_t colorArray[], uint8_t count, bool left)
 {
-    unsigned char indexArray[] = {7, 5, 3, 4, 6, 8};
-    static unsigned char offset = 0;
+    uint8_t indexArray[] = {7, 5, 3, 4, 6, 8};
+    static uint8_t offset = 0;
     
     for (int i=0; i<6; ++i) {
         leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[ (int)indexArray[i]], colorArray[(i + offset)%count]);
@@ -932,6 +1298,7 @@ void doColorSpin(uint32_t colorArray[], uint8_t count, bool left)
 
 void spinGlobe()
 {
+    // Just some blues and whites to try and make a cloudy globe of colors.
     uint32_t globColors[] = { 0x8888ff,
                             0xffffff,
                             0x8888ff,
@@ -946,6 +1313,19 @@ void spinGlobe()
                             0x0000ff };
     
     doColorSpin(globColors, sizeof(globColors)/sizeof(uint32_t), false);
+    delay(175);
+}
+
+void spinOrnament()
+{
+    // Just some blues and whites to try and make a cloudy globe of colors.
+    uint32_t ornamentColors[] = { COLOR_RED,
+                                  COLOR_GOLD,
+                                  COLOR_RED,
+                                  COLOR_RED,
+    };
+    
+    doColorSpin(ornamentColors, sizeof(ornamentColors)/sizeof(uint32_t), false);
     delay(175);
 }
 
