@@ -88,7 +88,7 @@ uint8_t gSpecialCharacterType = SPECIAL_CHAR_TYPE_CURRENT_MOON;
 #define SUN_OUTLINE 26
 #define EYE_OUTLINE 27
 
-#define EYE_SEAK_DURATION 150
+#define EYE_SEAK_DURATION 120
 
 #define EEPROM_INFO_ADDRESS 0
 #define EEPROM_NEVER_WAS_SET 255
@@ -207,8 +207,6 @@ writeEEProm(time_t t)
 
 uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
 {
-        // Birthdays put in so far:
-    // Inge/Lawrence/M&D/Us/Gran&Gram/?
     int currentYear = year(t);
     int currentMonth = month(t);
     int currentDay = day(t);
@@ -354,7 +352,7 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             gHolidayDigitColor = COLOR_GREEN;
             dayType = DAY_TYPE_BIRTHDAY;
         } else if (currentDay == 31) {
-            gHolidayDigitColor = COLOR_COPPER;
+            gHolidayDigitColor = COLOR_GOLD;
             dayType = DAY_TYPE_HALLOWEEN;
             (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_MONSTER_EYE;
         }
@@ -773,7 +771,9 @@ void showTimeUsingCurrentDisplayMode(time_t t)
 {
     clearLeds();
 
-    gHourTensScale = gHourOnesScale = gMinTensScale = gMinOnesScale = 255;
+    if (gDayDisplayType != DAY_TYPE_HALLOWEEN) {
+        gHourTensScale = gHourOnesScale = gMinTensScale = gMinOnesScale = 255;
+    }
     bool hasDoneSetLedsWithTime = false;
 
     switch (gDayDisplayType) {
@@ -819,7 +819,9 @@ void showTimeUsingCurrentDisplayMode(time_t t)
         } else {
             gSpecialCharacterType = SPECIAL_CHAR_TYPE_GOLDEN_RING;
         }
+        break;
     case DAY_TYPE_HALLOWEEN:
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor; 
         flameAnimation();
         break;
     }
@@ -976,7 +978,11 @@ void loop()
     
     checkForDisplayModeChange(t);
     showTimeUsingCurrentDisplayMode(t);
-    updateBrightness();
+    static uint8_t count = 0;
+    count++;
+    if (!(count%4)) { 
+        updateBrightness();
+    }
 }
 
 void clearLeds()
@@ -1405,8 +1411,14 @@ void digitBreathAnimation2()
 
 void flameAnimation()
 {
-    // TODO: This should do something to modulate the digit colors like flames.  Fine
-    // tune something in the simulator first.
+    static float x = 0.0;
+
+    x += 0.05;
+    uint8_t value = 255.0 *((12.0 + sin(x) + cos(x*1.5) +sin(x*1.7) + 0.2*sin(x*10) + 0.1*sin(x*25.0) +0.5*sin(x*2) + cos(x*2.285) + 0.15*sin(x*11) +0.05*sin(x*2.214))/16.0);
+    gHourTensScale = gHourOnesScale;
+    gHourOnesScale = gMinTensScale;
+    gMinTensScale = gMinOnesScale;
+    gMinOnesScale = value;
 }
 
 // The specialCharacter type colors eye color and maybe other attributes.
@@ -1424,7 +1436,7 @@ void eyeAnimation(uint8_t specialCharacterType)
     uint32_t goldColor = leds.Color(128, 50, 0);
     uint32_t yellowColor = leds.Color(255, 200, 0);
 
-    if (millis()%10 == 0) {
+    if (specialCharacterType == SPECIAL_CHAR_TYPE_SAURON_EYE && millis()%10 == 0) {
         value = gaussianRandom(120, 255);
     }
 
@@ -1467,7 +1479,7 @@ void eyeAnimation(uint8_t specialCharacterType)
             duration--;
         } else {
             goal = (rand()%2) ? 1 : (rand()%2) ? 2 : 0;
-            duration = (goal == 1) ? random(800, 6000) : random(800, 1500);
+            duration = (goal == 1) ? random(700, 5000) : random(700, 1200);
             seakDuration = EYE_SEAK_DURATION;
         }
     }
