@@ -94,7 +94,8 @@ typedef struct
 #define COLOR_MOON_BRIGHT 0xfff8d1
 #define COLOR_MOON_DIM 0x0f120d
 #define COLOR_EYE_GREEN 0x00c800
+#define COLOR_WHITE 0xffffff
+#define COLOR_ALMOST_WHITE 0xfffffe
 
-#define COLOR_UNKNOWN 0xffffff
 
 #define MIN_DIMMING_SCALE 64

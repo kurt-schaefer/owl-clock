@@ -175,6 +175,10 @@ void setup(void)
   leds.begin();
   clearLeds();
   leds.show();
+
+  // Restore display mode type.
+  time_t t = now() + gInfo.gmtOffsetInSeconds;
+  gDayDisplayType = computeDayTypeForTime(t, &gSpecialCharacterType);
 }
 
 void
@@ -246,6 +250,7 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             dayType = DAY_TYPE_VALENTINES_DAY;
         }
 
+        // Presedent's day
         if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, FEBRUARY, MONDAY, 3)) {
             dayType = DAY_TYPE_FLAG_DAY;
         }
@@ -677,76 +682,104 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
     return BUTTON_NO_EVENT;
 }
 
+uint32_t advanceFireworksColor(uint32_t color, uint8_t decayRate)
+{
+    // Provide a one frame white flash.
+    if (color == COLOR_WHITE) {
+        return COLOR_ALMOST_WHITE;
+    }
+    // Otherwise turn into gold/red/blue.
+    
+    if (color == COLOR_ALMOST_WHITE) {
+        color = COLOR_GOLD;
+        //        switch(random(0,3)){
+        // case 0:
+        //    return COLOR_GOLD;
+        //case 1:
+        //    return COLOR_RED;
+        //case 2:
+        //    return COLOR_BLUE;
+        //}
+    }
+    return scaleColor(color, gaussianRandom(decayRate - 20, decayRate + 20));
+}
+
 // This takes the digit colors and smears them back towards the 9 digit.  It does not
 // affect the 1's digit color, or the 0.  decayRate of 255 means no decay.
 void decayDigitStackExcludingZero(int digitBase, const uint8_t digitLookup[], uint8_t decayRate)
 {
-    uint32_t color = 0;
+    // Handle zero on its own.
+    uint32_t color = leds.getPixelColor(digitBase + digitLookup[9]);
+    leds.setPixelColor(digitBase + digitLookup[0], advanceFireworksColor(color, decayRate));
+
+    // Then do 9 though 1, with a black cranking back.
     for (int i=9; i >= 1; --i) {
         if (i - 1 >= 1) {
             color = leds.getPixelColor(digitBase + digitLookup[i - 1]);
-            color = scaleColor(color, decayRate);
-            leds.setPixelColor(digitBase + digitLookup[i], color);
+        } else {
+            color = 0;
         }
+        color = advanceFireworksColor(color, decayRate);
+        leds.setPixelColor(digitBase + digitLookup[i], color);
     }
 }
 
-void displayFireworks(bool blinkZeros, uint32_t color)
-{
-    clearLeds();
+void displayFireworks(bool blinkZeros)
+ {
+     clearLeds();
     
-    // Show fireworks for 50 seconds.
-    int loopDuration = 60*50;
-    bool zerosOn = false;
+     // Show fireworks for 50 seconds.
+     int baseDuration = 60*5;
+     int loopDuration = baseDuration;
+     int delayCount = 3;
+     bool zerosOn = blinkZeros;
+     unsigned long startMillis = millis();
 
-    // All 3 '1' digit leds direct index, we don't do the hours tens digit since
-    // that's over the special characters.
-    uint8_t oneIndexs[] = { 30, 9, 10 };
-    uint8_t currentOneIndex = 0;
-    uint8_t currentDuration = 5;
-    uint8_t startDuration = 5;
-    uint8_t currentState = FIREWORKS_STATE_BETWEEN_FLASHES;
-    
-    while (loopDuration > 0) {
-        //   if (blinkZeros && !loopDuration%30) {
-        //    zerosOn ^= zerosOn;
-        //}
+     while (loopDuration > 0) {
+         delayCount--;
+         if (delayCount <= 0) {
+             switch(random(0,3)) {
+             case 0:
+                 leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[random(1,9)], COLOR_WHITE);
+                 break;
+             case 1:
+                 leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[random(1,9)], COLOR_WHITE);
+                 break;
+             case 2:
+                 leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[random(1,9)], COLOR_WHITE);
+                 break;
+             }
+             // Have it ramp up until the last 3 seconds and then hold  at full.
+             float scale = easeIn(0.0, 1.0,   (float)(loopDuration)/(float)(baseDuration));
+             delayCount = gaussianRandom(1 + 18.0*scale, 3 + 18.0*scale);
+         }
+         
+         decayDigitStackExcludingZero(HOUR_ONES_BASE, gOnesDigit, 120);
+         decayDigitStackExcludingZero(MINUTE_TENS_BASE, gTensDigit, 120);
+         decayDigitStackExcludingZero(MINUTE_ONES_BASE, gOnesDigit, 120);
 
-        if (currentState == FIREWORKS_STATE_WHITE_FLASH) {
-            leds.setPixelColor(oneIndexs[currentOneIndex], scaleColor(COLOR_MOON_BRIGHT, gaussianRandom(10, 255)));
-            if (currentDuration == 0) {
-                startDuration = currentDuration = gaussianRandom(20, 50);
-                currentState = FIREWORKS_STATE_SOLID_COLOR_FADE;
-            }
-        } else if (currentState == FIREWORKS_STATE_SOLID_COLOR_FADE) {
-            float scale = 255.0*currentDuration/(float)startDuration;
-            leds.setPixelColor(oneIndexs[currentOneIndex], scaleColor(COLOR_GOLD, scale));
-            if (currentDuration == 0) {
-                leds.setPixelColor(oneIndexs[currentOneIndex], 0);
-                startDuration = currentDuration = gaussianRandom(30, 80);
-                currentState = FIREWORKS_STATE_BETWEEN_FLASHES;
-            }
-        } else if (currentState == FIREWORKS_STATE_BETWEEN_FLASHES) {
-            if (currentDuration == 0) {
-                startDuration = currentDuration = gaussianRandom(10, 20);
-                currentState = FIREWORKS_STATE_WHITE_FLASH;
-                currentOneIndex = random(0, 2);
-            }
-        }
+         // Zeros have a half second blink when celibrating midnight
+         if (blinkZeros) {
+             if (millis() - startMillis > 250) {
+                 zerosOn = !zerosOn;
+                 startMillis = millis();
+             }
+         }
 
-        --currentDuration;
-        
-        if (!(loopDuration%4)) { 
-            //decayDigitStackExcludingZero(HOUR_ONES_BASE, gOnesDigit, 255);
-            //decayDigitStackExcludingZero(MINUTE_TENS_BASE, gTensDigit, 255);
-            //decayDigitStackExcludingZero(MINUTE_ONES_BASE, gOnesDigit, 255);
-        }
-        
-        leds.show();
-        delay(16);
-        --loopDuration;
-    }
-}
+         // I don't like the way this looks
+         if (zerosOn) {
+             leds.setPixelColor(HOUR_ONES_BASE  + gOnesDigit[0], 0x111111);
+             leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[0], 0x111111);
+             leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[0], 0x111111);
+         }
+
+         spinNewYearsGlobe();
+         
+         leds.show();
+         delay(16);
+         --loopDuration;
+     }
+ }
 
 uint8_t gaussianRandom(int min, int max)
 {
@@ -799,7 +832,7 @@ void showTimeUsingCurrentDisplayMode(time_t t)
             hasDoneSetLedsWithTime = true;
 
             if (displayMinute == 0 && displaySecond == 0) {
-                displayFireworks(true, COLOR_GOLD);
+                displayFireworks(false);
             }
         }
         break;
@@ -879,7 +912,7 @@ void updateBrightness()
     float dv = inputValue - value;
         
     // Track up faster than down
-    float k = (inputValue > value) ? 10.0 : 10.0;// NOCOMMIT 0.2;
+    float k = (inputValue > value) ? 10.0 : 0.2;
         
     float springForce = dv*k;
     float mass = 1.0;
@@ -921,7 +954,6 @@ void showTopLightSensorValue()
     float dampingForce = 0.0;
     float k = 10.0;
     float mass = 1.0;
-    float damping = sqrt(k/mass);
     float acceleration = 0;
     float t = 0.016;
     
@@ -970,7 +1002,7 @@ void loop()
         showTopLightSensorValue();
     }
     if (digitalRead(SWITCH_DOWN_DIG_IN) == false) {
-        displayFireworks(true, COLOR_GOLD);
+        displayFireworks(false);
     }
 
     
@@ -1182,7 +1214,7 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
                     if (event == BUTTON_PRESSED || event == BUTTON_AUTO_REPEAT) {
                         // check before decrement so minValue 0 doesn't wrap.
                         if (*currentValue <= minValue) {
-                            // Keep them from wrapping around on the year since going up to
+                           // Keep them from wrapping around on the year since going up to
                             // max year is useless and disorienting.
                             if (minValue != 2016) {
                                 *currentValue = maxValue;
@@ -1299,7 +1331,7 @@ void performUserSetupSequence()
 
     // We update what's displayed but wait a second so users won't re-trigger set accedently.
     time_t t = now() + gInfo.gmtOffsetInSeconds;
-    // NOCOMMIT  Force an update.
+    // Force an update.
     gDayDisplayType = computeDayTypeForTime(t, &gSpecialCharacterType);
     checkForDisplayModeChange(t);
     showTimeUsingCurrentDisplayMode(t);
