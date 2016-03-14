@@ -76,6 +76,10 @@ typedef struct
 #define DAY_TYPE_TOLKIENS_BIRTHDAY      7
 #define DAY_TYPE_HALLOWEEN              8
 
+#define FIREWORKS_STATE_WHITE_FLASH 0
+#define FIREWORKS_STATE_SOLID_COLOR_FADE 1
+#define FIREWORKS_STATE_BETWEEN_FLASHES 2
+
 #define COLOR_DEFAULT_DIGITS 0xff0000
 #define COLOR_GOLD 0xfe7000
 #define COLOR_COPPER 0xff3000
@@ -92,3 +96,5 @@ typedef struct
 #define COLOR_EYE_GREEN 0x00c800
 
 #define COLOR_UNKNOWN 0xffffff
+
+#define MIN_DIMMING_SCALE 64

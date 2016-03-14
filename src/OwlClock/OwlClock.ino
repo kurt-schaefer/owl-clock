@@ -53,14 +53,17 @@ uint32_t gHourOnesColor = COLOR_DEFAULT_DIGITS;
 uint32_t gMinTensColor  = COLOR_DEFAULT_DIGITS;
 uint32_t gMinOnesColor  = COLOR_DEFAULT_DIGITS;
 
-uint32_t gHourTensScale = 0xff;
-uint32_t gHourOnesScale = 0xff;
-uint32_t gMinTensScale  = 0xff;
-uint32_t gMinOnesScale  = 0xff;
+uint8_t gHourTensScale = 0xff;
+uint8_t gHourOnesScale = 0xff;
+uint8_t gMinTensScale  = 0xff;
+uint8_t gMinOnesScale  = 0xff;
+
+uint8_t gDimmingValue = 0xff;
 
 uint32_t gHolidayDigitColor = COLOR_DEFAULT_DIGITS;
 uint8_t gDayDisplayType = DAY_TYPE_NORMAL_DAY;
 uint8_t gSpecialCharacterType = SPECIAL_CHAR_TYPE_CURRENT_MOON;
+
 
 
 #define DEFAULT_GMT_OFFSET -8*60*60;
@@ -113,7 +116,6 @@ const uint8_t winterSolsticeArray[] PROGMEM = { 149, 149, 149, 149, 149, 149, 14
 #define SUMMER_SOLSTICE_DAY_BASE 20
 #define FALL_EQUINOX_DAY_BASE 21
 #define WINTER_SOLSTICE_DAY_BASE 20
-
 
 #define SUN_EVENT_YEAR_BASE 2016
 #define SUN_EVENT_YEAR_RANGE 100
@@ -234,8 +236,8 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
     } else if (currentMonth == FEBRUARY) {
         if (currentDay == 2) { // Ground Hog Day
             
-        } else if (currentDay == 3) { // Cheryl ???
-            gHolidayDigitColor = COLOR_UNKNOWN;
+        } else if (currentDay == 3) { // Cheryl Green
+            gHolidayDigitColor = COLOR_GREEN;
             dayType = DAY_TYPE_BIRTHDAY;
         } else if (currentDay == 12) { // Lawrence Green.
             gHolidayDigitColor = COLOR_GREEN;
@@ -255,8 +257,8 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
         if (currentDay == 1) { // Stan W. Yellow
             gHolidayDigitColor = COLOR_YELLOW;
             dayType = DAY_TYPE_BIRTHDAY;
-        } else if (currentDay == 9) { // Pioneer ???
-            gHolidayDigitColor = COLOR_UNKNOWN;
+        } else if (currentDay == 9) { // Pioneer Blue
+            gHolidayDigitColor = COLOR_BLUE;
             dayType = DAY_TYPE_BIRTHDAY;            
         } else if (currentDay == 17) { // Saint Patrics Day
             gHolidayDigitColor = COLOR_GREEN;
@@ -348,8 +350,8 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             }            
         }
     } else if (currentMonth == OCTOBER) {
-        if (currentDay == 19) { // Simon ???
-            gHolidayDigitColor = COLOR_UNKNOWN;
+        if (currentDay == 19) { // Simon green
+            gHolidayDigitColor = COLOR_GREEN;
             dayType = DAY_TYPE_BIRTHDAY;
         } else if (currentDay == 31) {
             gHolidayDigitColor = COLOR_COPPER;
@@ -405,30 +407,44 @@ twelveHourValueFrom24HourTime(int hour)
     return hour;
 }
 
+void
+setLedsWithValue(int value)
+{
+    // This is mostly for debugging.
+    // We could in theor do neg is color, etc.
+    int bottomTwoDigits = value%100;
+    int topTwoDigits = value/100;
+    setLedsWithRawTime(topTwoDigits, bottomTwoDigits);
+}
+
 void 
 setLedsWithTime(int hours, int minutes)
 {
-  if (minutes > 59) {
-    minutes = 59;
-  }
+    if (minutes > 59) {
+        minutes = 59;
+    }
 
-  hours = twelveHourValueFrom24HourTime(hours);
-
-  int hourTens = floor(hours/10);
-  int hourOnes = hours - 10*hourTens;
-  
-  if (hourTens > 0) {
-      leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], scaleColor(gHourTensColor, gHourTensScale));
-  }
-  leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(gHourOnesColor, gHourOnesScale));
-
-  int minuteTens = floor(minutes/10);
-  int minuteOnes = minutes - minuteTens*10;
-
-  leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(gMinTensColor, gMinTensScale));
-  leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(gMinOnesColor, gMinOnesScale));
+    hours = twelveHourValueFrom24HourTime(hours);
+    setLedsWithRawTime(hours, minutes);
 }
 
+void
+setLedsWithRawTime(int hours, int minutes)
+{
+    int hourTens = floor(hours/10);
+    int hourOnes = hours - 10*hourTens;
+  
+    if (hourTens > 0) {
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], scaleColor(scaleColor(gHourTensColor, gHourTensScale), gDimmingValue));
+    }
+    leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(scaleColor(gHourOnesColor, gHourOnesScale), gDimmingValue));
+
+    int minuteTens = floor(minutes/10);
+    int minuteOnes = minutes - minuteTens*10;
+
+    leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(scaleColor(gMinTensColor, gMinTensScale), gDimmingValue));
+    leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(scaleColor(gMinOnesColor, gMinOnesScale), gDimmingValue));
+}
 
 void 
 displayCountdown(int minutes, int seconds)
@@ -455,9 +471,9 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
     float percentIlluminated =  illuminatedFractionKForDate(year, month, fday);
     boolean isWaxing = isWaxingForDate(year, month, fday);
     
-    // If the moon is going to over lap with a digit we show it very dimmly.
+    // If the moon is going to over lap with a digit we show it very dimmly, only dim the max color not min.
     hour = twelveHourValueFrom24HourTime(hour);
-    uint32_t moonColor = (hour <= 9) ? leds.Color(255, 248, 209) : leds.Color(15,18,13);
+    uint32_t moonColor = (hour <= 9) ? scaleColor(leds.Color(255, 248, 209), gDimmingValue) : leds.Color(15,18,13);
 
     // We use a .05 on either side to make new/full a bit more discriminating.  We might want to
     // make it even smaller.
@@ -509,22 +525,25 @@ setMoonPhaseLeds(int year, int month, int day, int hour)
 
 void drawSolarEventSpecialCharacters(uint8_t specialCharacterType)
 {
-    leds.setPixelColor(SUN_OUTLINE, COLOR_COPPER);
-    leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, COLOR_GOLD);
-    leds.setPixelColor(ZERO_PERCENT_MOON_ARC, COLOR_GOLD);
+    uint32_t colorCopper = scaleColor(COLOR_COPPER, gDimmingValue);
+    uint32_t colorGold = scaleColor(COLOR_GOLD, gDimmingValue);
+                                                                  
+    leds.setPixelColor(SUN_OUTLINE, colorCopper);
+    leds.setPixelColor(ONE_HUNDRED_PERCENT_MOON_ARC, colorGold);
+    leds.setPixelColor(ZERO_PERCENT_MOON_ARC, colorGold);
 
     // We put the spring equinox on the right hand side so it waxes like the moon.
     if (specialCharacterType == SPECIAL_CHAR_TYPE_SPRING_EQUINOX ||
         specialCharacterType == SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE) {
-        leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, COLOR_GOLD);
-        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, COLOR_GOLD);
+        leds.setPixelColor(TWENTY_PERCENT_MOON_ARC, colorGold);
+        leds.setPixelColor(FORTY_PERCENT_MOON_ARC, colorGold);
     }
 
     // We put the fall equinox on the left hand size so it wains like the moon.
     if (specialCharacterType == SPECIAL_CHAR_TYPE_FALL_EQUINOX ||
         specialCharacterType == SPECIAL_CHAR_TYPE_SUMMER_SOLSTICE) {
-        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, COLOR_GOLD);
-        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, COLOR_GOLD);
+        leds.setPixelColor(EIGHTY_PERCENT_MOON_ARC, colorGold);
+        leds.setPixelColor(SIXTY_PERCENT_MOON_ARC, colorGold);
     }
 }
 
@@ -660,15 +679,92 @@ uint8_t updateButtonInfoWithCurrentState(time_t currentTime,
     return BUTTON_NO_EVENT;
 }
 
+// This takes the digit colors and smears them back towards the 9 digit.  It does not
+// affect the 1's digit color, or the 0.  decayRate of 255 means no decay.
+void decayDigitStackExcludingZero(int digitBase, const uint8_t digitLookup[], uint8_t decayRate)
+{
+    uint32_t color = 0;
+    for (int i=9; i >= 1; --i) {
+        if (i - 1 >= 1) {
+            color = leds.getPixelColor(digitBase + digitLookup[i - 1]);
+            color = scaleColor(color, decayRate);
+            leds.setPixelColor(digitBase + digitLookup[i], color);
+        }
+    }
+}
+
+void displayFireworks(bool blinkZeros, uint32_t color)
+{
+    clearLeds();
+    
+    // Show fireworks for 50 seconds.
+    int loopDuration = 60*50;
+    bool zerosOn = false;
+
+    // All 3 '1' digit leds direct index, we don't do the hours tens digit since
+    // that's over the special characters.
+    uint8_t oneIndexs[] = { 30, 9, 10 };
+    uint8_t currentOneIndex = 0;
+    uint8_t currentDuration = 5;
+    uint8_t startDuration = 5;
+    uint8_t currentState = FIREWORKS_STATE_BETWEEN_FLASHES;
+    
+    while (loopDuration > 0) {
+        //   if (blinkZeros && !loopDuration%30) {
+        //    zerosOn ^= zerosOn;
+        //}
+
+        if (currentState == FIREWORKS_STATE_WHITE_FLASH) {
+            leds.setPixelColor(oneIndexs[currentOneIndex], scaleColor(COLOR_MOON_BRIGHT, gaussianRandom(10, 255)));
+            if (currentDuration == 0) {
+                startDuration = currentDuration = gaussianRandom(20, 50);
+                currentState = FIREWORKS_STATE_SOLID_COLOR_FADE;
+            }
+        } else if (currentState == FIREWORKS_STATE_SOLID_COLOR_FADE) {
+            float scale = 255.0*currentDuration/(float)startDuration;
+            leds.setPixelColor(oneIndexs[currentOneIndex], scaleColor(COLOR_GOLD, scale));
+            if (currentDuration == 0) {
+                leds.setPixelColor(oneIndexs[currentOneIndex], 0);
+                startDuration = currentDuration = gaussianRandom(30, 80);
+                currentState = FIREWORKS_STATE_BETWEEN_FLASHES;
+            }
+        } else if (currentState == FIREWORKS_STATE_BETWEEN_FLASHES) {
+            if (currentDuration == 0) {
+                startDuration = currentDuration = gaussianRandom(10, 20);
+                currentState = FIREWORKS_STATE_WHITE_FLASH;
+                currentOneIndex = random(0, 2);
+            }
+        }
+
+        --currentDuration;
+        
+        if (!(loopDuration%4)) { 
+            //decayDigitStackExcludingZero(HOUR_ONES_BASE, gOnesDigit, 255);
+            //decayDigitStackExcludingZero(MINUTE_TENS_BASE, gTensDigit, 255);
+            //decayDigitStackExcludingZero(MINUTE_ONES_BASE, gOnesDigit, 255);
+        }
+        
+        leds.show();
+        delay(16);
+        --loopDuration;
+    }
+}
+
+uint8_t gaussianRandom(int min, int max)
+{
+    int value = 0;
+     for (int i=0; i<12; ++i) {
+         value += random(min, max);
+     }
+     value = value/12;
+     return (uint8_t)value;
+}
+
 uint8_t flickerValue(int min, int max)
 {
     static unsigned int value = 255;
     if (millis()%10 == 0) {
-        value = 0;
-        for (int i=0; i<12; ++i) {
-            value += random(min, max);
-        }
-        value = value/12;
+        value = gaussianRandom(min, max);
     }
     return (uint8_t)value;
 }
@@ -695,8 +791,16 @@ void showTimeUsingCurrentDisplayMode(time_t t)
         if (hour(t) >= 23 && minute(t) >= 50) {     
             gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor; 
             gHourTensScale = gHourOnesScale = gMinTensScale = gMinOnesScale = flickerValue(120, 255);
-            setLedsWithTime(59 - minute(t), 59 - second(t));
+
+            int displayMinute = 59 - minute(t);
+            int displaySecond = 59 - second(t);
+            
+            setLedsWithRawTime(displayMinute, displaySecond);
             hasDoneSetLedsWithTime = true;
+
+            if (displayMinute == 0 && displaySecond == 0) {
+                displayFireworks(true, COLOR_GOLD);
+            }
         }
         break;
     case DAY_TYPE_VALENTINES_DAY:
@@ -762,6 +866,94 @@ void checkForDisplayModeChange(time_t t)
     }
 }
 
+void updateBrightness()
+{
+    static float value = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
+    static float velocity = 0.0;
+
+    // For now we don't bother tracking real time millis for time.
+    float t = 0.016;
+    float inputValue = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
+    float dv = inputValue - value;
+        
+    // Track up faster than down
+    float k = (inputValue > value) ? 10.0 : 10.0;// NOCOMMIT 0.2;
+        
+    float springForce = dv*k;
+    float mass = 1.0;
+   
+    // Use critical damping.
+    float dampingForce = -velocity*sqrt(k/mass);
+    float acceleration = (springForce + dampingForce)/mass;
+    velocity = acceleration*t;
+    value += velocity*t;
+
+    if (value < 0) {
+        value = 0;
+    }
+
+    if (value > 1024) {
+        value = 1024;
+    }
+
+    // normal room is maybe 600
+    // Fully dark is maybe < 120
+    if (value < 120) {
+        gDimmingValue = MIN_DIMMING_SCALE;
+    } else if (value > 350) {
+        gDimmingValue = 255;
+    } else {
+        gDimmingValue = MIN_DIMMING_SCALE + ((value - 120)/(350.0 - 120.0))*(255.0 - MIN_DIMMING_SCALE);
+    }
+}
+
+// Just for debuging.
+void showTopLightSensorValue()
+{
+    int loopDuration = 60*50;
+    float value = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
+    float velocity = 0.0;
+    float inputValue = 0.0;
+    float dv = 0.0;
+    float springForce = 0.0;
+    float dampingForce = 0.0;
+    float k = 10.0;
+    float mass = 1.0;
+    float damping = sqrt(k/mass);
+    float acceleration = 0;
+    float t = 0.016;
+    
+    while (loopDuration > 0) {
+        inputValue = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
+        dv = inputValue - value;
+        
+        // Track up faster than down
+        k = (inputValue > value) ? 20.0 : 20.0;
+        
+        springForce = dv*k;
+
+        // Use critical damping.
+        dampingForce = -velocity*sqrt(k/mass);
+        acceleration = (springForce + dampingForce)/mass;
+        velocity = acceleration*t;
+        value += velocity*t;
+
+        if (value < 0) {
+            value = 0;
+        }
+
+        if (value > 1024) {
+            value = 1024;
+        }
+        clearLeds();
+        setLedsWithValue(value);
+        leds.show();
+        
+        --loopDuration;
+        delay(16);
+    }
+}
+
 void loop()
 {
     DEBUG_PRINTLN(F("LOOP"));
@@ -771,10 +963,20 @@ void loop()
         performUserSetupSequence();
     }
 
+    // NOCOMMIT
+    if (digitalRead(SWITCH_UP_DIG_IN) == false) {
+        showTopLightSensorValue();
+    }
+    if (digitalRead(SWITCH_DOWN_DIG_IN) == false) {
+        displayFireworks(true, COLOR_GOLD);
+    }
+
+    
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     
     checkForDisplayModeChange(t);
     showTimeUsingCurrentDisplayMode(t);
+    updateBrightness();
 }
 
 void clearLeds()
@@ -1223,12 +1425,7 @@ void eyeAnimation(uint8_t specialCharacterType)
     uint32_t yellowColor = leds.Color(255, 200, 0);
 
     if (millis()%10 == 0) {
-        value = 0;
-        for (int i=0; i<12; ++i) {
-            value += random(120, 255);
-        }
-        value = value/12;
-
+        value = gaussianRandom(120, 255);
     }
 
     yellowColor = scaleColor(yellowColor, value);
@@ -1329,6 +1526,20 @@ void spinOrnament()
     delay(175);
 }
 
+
+void spinNewYearsGlobe()
+{
+    uint32_t newYearsGlobeColors[] = { COLOR_GOLD,
+                                 COLOR_GOLD,
+                                 COLOR_GOLD,
+                                 COLOR_GOLD,
+                                 COLOR_GOLD,
+                                 COLOR_GOLD,
+                                 0,0,0,0,0,0 };
+
+    doColorSpin(newYearsGlobeColors, sizeof(newYearsGlobeColors)/sizeof(uint32_t), false);
+                                 
+}
 
 void goldenRingSpin()
 {
