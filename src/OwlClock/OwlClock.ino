@@ -274,6 +274,14 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             gHolidayDigitColor = COLOR_BLUE;
             dayType = DAY_TYPE_BIRTHDAY;
         }
+        
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, MARCH, SUNDAY, 2)) { // Spring forward, but only do it on east/west coast
+            if (gInfo.gmtOffsetInSeconds == -60*60*8 ||                                    // offsets.  This lets people opt out of auto dst and
+                gInfo.gmtOffsetInSeconds == -60*60*5) {                                    // keeps us from over applying it.
+                gInfo.gmtOffsetInSeconds += 60*60;
+            }
+        }
+        
         // If it's the equinox we always show the symbol, but don't
         // override the color unless no one else has set it.
         if (currentDay == unpackSunEventDay(springEquinoxArray, SPRING_EQUINOX_DAY_BASE, currentYear)) {
@@ -373,6 +381,12 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
         } else if (currentDay == 14) { // Jennifer K. Purple
             gHolidayDigitColor = COLOR_PURPLE;
             dayType = DAY_TYPE_BIRTHDAY;
+        }
+        if (currentDay == computeHolidayBasedOnDayOfWeek(currentDay, NOVEMBER, SUNDAY, 1)) { // Fall back.
+            if (gInfo.gmtOffsetInSeconds == -60*60*7 ||
+                gInfo.gmtOffsetInSeconds == -60*60*4) {
+                gInfo.gmtOffsetInSeconds -= 60*60;
+            }
         }
         if (currentDay == computeHolidayBasedOnDayOfWeek(currentYear, NOVEMBER, THURSDAY, 4)) { // Thanksgiving
             gHolidayDigitColor = COLOR_GOLD;
@@ -993,6 +1007,7 @@ void showTopLightSensorValue()
     }
 }
 
+// Weirdly this only shows 85, maybe a real time clock bug?  Or my bug?
 void showTemperature()
 {
     // Show temp for 5 seconds.
