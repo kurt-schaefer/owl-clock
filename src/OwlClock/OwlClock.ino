@@ -346,6 +346,11 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             dayType = DAY_TYPE_BIRTHDAY;
         }
     } else if (currentMonth == SEPTEMBER) {
+        if (currentDay == 5) { // Our annaversary.
+            gDayDisplayType = DAY_TYPE_COLOR_HOLIDAY;
+            gHolidayDigitColor = COLOR_RED;
+            (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_GOLDEN_RING;
+        }
         if (currentDay == unpackSunEventDay(fallEquinoxArray, FALL_EQUINOX_DAY_BASE, currentYear)) {
             (*specialCharacterTypePtr) = SPECIAL_CHAR_TYPE_FALL_EQUINOX;
             if (dayType == DAY_TYPE_NORMAL_DAY) {
@@ -988,6 +993,50 @@ void showTopLightSensorValue()
     }
 }
 
+void showTemperature()
+{
+    // Show temp for 5 seconds.
+    int loopDuration = 60*5;
+    int temp = 0;
+    uint32_t color = COLOR_GOLD;
+    
+    while (loopDuration > 0) {
+        clearLeds();
+        
+        temp = RTC.temperature();
+
+        if (temp < 45) {
+            color = COLOR_BLUE;
+        } else if (temp < 59) {
+            color = COLOR_TURQUOISE;
+        } else if (temp < 90) {
+            color = COLOR_GOLD;
+        } else if (temp < 100) {
+            color = COLOR_ORANGE;
+        } else {
+            color = COLOR_RED;
+        }
+
+
+        int minuteOnes = temp%10;
+        int minuteTens = (temp/10)%10;
+        int hourOnes = (temp/100)%10;
+
+        // Manually set these so we don't mess with the global color and can trim leading zeros.
+        if (hourOnes > 0) {
+            leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(scaleColor(color, gHourOnesScale), gDimmingValue));
+        }
+        if (minuteTens > 0) {
+            leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(scaleColor(color, gMinTensScale), gDimmingValue));
+        }
+        leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(scaleColor(color, gMinOnesScale), gDimmingValue));
+
+        leds.show();
+        --loopDuration;
+        delay(16);        
+    }
+}
+
 void loop()
 {
     DEBUG_PRINTLN(F("LOOP"));
@@ -1002,9 +1051,8 @@ void loop()
         showTopLightSensorValue();
     }
     if (digitalRead(SWITCH_DOWN_DIG_IN) == false) {
-        displayFireworks(false);
+        showTemperature();
     }
-
     
     time_t t = now() + gInfo.gmtOffsetInSeconds;
     
