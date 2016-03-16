@@ -961,10 +961,49 @@ void updateBrightness()
     }
 }
 
-// Just for debuging.
-void showTopLightSensorValue()
+void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v)
 {
-    int loopDuration = 60*50;
+    unsigned char region, fpart, p, q, t;
+    
+    if (s == 0) {
+        // color is grayscale
+        *r = *g = *b = v;
+        return;
+    }
+    
+    // make hue 0-5 
+    region = h / 43;
+    // find remainder part, make it from 0-255
+    fpart = (h - (region * 43)) * 6;
+    
+    // calculate temp vars, doing integer multiplication
+    p = (v * (255 - s)) >> 8;
+    q = (v * (255 - ((s * fpart) >> 8))) >> 8;
+    t = (v * (255 - ((s * (255L - fpart)) >> 8))) >> 8;
+        
+    // assign temp vars based on color cone region 
+    switch(region) {
+        case 0:
+            *r = v; *g = t; *b = p; break;
+        case 1:
+            *r = q; *g = v; *b = p; break;
+        case 2:
+            *r = p; *g = v; *b = t; break;
+        case 3:
+            *r = p; *g = q; *b = v; break;
+        case 4:
+            *r = t; *g = p; *b = v; break;
+        default:
+            *r = v; *g = p; *b = q; break;
+    }
+    
+    return;
+}
+
+
+void showOpticalTheremin()
+{
+    int loopDuration = 60*60;
     float value = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
     float velocity = 0.0;
     float inputValue = 0.0;
@@ -975,6 +1014,16 @@ void showTopLightSensorValue()
     float mass = 1.0;
     float acceleration = 0;
     float t = 0.016;
+    int minuteOnes = 0;
+    int minuteTens = 0;
+    int hourOnes = 0;
+    int hourTens = 0;
+    uint8_t r, g, b;
+    uint8_t h = 0;
+    uint8_t s = 255;
+    uint8_t v = 255;
+    uint32_t color;
+    int iValue;
     
     while (loopDuration > 0) {
         inputValue = analogRead(LIGHT_SENSOR_TOP_ANALOG_IN);
@@ -995,11 +1044,29 @@ void showTopLightSensorValue()
             value = 0;
         }
 
-        if (value > 1024) {
-            value = 1024;
+        if (value > 1023) {
+            value = 1023;
         }
         clearLeds();
-        setLedsWithValue(value);
+
+        iValue = (int)value;
+        
+        minuteOnes = iValue%10;
+        minuteTens = (iValue/10)%10;
+        hourOnes = (iValue/100)%10;
+        hourTens = (iValue/1000)%10;
+
+        // value is 10 bits convert that to 8 bits.
+        h = iValue%256;
+        hsvtorgb(&r, &g, &b, h, s, v);
+
+        color = leds.Color(r, g, b);
+        
+        // Manually set these so we don't mess with the global color.
+        leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], (hourTens == 1) ? scaleColor(color, gDimmingValue) : 0);
+        leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(color, gDimmingValue));
+        leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(color, gDimmingValue));
+        leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(color, gDimmingValue));
         leds.show();
         
         --loopDuration;
@@ -1061,9 +1128,8 @@ void loop()
         performUserSetupSequence();
     }
 
-    // NOCOMMIT
     if (digitalRead(SWITCH_UP_DIG_IN) == false) {
-        showTopLightSensorValue();
+        showOpticalTheremin();
     }
     if (digitalRead(SWITCH_DOWN_DIG_IN) == false) {
         showTemperature();
