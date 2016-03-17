@@ -859,8 +859,10 @@ void showTimeUsingCurrentDisplayMode(time_t t)
         // TODO: Add beating heart digit color animations/pulsing special characters.
         break;
     case DAY_TYPE_EASTER:
-        // TODO: Um, occationally fade pink/blue/yellow eggs (zeros) in and out?
-        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor;        
+        // Alternate between pink and baby blue.  Put in/out easter eggs, doing this before setting the time
+        // makes them not show if their zero is used in the current time.
+        gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = (hour(t)%2) ? COLOR_PINK : COLOR_TURQUOISE;
+        easterAnimation();
         break;
     case DAY_TYPE_TOLKIENS_BIRTHDAY:
         gHourTensColor = gHourOnesColor = gMinTensColor = gMinOnesColor = gHolidayDigitColor;
@@ -1570,6 +1572,49 @@ void digitBreathAnimation2()
     gMinOnesScale = 255 - (int)(220.0*value);    
 }
 
+ void easterAnimation()
+ {
+     static unsigned long startMillis = 0;
+     static unsigned long duration = 0;
+     static uint8_t digitIndex = 0;
+     static uint32_t color = 0;
+     static uint8_t zeroIndexes[] = { 15, 6, 35 };
+
+     
+     unsigned long curMillis = millis();
+
+     // If millis has looped don't get stuck holding off a super long time.
+     if (startMillis > curMillis + 10000000) {
+         startMillis = 0;
+     }
+     
+     if (curMillis > startMillis && curMillis < startMillis + duration) {
+
+         curMillis -= startMillis;
+         uint8_t eggBrightness = 0;
+         unsigned long fadeTime = duration/2;
+
+         if (curMillis < fadeTime) {
+             eggBrightness = 255.0*easeOut(0.0, 1.0, (float)curMillis/(float)fadeTime);
+         } else if (curMillis > duration - fadeTime) {
+             eggBrightness = 255.0*easeOut(1.0, 0.0, (float)(curMillis - (duration - fadeTime))/(float)fadeTime);
+         }
+         eggBrightness = scaleColor(eggBrightness, gDimmingValue);
+         leds.setPixelColor(digitIndex, scaleColor(color, eggBrightness));
+         
+     } else {         
+         if (startMillis + duration < curMillis) {
+             digitIndex = zeroIndexes[random(0,3)];
+             // Post multiply by 10 to avoid int overflows in gaussianRandom.
+             startMillis = curMillis + 10*(unsigned long)gaussianRandom(100, 300);
+             duration = 10*(unsigned long)gaussianRandom(100, 800);
+             uint8_t r, g, b;
+             hsvtorgb(&r, &g, &b, random(0, 255), 255, 255);
+             color = scaleColor(leds.Color(r, g, b), 128);
+         }
+     }
+ }
+ 
 void flameAnimation()
 {
     static float x = 0.0;
