@@ -924,6 +924,7 @@ void checkForDisplayModeChange(time_t t)
 {
     // If the day has changed, we need to check if this is a day holiday, etc.
     if (gInfo.month != month(t) || gInfo.day != day(t)) {
+        gInfo.month = month(t);
         gInfo.day = day(t);
         gDayDisplayType = computeDayTypeForTime(t, &gSpecialCharacterType);
         writeEEProm(t);
