@@ -1085,7 +1085,6 @@ void showOpticalTheremin()
     }
 }
 
-// Weirdly this only shows 85, maybe a real time clock bug?  Or my bug?
 void showTemperature()
 {
     // Show temp for 5 seconds.
@@ -1098,6 +1097,9 @@ void showTemperature()
         
         temp = RTC.temperature();
 
+        // Convert from C*4 to F.  Temperature() returns C*4 
+        temp = ((((float)temp/4.0)*1.8) + 32.0) + 0.5;
+        
         if (temp < 45) {
             color = COLOR_BLUE;
         } else if (temp < 59) {
@@ -1110,9 +1112,6 @@ void showTemperature()
             color = COLOR_RED;
         }
 
-        // Convert from C to F.
-        temp = (temp*1.8) + 32.0;
-
         int minuteOnes = temp%10;
         int minuteTens = (temp/10)%10;
         int hourOnes = (temp/100)%10;
@@ -1121,7 +1120,7 @@ void showTemperature()
         if (hourOnes > 0) {
             leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(scaleColor(color, gHourOnesScale), gDimmingValue));
         }
-        if (minuteTens > 0) {
+        if (minuteTens > 0 || hourOnes > 0) {
             leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(scaleColor(color, gMinTensScale), gDimmingValue));
         }
         leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(scaleColor(color, gMinOnesScale), gDimmingValue));
