@@ -296,7 +296,9 @@ uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
             dayType = DAY_TYPE_EASTER;
         }            
     } else if (currentMonth == APRIL) {
-        if (currentDay == 7) { // Luther Turquoise
+        if (currentDay == 1) { // April fools
+            dayType = DAY_TYPE_APRIL_FOOLS;
+        } else if (currentDay == 7) { // Luther Turquoise
             gHolidayDigitColor = COLOR_TURQUOISE;
             dayType = DAY_TYPE_BIRTHDAY;
         } else if (currentDay == 22) { // Arbor day/earth day
@@ -455,15 +457,21 @@ setLedsWithRawTime(int hours, int minutes)
 {
     int hourTens = floor(hours/10);
     int hourOnes = hours - 10*hourTens;
+    int minuteTens = floor(minutes/10);
+    int minuteOnes = minutes - minuteTens*10;
   
     if (hourTens > 0) {
         leds.setPixelColor(HOUR_TENS_BASE + gTensDigit[hourTens], scaleColor(scaleColor(gHourTensColor, gHourTensScale), gDimmingValue));
+    } else {
+        // For april fools and we don't have a hour tens digit, we flip the time.
+        // This can cause all manner of issues with other raw time display users.  ;]
+        if (gDayDisplayType == DAY_TYPE_APRIL_FOOLS) {
+            int temp = minuteOnes;
+            minuteOnes = hourOnes;
+            hourOnes = temp;
+        }
     }
     leds.setPixelColor(HOUR_ONES_BASE + gOnesDigit[hourOnes], scaleColor(scaleColor(gHourOnesColor, gHourOnesScale), gDimmingValue));
-
-    int minuteTens = floor(minutes/10);
-    int minuteOnes = minutes - minuteTens*10;
-
     leds.setPixelColor(MINUTE_TENS_BASE + gTensDigit[minuteTens], scaleColor(scaleColor(gMinTensColor, gMinTensScale), gDimmingValue));
     leds.setPixelColor(MINUTE_ONES_BASE + gOnesDigit[minuteOnes], scaleColor(scaleColor(gMinOnesColor, gMinOnesScale), gDimmingValue));
 }
@@ -1101,6 +1109,8 @@ void showTemperature()
             color = COLOR_RED;
         }
 
+        // Convert from C to F.
+        temp = (temp*1.8) + 32.0;
 
         int minuteOnes = temp%10;
         int minuteTens = (temp/10)%10;

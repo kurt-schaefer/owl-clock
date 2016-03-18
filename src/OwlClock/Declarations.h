@@ -75,6 +75,7 @@ typedef struct
 #define DAY_TYPE_EASTER                 6
 #define DAY_TYPE_TOLKIENS_BIRTHDAY      7
 #define DAY_TYPE_HALLOWEEN              8
+#define DAY_TYPE_APRIL_FOOLS            9
 
 #define FIREWORKS_STATE_WHITE_FLASH 0
 #define FIREWORKS_STATE_SOLID_COLOR_FADE 1
