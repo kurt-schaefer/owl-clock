@@ -206,7 +206,7 @@ writeEEProm(time_t t)
     gInfo.month = month(t);
     gInfo.day = day(t);
 
-    EEPROM.put(EEPROM_INFO_VERSION, gInfo);
+    EEPROM.put(EEPROM_INFO_ADDRESS, gInfo);
 }
 
 uint8_t computeDayTypeForTime(time_t t, uint8_t *specialCharacterTypePtr)
@@ -1382,31 +1382,9 @@ uint8_t setValueUsingButtons(int *currentValue, int minValue, int maxValue,
 }
 
 
-void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMTOffset, int newYear, int newMonth, int newDay)
+void applyNewValues(/*time_t timeAtStart,*/ int newHours, int newMinutes, int newGMTOffsetInSeconds, int newYear, int newMonth, int newDay)
 {
     tmElements_t tm;
-    
-    if (newMinutes == minute(timeAtStart) &&
-        newGMTOffset == gInfo.gmtOffsetInSeconds &&
-        newYear == year(timeAtStart) &&
-        newMonth == month(timeAtStart) &&
-        newDay == day(timeAtStart)) {
-       
-        // User did nothing.
-        if (newHours == hour(timeAtStart)) {
-            return;
-        }
-        
-        // User only changed the hour, assume this is a daylight savings time adjustment
-        // and fiddle with the gMT offset intead of fully setting the time.
-        int changeInHours = newHours - hour(timeAtStart);
-        
-        if (abs(changeInHours) == 1) {
-            gInfo.gmtOffsetInSeconds += changeInHours*60*60;
-            writeEEProm(timeAtStart);
-            return;
-        }
-    }
     
     tm.Year = CalendarYrToTm(newYear);
     tm.Month = newMonth;
@@ -1415,20 +1393,21 @@ void applyNewValues(time_t timeAtStart, int newHours, int newMinutes, int newGMT
     tm.Minute = newMinutes;
     tm.Second = 0;
 
-    gInfo.gmtOffsetInSeconds = newGMTOffset;
+    gInfo.gmtOffsetInSeconds = newGMTOffsetInSeconds;
     
     time_t t = makeTime(tm) - gInfo.gmtOffsetInSeconds;
     RTC.set(t);        //use the time_t value to ensure correct weekday is set
     setTime(t);
 
     // Save the GMT offset/time off into eeprom.
-    writeEEProm(t);
+    writeEEProm(t + gInfo.gmtOffsetInSeconds);
 }
 
-void redrawTime(time_t t)
+// Special redraw so we can reflect the new hours during setup sequence.
+void redrawTime(time_t t, int hours)
 {
     clearLeds();
-    setLedsWithTime(hour(t), minute(t));
+    setLedsWithTime(hours, minute(t));
     setMoonPhaseLeds(year(t), month(t), day(t), hour(t));
     leds.show();
 }
@@ -1446,7 +1425,7 @@ void performUserSetupSequence()
 
     DEBUG_PRINTLN(F("setup sequence"));
     uint8_t result = setValueUsingButtons(&newHours, 0, 23, HOUR_ONES_BASE, HOUR_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_HOURS);
-    redrawTime(timeAtStart);
+    redrawTime(timeAtStart, newHours);
     
     if (result != USER_TIMEOUT) {
         result = setValueUsingButtons(&newMinutes, 0, 59, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_MINUTES);
@@ -1470,7 +1449,7 @@ void performUserSetupSequence()
         result = setValueUsingButtons(&newDay, 1, 31, MINUTE_ONES_BASE, MINUTE_TENS_BASE, NO_INDEX, NO_INDEX, DIGIT_TYPE_DAY);
     }
 
-    applyNewValues(timeAtStart, newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
+    applyNewValues(/*timeAtStart,*/ newHours, newMinutes,  newGMTOffset*60*60, newYear, newMonth, newDay);
 
     // We update what's displayed but wait a second so users won't re-trigger set accedently.
     time_t t = now() + gInfo.gmtOffsetInSeconds;
