@@ -1104,6 +1104,8 @@ void showTemperature()
             color = COLOR_BLUE;
         } else if (temp < 59) {
             color = COLOR_TURQUOISE;
+        } else if (temp < 80) {
+            color = COLOR_GREEN;
         } else if (temp < 90) {
             color = COLOR_GOLD;
         } else if (temp < 100) {
